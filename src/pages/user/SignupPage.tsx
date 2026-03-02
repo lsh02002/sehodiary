@@ -101,8 +101,4 @@ const Title = styled.div`
   h3 {
     font-weight: 500;
   }
-
-  a {
-    font-size: 0.8rem;
-  }
 `;

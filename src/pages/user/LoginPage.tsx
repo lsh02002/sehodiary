@@ -19,7 +19,7 @@ const LoginPage = () => {
       .then((res) => {
         console.log("login ", res);
         localStorage.setItem("userId", res.data.data.userId);
-        localStorage.setItem("nickname", res.data.data.nickname);        
+        localStorage.setItem("nickname", res.data.data.nickname);
         localStorage.setItem("accessToken", res.headers.accesstoken);
         localStorage.setItem("refreshToken", res.headers.refreshtoken);
 
@@ -89,9 +89,5 @@ const Title = styled.div`
 
   h3 {
     font-weight: 500;
-  }
-
-  a {
-    font-size: 0.7rem;
   }
 `;

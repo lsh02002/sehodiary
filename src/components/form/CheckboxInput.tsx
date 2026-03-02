@@ -58,7 +58,7 @@ const Container = styled.div`
 `;
 
 const CheckboxWrapper = styled.div`
-  width: 100%;
+  width: 100%;  
   display: flex;
   align-items: center;
 

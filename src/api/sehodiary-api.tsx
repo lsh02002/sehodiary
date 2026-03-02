@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import { toast } from "react-toastify";
-import { UserSignupType } from "../types/type";
+import { DiaryRequestType, UserSignupType } from "../types/type";
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -18,7 +18,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ✅ 응답 인터셉터: 새 accessToken이 오면 자동 저장
@@ -41,7 +41,7 @@ api.interceptors.response.use(
     }
     console.error("⚠️ Axios Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 const UserLoginApi = async (email: string, password: string) => {
@@ -63,9 +63,29 @@ const getUserInfosApi = async () => {
   return api.get(`/user`);
 };
 
+const getDiariesByUserApi = async () => {
+  return api.get(`/diary/user`);
+}
+
+const getOneDiaryApi = async(diaryId: number) => {
+  return api.get(`/diary/${diaryId}`);
+}
+
+const createDiaryApi = async (data: DiaryRequestType) => {
+  return api.post(`/diary/create`, data);
+};
+
+const editDiaryApi = async (diaryId: number, data: DiaryRequestType) => {
+  return api.put(`/diary/${diaryId}`, data);
+}
+
 export {
   UserLoginApi,
   UserSignupApi,
   UserLogoutApi,
   getUserInfosApi,
+  getDiariesByUserApi,
+  getOneDiaryApi,
+  createDiaryApi,
+  editDiaryApi,
 };
