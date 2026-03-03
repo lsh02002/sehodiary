@@ -1,15 +1,12 @@
 import React from "react";
-import DiaryCard1 from "./DiaryCard1";
-import { useLogin } from "../../context/LoginContext";
 import styled from "styled-components";
+import { CommentResponseType } from "../../types/type";
 
-const CommentCard = () => {
-  const { diary } = useLogin();
+const CommentCard = ({comment}: {comment: CommentResponseType}) => {  
 
   return (
     <PageContainer>
-      <DiaryCard1 diary={diary} />
-      <div>comment 창입니다</div>
+      <div>{comment?.content} {comment?.nickname}</div>
     </PageContainer>
   );
 };

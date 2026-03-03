@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import { AddDiaryButton } from "../form/AddDiaryButton";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
-import CommentCard from "../card/CommentCard";
+import CommentPage from "../../pages/comment/CommentPage";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -77,7 +77,7 @@ export default function Layout({
         </SidebarHeader>
 
         <Nav role="navigation" aria-label="주 메뉴">
-          <CommentCard />
+          <CommentPage />
         </Nav>
       </Sidebar>
 
@@ -183,14 +183,13 @@ const Sidebar = styled.aside<{ $open: boolean }>`
   top: 200px;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 80%;  
+  bottom: 0;  
   width: 100%;
   background: white;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
   transform: translateY(100%);
   transition: transform 220ms ease;
-  z-index: 45;
+  z-index: 45;  
   ${({ $open }) =>
     $open &&
     css`
@@ -230,10 +229,8 @@ const CloseX = styled.button`
   }
 `;
 
-const Nav = styled.nav`
-  padding: 8px;
-  overflow-y: scroll;
-  height: (100% - 250px);
+const Nav = styled.nav`  
+  padding: 8px;  
   ul {
     list-style: none;
     padding: 0;

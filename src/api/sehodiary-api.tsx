@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import { toast } from "react-toastify";
-import { DiaryRequestType, UserSignupType } from "../types/type";
+import { CommentRequestType, DiaryRequestType, UserSignupType } from "../types/type";
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -63,6 +63,10 @@ const getUserInfosApi = async () => {
   return api.get(`/user`);
 };
 
+const getAllDiariesApi = async () => {
+  return api.get(`/diary/all`);
+}
+
 const getDiariesByUserApi = async () => {
   return api.get(`/diary/user`);
 }
@@ -79,13 +83,24 @@ const editDiaryApi = async (diaryId: number, data: DiaryRequestType) => {
   return api.put(`/diary/${diaryId}`, data);
 }
 
+const getCommentsByDiaryApi = async (diaryId: number) => {
+  return api.get(`/comment/diary/${diaryId}`);
+}
+
+const createCommentApi = async (data: CommentRequestType) => {
+  return api.post(`/comment/create`, data);
+}
+
 export {
   UserLoginApi,
   UserSignupApi,
   UserLogoutApi,
   getUserInfosApi,
+  getAllDiariesApi,
   getDiariesByUserApi,
   getOneDiaryApi,
   createDiaryApi,
   editDiaryApi,
+  getCommentsByDiaryApi,
+  createCommentApi,
 };
