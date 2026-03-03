@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const TextInput = ({
+const TextAreaInput = ({
   disabled,
   name,
   title,
@@ -31,7 +31,7 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
+export default TextAreaInput;
 
 const Container = styled.div`
   width: 100%;
