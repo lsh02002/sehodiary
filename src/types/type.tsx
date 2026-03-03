@@ -20,6 +20,8 @@ export type DiaryResponseType = {
   content: string;
   visibility: string;
   weather: string;
+  commentsCount: number;
+  createdAt: string;
 };
 
 export type CommentRequestType = {

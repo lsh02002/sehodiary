@@ -44,4 +44,5 @@ const PageContainer = styled.div`
 const Wrapper = styled.div`  
   overflow-y: auto;
   height: calc(100vh - 460px);
+  border-top: 1px solid #e5e7eb;  
 `;

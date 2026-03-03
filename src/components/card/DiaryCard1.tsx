@@ -12,14 +12,7 @@ import {
 import { TwoDiv } from "../form/TwoDiv";
 
 const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
-  //   const navigator = useNavigate();
-  //   const { setOpen, setDiary } = useLogin();
-
-  //   const handleEditComment = (e: React.MouseEvent<SVGSVGElement>) => {
-  //     e.stopPropagation();
-  //     setDiary(diary);
-  //     setOpen(true);
-  //   };
+  const createdAt = `${new Date(diary?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
     <CardContainer>
@@ -32,6 +25,11 @@ const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
           <ContentField>내용: {diary?.content}</ContentField>
           <TwoDiv>
             <SlugField>작성자: {diary?.nickname}</SlugField>
+            <div
+              style={{ fontStyle: "italic", color: "gray", fontSize: "0.9rem" }}
+            >
+              {createdAt}
+            </div>
           </TwoDiv>
         </InfoBoxField>
       </CardWrapper>

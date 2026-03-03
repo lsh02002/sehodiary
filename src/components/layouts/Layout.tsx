@@ -70,7 +70,7 @@ export default function Layout({
       {/* 사이드바 */}
       <Sidebar id="side-nav" $open={open} aria-hidden={!open}>
         <SidebarHeader>
-          <MenuTitle>{appName}</MenuTitle>
+          <MenuTitle>{"댓글 창"}</MenuTitle>
           <CloseX onClick={() => setOpen(false)} aria-label="메뉴 닫기">
             ×
           </CloseX>

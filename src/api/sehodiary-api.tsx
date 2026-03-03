@@ -80,7 +80,7 @@ const createDiaryApi = async (data: DiaryRequestType) => {
 };
 
 const editDiaryApi = async (diaryId: number, data: DiaryRequestType) => {
-  return api.put(`/diary/${diaryId}`, data);
+  return api.post(`/diary/edit/${diaryId}`, data);
 }
 
 const getCommentsByDiaryApi = async (diaryId: number) => {
