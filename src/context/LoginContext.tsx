@@ -6,10 +6,15 @@ import {
   SetStateAction,
   useContext,
 } from "react";
+import { DiaryResponseType } from "../types/type";
 
 type LoginContextValue = {
   isLogin: boolean;
   setIsLogin: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  diary?: DiaryResponseType;
+  setDiary: Dispatch<SetStateAction<DiaryResponseType | undefined>>;
 };
 
 export const LoginContext = createContext<LoginContextValue | undefined>(
@@ -18,8 +23,17 @@ export const LoginContext = createContext<LoginContextValue | undefined>(
 
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [diary, setDiary] = useState<DiaryResponseType>();
 
-  const value: LoginContextValue = { isLogin, setIsLogin };
+  const value: LoginContextValue = {
+    isLogin,
+    setIsLogin,
+    open,
+    setOpen,
+    diary,
+    setDiary,
+  };
 
   return (
     <LoginContext.Provider value={value}>{children}</LoginContext.Provider>

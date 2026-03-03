@@ -12,7 +12,10 @@ export const CardContainer = styled.div`
   background: #ffffff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
   &:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     border-color: #d1d5db;
@@ -30,7 +33,7 @@ export const IdField = styled.div`
   color: #4680ff;
   font-weight: 600;
   margin-bottom: 4px;
-  transition: color 0.15s ease;
+  transition: color 0.15s ease;   
 
   ${CardContainer}:hover & {
     color: #2e63d4;
@@ -57,12 +60,18 @@ export const NameField = styled.div`
   font-weight: 500;
   margin-bottom: 4px;
   color: black;
+  width: 100%;  
 `;
 
 export const SlugField = styled.div`
   color: gray;
   font-size: 0.9rem;
   font-style: italic;
+`;
+
+export const ContentField = styled.div`
+  margin-top: 2px;
+  font-size: 0.9rem;
 `;
 
 export const EditButtonField = styled.span`
@@ -93,5 +102,5 @@ export const InfoBoxField = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-direction: column;
+  flex-direction: column;  
 `;

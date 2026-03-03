@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import DiaryCard0 from "../../components/card/DiaryCard0";
 
 const DiaryListPage = () => {
-  const navigator = useNavigate();
   const [diaryList, setDiaryList] = useState([]);
 
   useEffect(() => {
@@ -22,18 +21,7 @@ const DiaryListPage = () => {
   return (
     <PageContainer>
       {diaryList.map((diary: DiaryResponseType) => (
-        <div
-          style={{            
-            height: "50px",
-            border: "1px solid red",
-            margin: "10px",
-            padding: "10px",            
-          }}
-          key={diary?.id}
-          onClick={() => navigator(`/edit/${diary?.id}`)}
-        >
-          {diary?.id} {diary?.title} {diary?.content}
-        </div>
+        <DiaryCard0 key={diary?.id} diary={diary} />
       ))}
     </PageContainer>
   );
@@ -42,5 +30,6 @@ const DiaryListPage = () => {
 export default DiaryListPage;
 
 const PageContainer = styled.div`
-  padding: 0 20px;  
+  margin-top: 20px;
+  padding: 0 20px;
 `;

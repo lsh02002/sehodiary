@@ -1,8 +1,10 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Menu } from "lucide-react";
-import { AddTransButton } from "../form/AddTransButton";
+import { AddDiaryButton } from "../form/AddDiaryButton";
 import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../context/LoginContext";
+import CommentCard from "../card/CommentCard";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -35,7 +37,7 @@ export default function Layout({
   children,
 }: Props) {
   const navigator = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const {open, setOpen} = useLogin();
 
   // 포커스 트랩 단순 구현: 열릴 때 첫 링크에 포커스
   const firstLinkRef = React.useRef<HTMLAnchorElement | null>(null);
@@ -52,7 +54,7 @@ export default function Layout({
         aria-label="메뉴 열기"
         aria-expanded={open}
         aria-controls="side-nav"
-        onClick={() => setOpen(true)}
+        // onClick={() => setOpen(true)}
       >
         <Menu className="icon" />
       </BurgerButton>
@@ -68,14 +70,14 @@ export default function Layout({
       {/* 사이드바 */}
       <Sidebar id="side-nav" $open={open} aria-hidden={!open}>
         <SidebarHeader>
-          <AppName>{appName}</AppName>
+          <MenuTitle>{appName}</MenuTitle>
           <CloseX onClick={() => setOpen(false)} aria-label="메뉴 닫기">
             ×
           </CloseX>
         </SidebarHeader>
 
         <Nav role="navigation" aria-label="주 메뉴">
-          <div>사이드 메뉴</div>
+          <CommentCard />
         </Nav>
       </Sidebar>
 
@@ -90,7 +92,7 @@ export default function Layout({
       <Main id="main">{children}</Main>
 
       <LockBodyScroll when={open} />
-      <AddTransButton onClick={() => navigator("/create")}>+</AddTransButton>
+      <AddDiaryButton onClick={() => navigator("/create")}>+</AddDiaryButton>
     </Container>
   );
 }
@@ -178,13 +180,15 @@ const Overlay = styled.div<{ $open: boolean }>`
 
 const Sidebar = styled.aside<{ $open: boolean }>`
   position: fixed;
-  top: 0;
+  top: 200px;
   left: 0;
-  height: 100vh;
-  width: 320px;
+  right: 0;
+  bottom: 0;
+  height: 80%;  
+  width: 100%;
   background: white;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
-  transform: translateX(-100%);
+  transform: translateY(100%);
   transition: transform 220ms ease;
   z-index: 45;
   ${({ $open }) =>
@@ -203,7 +207,7 @@ const SidebarHeader = styled.div`
   border-bottom: 1px solid #e5e7eb;
 `;
 
-const AppName = styled.h2`
+const MenuTitle = styled.h2`
   margin: 0;
   font-size: 16px;
   font-weight: 700;
