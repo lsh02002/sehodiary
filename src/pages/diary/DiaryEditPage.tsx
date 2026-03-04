@@ -88,7 +88,7 @@ const DiaryEditPage = () => {
         setData={setContent}
         rows={10}
       />
-      <ConfirmButton title="일기저장" onClick={handleEditDiary} />
+      <ConfirmButton title="일기 수정" onClick={handleEditDiary} />
     </PageContainer>
   );
 };

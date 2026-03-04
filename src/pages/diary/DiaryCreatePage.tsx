@@ -70,7 +70,7 @@ const DiaryCreatePage = () => {
         setData={setContent}
         rows={10}
       />
-      <ConfirmButton title="일기저장" onClick={handleCreateDiary} />
+      <ConfirmButton title="일기 생성" onClick={handleCreateDiary} />
     </PageContainer>
   );
 };

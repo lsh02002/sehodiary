@@ -63,8 +63,8 @@ const getUserInfosApi = async () => {
   return api.get(`/user`);
 };
 
-const getAllDiariesApi = async () => {
-  return api.get(`/diary/all`);
+const getDiariesByPublicApi = async () => {
+  return api.get(`/diary/public`);
 }
 
 const getDiariesByUserApi = async () => {
@@ -96,7 +96,7 @@ export {
   UserSignupApi,
   UserLogoutApi,
   getUserInfosApi,
-  getAllDiariesApi,
+  getDiariesByPublicApi,
   getDiariesByUserApi,
   getOneDiaryApi,
   createDiaryApi,
