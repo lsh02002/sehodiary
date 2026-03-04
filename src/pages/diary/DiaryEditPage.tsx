@@ -7,6 +7,7 @@ import { TwoDiv } from "../../components/form/TwoDiv";
 import {
   deleteLikeApi,
   editDiaryApi,
+  getLikingNicknameByDiaryApi,
   getOneDiaryApi,
   insertLikeApi,
   isLikedApi,
@@ -31,6 +32,8 @@ const DiaryEditPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [createdAt, setCreatedAt] = useState("");
   const { isLogin, diary, setDiary, setOpen } = useLogin();
+  const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
+  const [nicknameList, setNicknameList] = useState([]);
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -62,7 +65,7 @@ const DiaryEditPage = () => {
       isLikedApi(Number(diaryId) ?? -1)
         .then((res) => {
           console.log(res);
-          setIsLiked(res.data);          
+          setIsLiked(res.data);
         })
         .catch((err) => {
           console.error(err);
@@ -71,6 +74,19 @@ const DiaryEditPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaryId, isLogin]);
+
+  useEffect(() => {
+    if (likesCount > 0 && isMouseOverOnce) {
+      getLikingNicknameByDiaryApi(Number(diaryId) ?? -1)
+        .then((res) => {
+          console.log("마우스 호버", res);
+          setNicknameList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [diaryId, isMouseOverOnce, likesCount]);
 
   const handleEditDiary = () => {
     const data: DiaryRequestType = {
@@ -179,7 +195,11 @@ const DiaryEditPage = () => {
         >
           ({diary?.commentsCount})
         </div>
-        <div onClick={handleLikeClick}>
+        <div
+          onMouseOver={() => setIsMouseOverOnce(true)}
+          onMouseLeave={() => setIsMouseOverOnce(false)}
+          onClick={handleLikeClick}
+        >
           {isLiked ? <AiFillLike /> : <AiOutlineLike />}
         </div>
         <div
@@ -187,9 +207,20 @@ const DiaryEditPage = () => {
             fontStyle: "italic",
             color: "gray",
             marginRight: "10px",
+            position: "relative",
           }}
         >
           {likesCount}
+          {isMouseOverOnce && nicknameList.length > 0 && (
+            <NicknameListBox
+              onMouseOver={() => setIsMouseOverOnce(true)}
+              onMouseLeave={() => setIsMouseOverOnce(false)}
+            >
+              {nicknameList?.map((list) => (
+                <div>{list}</div>
+              ))}
+            </NicknameListBox>
+          )}
         </div>
       </div>
       <ConfirmButton title="일기 수정" onClick={handleEditDiary} />
@@ -201,4 +232,13 @@ export default DiaryEditPage;
 
 const PageContainer = styled.div`
   padding: 0 20px;
+`;
+
+const NicknameListBox = styled.div`
+  border: 1px solid black;
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  left: -15px;
+  top: 25px;
 `;

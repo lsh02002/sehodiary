@@ -95,6 +95,10 @@ const createCommentApi = async (data: CommentRequestType) => {
   return api.post(`/comment/create`, data);
 };
 
+const getLikingNicknameByDiaryApi = async (diaryId: number) => {
+  return api.get(`/like/nicknames/${diaryId}`);
+}
+
 const isLikedApi = async (diaryId: number) => {
   return api.get(`/like/isLiked/${diaryId}`);
 };
@@ -119,6 +123,7 @@ export {
   editDiaryApi,
   getCommentsByDiaryApi,
   createCommentApi,
+  getLikingNicknameByDiaryApi,
   isLikedApi,
   insertLikeApi,
   deleteLikeApi,

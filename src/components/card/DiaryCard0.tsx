@@ -17,15 +17,19 @@ import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import {
   deleteLikeApi,
+  getLikingNicknameByDiaryApi,
   insertLikeApi,
   isLikedApi,
 } from "../../api/sehodiary-api";
+import styled from "styled-components";
 
 const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const navigator = useNavigate();
   const { isLogin, setOpen, setDiary } = useLogin();
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(-1);
+  const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
+  const [nicknameList, setNicknameList] = useState([]);
   const createdAt = `${new Date(diary0?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   useEffect(() => {
@@ -43,6 +47,19 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary0?.id]);
+
+  useEffect(() => {
+    if (likesCount > 0 && isMouseOverOnce) {
+      getLikingNicknameByDiaryApi(diary0?.id ?? -1)
+        .then((res) => {
+          console.log("마우스 호버", res);
+          setNicknameList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [diary0?.id, isMouseOverOnce, likesCount]);
 
   const handleLikeClick = () => {
     if (isLogin) {
@@ -109,7 +126,11 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
               >
                 ({diary0?.commentsCount})
               </div>
-              <div onClick={handleLikeClick}>
+              <div
+                onMouseOver={() => setIsMouseOverOnce(true)}
+                onMouseLeave={() => setIsMouseOverOnce(false)}
+                onClick={handleLikeClick}
+              >
                 {isLiked ? <AiFillLike /> : <AiOutlineLike />}
               </div>
               <div
@@ -117,9 +138,20 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
                   fontStyle: "italic",
                   color: "gray",
                   marginRight: "10px",
+                  position: "relative",
                 }}
               >
                 {likesCount}
+                {isMouseOverOnce && nicknameList.length > 0 && (
+                  <NicknameListBox
+                    onMouseOver={() => setIsMouseOverOnce(true)}
+                    onMouseLeave={() => setIsMouseOverOnce(false)}
+                  >
+                    {nicknameList?.map((list) => (
+                      <div>{list}</div>
+                    ))}
+                  </NicknameListBox>
+                )}
               </div>
               <div style={{ fontStyle: "italic", color: "gray" }}>
                 {createdAt}
@@ -133,3 +165,12 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
 };
 
 export default DiaryCard0;
+
+const NicknameListBox = styled.div`
+  border: 1px solid black;
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  left: -15px;
+  top: 25px;
+`;
