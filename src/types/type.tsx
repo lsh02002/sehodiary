@@ -21,6 +21,8 @@ export type DiaryResponseType = {
   visibility: string;
   weather: string;
   commentsCount: number;
+  likesCount: number;
+  isLiked: boolean;
   createdAt: string;
 };
 

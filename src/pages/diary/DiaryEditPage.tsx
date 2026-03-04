@@ -4,12 +4,20 @@ import TextInput from "../../components/form/TextInput";
 import TextAreaInput from "../../components/form/TextAreaInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
-import { editDiaryApi, getOneDiaryApi } from "../../api/sehodiary-api";
+import {
+  deleteLikeApi,
+  editDiaryApi,
+  getOneDiaryApi,
+  insertLikeApi,
+  isLikedApi,
+} from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import { DiaryRequestType } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
+import { AiOutlineLike } from "react-icons/ai";
+import { AiFillLike } from "react-icons/ai";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -19,8 +27,10 @@ const DiaryEditPage = () => {
   const [visibility, setVisibility] = useState("");
   const [content, setContent] = useState("");
   const [commentsCount, setCommentsCount] = useState(-1);
+  const [likesCount, setLikesCount] = useState(-1);
+  const [isLiked, setIsLiked] = useState(false);
   const [createdAt, setCreatedAt] = useState("");
-  const { diary, setDiary, setOpen } = useLogin();
+  const { isLogin, diary, setDiary, setOpen } = useLogin();
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -39,15 +49,28 @@ const DiaryEditPage = () => {
         setVisibility(res.data.visibility);
         setContent(res.data.content);
         setCommentsCount(res.data.commentsCount);
-        setCreatedAt(res.data.setCreatedAt);
+        setLikesCount(res.data.likesCount);
+        setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryId]);
+
+    if (isLogin) {
+      isLikedApi(Number(diaryId) ?? -1)
+        .then((res) => {
+          console.log(res);
+          setIsLiked(res.data);          
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diaryId, isLogin]);
 
   const handleEditDiary = () => {
     const data: DiaryRequestType = {
@@ -66,10 +89,39 @@ const DiaryEditPage = () => {
       });
   };
 
-  const handleEditComment = (e: React.MouseEvent<SVGSVGElement>) => {
+  const handleLikeClick = () => {
+    if (isLogin) {
+      if (isLiked) {
+        deleteLikeApi(Number(diaryId) ?? -1)
+          .then((res) => {
+            console.log(res);
+            setIsLiked(res.data);
+            setLikesCount(likesCount - 1);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        insertLikeApi(Number(diaryId) ?? -1)
+          .then((res) => {
+            console.log(res);
+            setIsLiked(res.data);
+            setLikesCount(likesCount + 1);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+    }
+  };
+
+  const handleOpenComment = (e: React.MouseEvent<SVGSVGElement>) => {
     e.stopPropagation();
-    
-    const cCount = diary && diary?.commentsCount > commentsCount ? diary?.commentsCount : commentsCount;
+
+    const cCount =
+      diary && diary?.commentsCount > commentsCount
+        ? diary?.commentsCount
+        : commentsCount;
 
     const data = {
       id: Number(diaryId),
@@ -79,6 +131,8 @@ const DiaryEditPage = () => {
       visibility,
       weather,
       commentsCount: cCount,
+      likesCount,
+      isLiked,
       createdAt,
     };
     setDiary(data);
@@ -119,11 +173,23 @@ const DiaryEditPage = () => {
         rows={10}
       />
       <div style={{ display: "flex", alignItems: "center" }}>
-        <FaRegCommentDots onClick={handleEditComment} />
+        <FaRegCommentDots onClick={handleOpenComment} />
         <div
           style={{ fontStyle: "italic", color: "gray", marginRight: "10px" }}
         >
           ({diary?.commentsCount})
+        </div>
+        <div onClick={handleLikeClick}>
+          {isLiked ? <AiFillLike /> : <AiOutlineLike />}
+        </div>
+        <div
+          style={{
+            fontStyle: "italic",
+            color: "gray",
+            marginRight: "10px",
+          }}
+        >
+          {likesCount}
         </div>
       </div>
       <ConfirmButton title="일기 수정" onClick={handleEditDiary} />

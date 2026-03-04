@@ -23,7 +23,7 @@ const DiaryListPage = () => {
     <PageContainer>
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
-          <DiaryCard0 key={diary?.id} diary={diary} />
+          <DiaryCard0 key={diary?.id} diary0={diary} />
         ))
       ) : (
         <div>해당 글이 없습니다!</div>
