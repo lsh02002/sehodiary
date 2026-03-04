@@ -189,7 +189,8 @@ const Sidebar = styled.aside<{ $open: boolean }>`
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
   transform: translateY(100%);
   transition: transform 220ms ease;
-  z-index: 45;  
+  z-index: 45;
+  border-radius: 20px 20px 0 0;
   ${({ $open }) =>
     $open &&
     css`
