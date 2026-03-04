@@ -9,8 +9,7 @@ import { createCommentApi } from "../../api/sehodiary-api";
 import { useLogin } from "../../context/LoginContext";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
-  const { setDiaryList } = useLogin();
-  const { setCommentList } = useLogin();
+  const { setDiary, setDiaryList, setCommentList } = useLogin();
   const [nickname, setNickname] = useState(
     localStorage.getItem("nickname") ?? "",
   );
@@ -43,6 +42,18 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
               : diary,
           );
         });
+
+        setDiary((prev) => {
+          if (prev === undefined) {
+            return;
+          }
+          return {
+            ...prev,
+            commentsCount: prev.commentsCount + 1,
+          };
+        });
+
+        setContent("");
       })
       .catch((err) => {
         console.error(err);
