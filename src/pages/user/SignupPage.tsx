@@ -17,12 +17,17 @@ const SignupPage = () => {
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   const OnSignupSubmit = () => {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("nickname");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
     const userInfo: UserSignupType = {
       email,
       nickname,
       profileImage: "",
       password,
-      passwordConfirm,      
+      passwordConfirm,
     };
 
     UserSignupApi(userInfo)
@@ -53,7 +58,12 @@ const SignupPage = () => {
           data={email}
           setData={setEmail}
         />
-        <TextInput name="nickname" title="닉네임" data={nickname} setData={setNickname} />
+        <TextInput
+          name="nickname"
+          title="닉네임"
+          data={nickname}
+          setData={setNickname}
+        />
         <PasswordInput
           name="password"
           title="비밀번호"

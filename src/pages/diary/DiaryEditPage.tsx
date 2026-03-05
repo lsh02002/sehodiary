@@ -19,6 +19,7 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -99,6 +100,7 @@ const DiaryEditPage = () => {
     editDiaryApi(Number(diaryId), data)
       .then((res) => {
         console.log(res);
+        toast.success("글 수정이 되었습니다.");
       })
       .catch((err) => {
         console.error(err);

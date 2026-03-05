@@ -7,6 +7,7 @@ import { TwoDiv } from "../../components/form/TwoDiv";
 import { createDiaryApi } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import { DiaryRequestType } from "../../types/type";
+import { toast } from "react-toastify";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -32,6 +33,7 @@ const DiaryCreatePage = () => {
     createDiaryApi(data)
     .then(res=>{
       console.log(res);
+      toast.success("글 생성이 되었습니다.");
     })
     .catch(err=>{
       console.error(err);
