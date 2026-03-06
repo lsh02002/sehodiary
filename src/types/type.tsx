@@ -40,3 +40,9 @@ export type CommentResponseType = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type ActivityLogResponseType = {
+  id: number;
+  message: string;
+  createdAt: string;
+};

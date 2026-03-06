@@ -97,7 +97,7 @@ const createCommentApi = async (data: CommentRequestType) => {
 
 const getLikingNicknameByDiaryApi = async (diaryId: number) => {
   return api.get(`/like/nicknames/${diaryId}`);
-}
+};
 
 const isLikedApi = async (diaryId: number) => {
   return api.get(`/like/isLiked/${diaryId}`);
@@ -109,6 +109,10 @@ const insertLikeApi = async (diaryId: number) => {
 
 const deleteLikeApi = async (diaryId: number) => {
   return api.delete(`/like/${diaryId}`);
+};
+
+const getLogMessagesByUserApi = async () => {
+  return api.get(`/activitylog/user`);
 };
 
 export {
@@ -127,4 +131,5 @@ export {
   isLikedApi,
   insertLikeApi,
   deleteLikeApi,
+  getLogMessagesByUserApi,
 };
