@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
-import { useLogin } from "../../context/LoginContext";
 import ActivityLogCard from "../../components/card/ActivityLogCard";
 
 const MyActivityLogs = () => {
-  const { isLogin } = useLogin();
   const [logMessages, setLogMessages] = useState([]);
 
   useEffect(() => {
-    if (isLogin) {
-      getLogMessagesByUserApi()
-        .then((res) => {
-          console.log(res);
-          setLogMessages(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }, [isLogin]);
+    getLogMessagesByUserApi()
+      .then((res) => {
+        console.log(res);
+        setLogMessages(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <>

@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLogin } from "../../context/LoginContext";
 import { getCommentsByUserApi } from "../../api/sehodiary-api";
 import { CommentResponseType } from "../../types/type";
 import CommentCard1 from "../../components/card/CommentCard1";
 
-const MyComments = () => {
-  const { isLogin } = useLogin();
+const MyComments = () => {  
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
-    if (isLogin) {
       getCommentsByUserApi()
         .then((res) => {
           console.log(res);
@@ -18,8 +15,7 @@ const MyComments = () => {
         .catch((err) => {
           console.error(err);
         });
-    }
-  }, [isLogin]);
+  }, []);
 
   return (
     <>

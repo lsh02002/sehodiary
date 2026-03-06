@@ -14,62 +14,65 @@ const MyPage = () => {
   return (
     <Wrapper>
       {isLogin && (
-        <Title>
-          <TabH3
-            role="tab"
-            aria-selected={currentTab.get("tab") === "info"}
-            $active={currentTab.get("tab") === "info"}
-            tabIndex={0}
-            onClick={() => {
-              navigator(`?tab=info`);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") navigator(`?tab=info`);
-            }}
-          >
-            회원 정보
-          </TabH3>
-          <TabH3
-            role="tab"
-            aria-selected={currentTab.get("tab") === "mydiary"}
-            $active={currentTab.get("tab") === "mydiary"}
-            tabIndex={0}
-            onClick={() => {
-              navigator(`?tab=mydiary`);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") navigator(`?tab=mydiary`);
-            }}
-          >
-            내가쓴일기
-          </TabH3>
-          <TabH3
-            role="tab"
-            aria-selected={currentTab.get("tab") === "activitylog"}
-            $active={currentTab.get("tab") === "activitylog"}
-            tabIndex={0}
-            onClick={() => {
-              navigator(`?tab=activitylog`);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ")
+        <>
+          <Title>
+            <TabH3
+              role="tab"
+              aria-selected={currentTab.get("tab") === "info"}
+              $active={currentTab.get("tab") === "info"}
+              tabIndex={0}
+              onClick={() => {
+                navigator(`?tab=info`);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") navigator(`?tab=info`);
+              }}
+            >
+              회원 정보
+            </TabH3>
+            <TabH3
+              role="tab"
+              aria-selected={currentTab.get("tab") === "mydiary"}
+              $active={currentTab.get("tab") === "mydiary"}
+              tabIndex={0}
+              onClick={() => {
+                navigator(`?tab=mydiary`);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ")
+                  navigator(`?tab=mydiary`);
+              }}
+            >
+              내가쓴일기
+            </TabH3>
+            <TabH3
+              role="tab"
+              aria-selected={currentTab.get("tab") === "activitylog"}
+              $active={currentTab.get("tab") === "activitylog"}
+              tabIndex={0}
+              onClick={() => {
                 navigator(`?tab=activitylog`);
-            }}
-          >
-            활동 로그 내역
-          </TabH3>
-        </Title>
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ")
+                  navigator(`?tab=activitylog`);
+              }}
+            >
+              활동 로그 내역
+            </TabH3>
+          </Title>          
+          <Section>
+            {currentTab.get("tab") === "info" && <MyInfo />}
+            {currentTab.get("tab") === "mydiary" && (
+              <>
+                <MyDiaries />
+                <MyComments />
+              </>
+            )}
+            {currentTab.get("tab") === "activitylog" && <MyActivityLogs />}
+          </Section>
+        </>
       )}
-      <Section>
-        {currentTab.get("tab") === "info" && <MyInfo />}
-        {currentTab.get("tab") === "mydiary" && (
-          <>
-            <MyDiaries />
-            <MyComments />
-          </>
-        )}
-        {currentTab.get("tab") === "activitylog" && <MyActivityLogs />}
-      </Section>
     </Wrapper>
   );
 };

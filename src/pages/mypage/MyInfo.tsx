@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLogin } from "../../context/LoginContext";
 import { getUserInfoApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/form/TextInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
@@ -7,28 +6,25 @@ import { TwoDiv } from "../../components/form/TwoDiv";
 import styled from "styled-components";
 
 const MyInfo = () => {
-  const { isLogin } = useLogin();
   const [id, setId] = useState(-1);
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
-    if (isLogin) {
-      getUserInfoApi()
-        .then((res) => {
-          console.log(res);
+    getUserInfoApi()
+      .then((res) => {
+        console.log(res);
 
-          setId(res?.data.id);
-          setEmail(res?.data.email);
-          setNickname(res?.data.nickname);
-          setProfileImage(res?.data.profileImage);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }, [isLogin]);
+        setId(res?.data.id);
+        setEmail(res?.data.email);
+        setNickname(res?.data.nickname);
+        setProfileImage(res?.data.profileImage);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <>
