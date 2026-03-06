@@ -91,6 +91,10 @@ const getCommentsByDiaryApi = async (diaryId: number) => {
   return api.get(`/comment/diary/${diaryId}`);
 };
 
+const getCommentsByUserApi = async () => {
+  return api.get(`/comment/user`);
+}
+
 const createCommentApi = async (data: CommentRequestType) => {
   return api.post(`/comment/create`, data);
 };
@@ -126,6 +130,7 @@ export {
   createDiaryApi,
   editDiaryApi,
   getCommentsByDiaryApi,
+  getCommentsByUserApi,
   createCommentApi,
   getLikingNicknameByDiaryApi,
   isLikedApi,

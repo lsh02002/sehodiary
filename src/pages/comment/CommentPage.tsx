@@ -5,7 +5,7 @@ import DiaryCard1 from "../../components/card/DiaryCard1";
 import CommentCreateCard from "../../components/card/CommentCreateCard";
 import { getCommentsByDiaryApi } from "../../api/sehodiary-api";
 import { CommentResponseType } from "../../types/type";
-import CommentCard from "../../components/card/CommentCard";
+import CommentCard0 from "../../components/card/CommentCard0";
 
 const CommentPage = () => {
   const { diary } = useLogin();
@@ -31,7 +31,7 @@ const CommentPage = () => {
         <CommentCreateCard diaryId={diary?.id ?? -1} />
         {commentList && commentList.length > 0 ? (
           commentList.map((comment: CommentResponseType) => (
-            <CommentCard key={comment?.commentId} comment={comment} />
+            <CommentCard0 key={comment?.commentId} comment={comment} />
           ))
         ) : (
           <div>해당 댓글이 없습니다!</div>

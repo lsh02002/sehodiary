@@ -4,6 +4,8 @@ import { ActivityLogResponseType } from "../../types/type";
 import { useLogin } from "../../context/LoginContext";
 import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import MyDiaries from "./MyDiaries";
+import MyComments from "./MyComments";
 
 const MyPage = () => {
   const navigator = useNavigate();
@@ -47,6 +49,23 @@ const MyPage = () => {
           </TabH3>
           <TabH3
             role="tab"
+            aria-selected={currentTab.get("tab") === "mydiary"}
+            $active={currentTab.get("tab") === "mydiary"}
+            tabIndex={0}
+            onClick={() => {
+              currentTab.set("tab", "mydiary");
+              navigator(`?${currentTab.toString()}`);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ")
+                currentTab.set("tab", "mydiary");
+              navigator(`?${currentTab.toString()}`);
+            }}
+          >
+            내가쓴일기
+          </TabH3>
+          <TabH3
+            role="tab"
             aria-selected={currentTab.get("tab") === "activitylog"}
             $active={currentTab.get("tab") === "activitylog"}
             tabIndex={0}
@@ -68,19 +87,37 @@ const MyPage = () => {
         <div
           style={{
             margin: "10px 0",
-            padding: "15px",
+            padding: "20px",
             marginTop: "70px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           회원 정보란입니다.
+        </div>
+      )}
+      {currentTab.get("tab") === "mydiary" && (
+        <div
+          style={{
+            margin: "10px 0",
+            padding: "20px",
+            marginTop: "70px",
+            width: "100%",
+            boxSizing: "border-box",
+          }}
+        >          
+          <MyDiaries />
+          <MyComments />
         </div>
       )}
       {currentTab.get("tab") === "activitylog" && (
         <div
           style={{
             margin: "10px 0",
-            padding: "15px",
+            padding: "20px",
             marginTop: "70px",
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           <div>활동 내역</div>

@@ -4,8 +4,8 @@ import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
 
-const CommentCard = ({ comment }: { comment: CommentResponseType }) => {
-      const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
+  const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
     <PageContainer>
@@ -14,6 +14,7 @@ const CommentCard = ({ comment }: { comment: CommentResponseType }) => {
           <IoPersonOutline style={{ marginRight: "5px" }} />
           {comment?.content}
         </IconAndContent>
+        <Diary>글아이디: {comment?.diaryId}</Diary>
         <TwoDiv>
           <Nickname>작성자: {comment?.nickname}</Nickname>
           <CreatedAt>{createdAt}</CreatedAt>
@@ -23,7 +24,7 @@ const CommentCard = ({ comment }: { comment: CommentResponseType }) => {
   );
 };
 
-export default CommentCard;
+export default CommentCard1;
 
 const PageContainer = styled.div`
   border: 1px solid #e5e7eb;
@@ -43,6 +44,11 @@ const IconAndContent = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
+`;
+
+const Diary = styled.div`
+  font-style: italic;
+  color: gray;
 `;
 
 const Nickname = styled.div`
