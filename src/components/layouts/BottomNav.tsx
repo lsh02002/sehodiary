@@ -1,12 +1,15 @@
 import styled from "styled-components";
 
 import Home from "../../assets/home.svg";
-import Inbox from "../../assets/inbox.svg";
-import TaskList from "../../assets/task-list.svg";
-import Settings from "../../assets/dashboard.svg";
+// import Inbox from "../../assets/inbox.svg";
+// import TaskList from "../../assets/task-list.svg";
+import MyPage from "../../assets/dashboard.svg";
 import { NavLink } from "react-router-dom";
+import { useLogin } from "../../context/LoginContext";
 
 const BottomNav = () => {
+  const { isLogin } = useLogin();
+
   return (
     <Container>
       <Wrapper>
@@ -16,7 +19,7 @@ const BottomNav = () => {
           </div>
           <div>홈</div>
         </IconLink>
-        <IconLink to={`/inbox`}>
+        {/* <IconLink to={`/inbox`}>
           <div>
             <img src={Inbox} alt="" />
           </div>
@@ -27,13 +30,15 @@ const BottomNav = () => {
             <img src={TaskList} alt="" />
           </div>
           <div>나의 태스크들</div>
-        </IconLink>
-        <IconLink to="/settings">
-          <div>
-            <img src={Settings} alt="" />
-          </div>
-          <div>설정</div>
-        </IconLink>
+        </IconLink> */}
+        {isLogin && (
+          <IconLink to="/mypage?tab=info">
+            <div>
+              <img src={MyPage} alt="" />
+            </div>
+            <div>마이페이지</div>
+          </IconLink>
+        )}
       </Wrapper>
     </Container>
   );

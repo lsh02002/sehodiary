@@ -49,7 +49,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   }, [diary0?.id]);
 
   useEffect(() => {
-    if (likesCount > 0 && isMouseOverOnce) {
+    if (isMouseOverOnce) {
       getLikingNicknameByDiaryApi(diary0?.id ?? -1)
         .then((res) => {
           console.log("마우스 호버", res);

@@ -12,14 +12,16 @@ const CommentPage = () => {
   const { commentList, setCommentList } = useLogin();
 
   useEffect(() => {
-    getCommentsByDiaryApi(diary?.id ?? -1)
-      .then((res) => {
-        console.log(res);
-        setCommentList(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (diary?.id) {
+      getCommentsByDiaryApi(diary?.id ?? -1)
+        .then((res) => {
+          console.log(res);
+          setCommentList(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [diary?.id, setCommentList]);
 
   return (
