@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
-import { ActivityLogResponseType } from "../../types/type";
 import { useLogin } from "../../context/LoginContext";
 import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
+import MyActivityLogs from "./MyActivityLogs";
+import MyInfo from "./MyInfo";
 
 const MyPage = () => {
   const navigator = useNavigate();
   const [currentTab] = useSearchParams();
   const { isLogin } = useLogin();
-  const [logMessages, setLogMessages] = useState([]);
-
-  useEffect(() => {
-    if (currentTab.get("tab") === "activitylog") {
-      getLogMessagesByUserApi()
-        .then((res) => {
-          console.log(res);
-          setLogMessages(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }, [currentTab]);
 
   return (
     <Wrapper>
@@ -36,13 +21,10 @@ const MyPage = () => {
             $active={currentTab.get("tab") === "info"}
             tabIndex={0}
             onClick={() => {
-              currentTab.set("tab", "info");
-              navigator(`?${currentTab.toString()}`);
+              navigator(`?tab=info`);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ")
-                currentTab.set("tab", "info");
-              navigator(`?${currentTab.toString()}`);
+              if (e.key === "Enter" || e.key === " ") navigator(`?tab=info`);
             }}
           >
             회원 정보
@@ -53,13 +35,10 @@ const MyPage = () => {
             $active={currentTab.get("tab") === "mydiary"}
             tabIndex={0}
             onClick={() => {
-              currentTab.set("tab", "mydiary");
-              navigator(`?${currentTab.toString()}`);
+              navigator(`?tab=mydiary`);
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ")
-                currentTab.set("tab", "mydiary");
-              navigator(`?${currentTab.toString()}`);
+              if (e.key === "Enter" || e.key === " ") navigator(`?tab=mydiary`);
             }}
           >
             내가쓴일기
@@ -70,85 +49,34 @@ const MyPage = () => {
             $active={currentTab.get("tab") === "activitylog"}
             tabIndex={0}
             onClick={() => {
-              currentTab.set("tab", "activitylog");
-              navigator(`?${currentTab.toString()}`);
+              navigator(`?tab=activitylog`);
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ")
-                currentTab.set("tab", "activitylog");
-              navigator(`?${currentTab.toString()}`);
+                navigator(`?tab=activitylog`);
             }}
           >
             활동 로그 내역
           </TabH3>
         </Title>
       )}
-      {currentTab.get("tab") === "info" && (
-        <div
-          style={{
-            margin: "10px 0",
-            padding: "20px",
-            marginTop: "70px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          회원 정보란입니다.
-        </div>
-      )}
-      {currentTab.get("tab") === "mydiary" && (
-        <div
-          style={{
-            margin: "10px 0",
-            padding: "20px",
-            marginTop: "70px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-        >          
-          <MyDiaries />
-          <MyComments />
-        </div>
-      )}
-      {currentTab.get("tab") === "activitylog" && (
-        <div
-          style={{
-            margin: "10px 0",
-            padding: "20px",
-            marginTop: "70px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-        >
-          <div>활동 내역</div>
-          {logMessages &&
-            (logMessages?.length > 0 ? (
-              logMessages?.map((log: ActivityLogResponseType) => (
-                <div
-                  key={log?.id}
-                  style={{
-                    margin: "10px 0",
-                    padding: "15px",
-                    borderRadius: "15px",
-                    border: "1px solid gray",
-                  }}
-                >
-                  <div>{log?.message}</div>
-                  <div>{log?.createdAt}</div>
-                </div>
-              ))
-            ) : (
-              <div>해당 메시지가 없습니다!</div>
-            ))}
-        </div>
-      )}
+      <Section>
+        {currentTab.get("tab") === "info" && <MyInfo />}
+        {currentTab.get("tab") === "mydiary" && (
+          <>
+            <MyDiaries />
+            <MyComments />
+          </>
+        )}
+        {currentTab.get("tab") === "activitylog" && <MyActivityLogs />}
+      </Section>
     </Wrapper>
   );
 };
 
 export default MyPage;
 
-export const Wrapper = styled.div`
+const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -203,4 +131,12 @@ const TabH3 = styled.h3<{ $active?: boolean }>`
   &:hover {
     color: #111827;
   }
+`;
+
+const Section = styled.div`
+  margin: 10px 0;
+  padding: 20px;
+  margin-top: 70px;
+  width: 100%;
+  box-sizing: border-box;
 `;

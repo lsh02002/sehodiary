@@ -71,7 +71,7 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
             setData={setContent}
             rows={5}
           />
-          <div>
+          <DivBox>
             <TextInput
               disabled
               name="nickname"
@@ -80,7 +80,7 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
               setData={setNickname}
             />
             <ConfirmButton title="댓글 입력" onClick={handleCreateComment} />
-          </div>
+          </DivBox>
         </TwoDiv>
       </Wrapper>
     </Container>
@@ -106,3 +106,5 @@ const Wrapper = styled.div`
   //   padding: 20px;
   box-sizing: border-box;
 `;
+
+const DivBox = styled.div``;

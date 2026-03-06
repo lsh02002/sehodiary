@@ -63,8 +63,8 @@ const UserLogoutApi = async () => {
   return api.delete(`/user/logout`);
 };
 
-const getUserInfosApi = async () => {
-  return api.get(`/user`);
+const getUserInfoApi = async () => {
+  return api.get(`/user/info`);
 };
 
 const getDiariesByPublicApi = async () => {
@@ -123,7 +123,7 @@ export {
   UserLoginApi,
   UserSignupApi,
   UserLogoutApi,
-  getUserInfosApi,
+  getUserInfoApi,
   getDiariesByPublicApi,
   getDiariesByUserApi,
   getOneDiaryApi,

@@ -5,7 +5,7 @@ import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
 
 const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
-      const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+  const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
     <PageContainer>
