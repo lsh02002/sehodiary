@@ -128,46 +128,48 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
             }}
           >
             <SlugField>작성자: {diary0?.nickname}</SlugField>
-            <EmojiField>{diary0?.emoji}</EmojiField>
-            <FaRegCommentDots onClick={handleEditComment} />
-            <div
-              style={{
-                fontStyle: "italic",
-                color: "gray",
-                marginRight: "10px",
-              }}
-            >
-              ({diary0?.commentsCount})
-            </div>
-            <div
-              onMouseOver={() => setIsMouseOverOnce(true)}
-              onMouseLeave={() => setIsMouseOverOnce(false)}
-              onClick={handleLikeClick}
-            >
-              {isLiked ? <AiFillLike /> : <AiOutlineLike />}
-            </div>
-            <div
-              style={{
-                fontStyle: "italic",
-                color: "gray",
-                marginRight: "10px",
-                position: "relative",
-              }}
-            >
-              {likesCount}
-              {isMouseOverOnce && nicknameList.length > 0 && (
-                <NicknameListBox
-                  onMouseOver={() => setIsMouseOverOnce(true)}
-                  onMouseLeave={() => setIsMouseOverOnce(false)}
-                >
-                  {nicknameList?.map((list) => (
-                    <div>{list}</div>
-                  ))}
-                </NicknameListBox>
-              )}
-            </div>
-            <div style={{ fontStyle: "italic", color: "gray" }}>
-              {createdAt}
+            <div style={{display: "flex", alignItems: "center"}}>
+              <EmojiField>{diary0?.emoji}</EmojiField>
+              <FaRegCommentDots onClick={handleEditComment} />
+              <div
+                style={{
+                  fontStyle: "italic",
+                  color: "gray",
+                  marginRight: "10px",
+                }}
+              >
+                ({diary0?.commentsCount})
+              </div>
+              <div
+                onMouseOver={() => setIsMouseOverOnce(true)}
+                onMouseLeave={() => setIsMouseOverOnce(false)}
+                onClick={handleLikeClick}
+              >
+                {isLiked ? <AiFillLike /> : <AiOutlineLike />}
+              </div>
+              <div
+                style={{
+                  fontStyle: "italic",
+                  color: "gray",
+                  marginRight: "10px",
+                  position: "relative",
+                }}
+              >
+                {likesCount}
+                {isMouseOverOnce && nicknameList.length > 0 && (
+                  <NicknameListBox
+                    onMouseOver={() => setIsMouseOverOnce(true)}
+                    onMouseLeave={() => setIsMouseOverOnce(false)}
+                  >
+                    {nicknameList?.map((list) => (
+                      <div>{list}</div>
+                    ))}
+                  </NicknameListBox>
+                )}
+              </div>
+              <div style={{ fontStyle: "italic", color: "gray" }}>
+                {createdAt}
+              </div>
             </div>
           </div>
         </InfoBoxField>
