@@ -67,12 +67,13 @@ export const SlugField = styled.div`
   color: gray;
   font-size: 0.9rem;
   font-style: italic;
+  width: 110px;  
 `;
 
 export const ContentField = styled.div`
   margin-top: 2px;
   font-size: 0.9rem;
-  width: 100%;
+  width: 100%;  
 `;
 
 export const EditButtonField = styled.span`
@@ -104,5 +105,5 @@ export const InfoBoxField = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
-  width: 100%;
+  width: 100%;  
 `;

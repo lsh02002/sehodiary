@@ -10,6 +10,7 @@ import { DiaryRequestType } from "../../types/type";
 import { toast } from "react-toastify";
 import ImageInput from "../../components/form/ImageInput";
 import CheckboxInput from "../../components/form/CheckboxInput";
+import EmotionSelectInput from "../../components/form/EmotionSelectInput";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -22,6 +23,7 @@ const DiaryCreatePage = () => {
   const [isImagesShown, setIsImagesShown] = useState(true);
   const [images, setImages] = useState<File[] | null>(null);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [emoji, setEmoji] = useState<string>();
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -35,6 +37,7 @@ const DiaryCreatePage = () => {
       weather,
       visibility,
       content,
+      emoji: emoji ?? "",
     };
 
     const formDataToSend = new FormData();
@@ -88,6 +91,12 @@ const DiaryCreatePage = () => {
         data={content}
         setData={setContent}
         rows={10}
+      />
+      <EmotionSelectInput
+        name="emotion"
+        title="이모션"
+        data={emoji ?? ""}
+        setData={setEmoji}
       />
       <CheckboxInput
         name="isimageshown"

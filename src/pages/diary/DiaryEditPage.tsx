@@ -41,7 +41,7 @@ const DiaryEditPage = () => {
   const [images, setImages] = useState<File[]>([]);
   const [imageResponses, setImageResponses] = useState<ImageResponseType[]>([]);
   const [createdAt, setCreatedAt] = useState("");
-  const [emotion, setEmotion] = useState<string>();
+  const [emoji, setEmoji] = useState<string>();
 
   const [isImagesShown, setIsImagesShown] = useState(true);
   const { isLogin, diary, setDiary, setOpen } = useLogin();
@@ -72,6 +72,7 @@ const DiaryEditPage = () => {
             (image: ImageResponseType) => image.fileUrl,
           ),
         );
+        setEmoji(res.data.emoji);
         setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);
@@ -113,6 +114,7 @@ const DiaryEditPage = () => {
       weather,
       visibility,
       content,
+      emoji: emoji ?? "",
     };
 
     const formDataToSend = new FormData();
@@ -180,6 +182,7 @@ const DiaryEditPage = () => {
       likesCount,
       isLiked,
       imageResponses: imageResponses,
+      emoji: emoji ?? "",
       createdAt,
     };
     setDiary(data);
@@ -257,8 +260,8 @@ const DiaryEditPage = () => {
       <EmotionSelectInput
         name="emotion"
         title="이모션"
-        data={emotion ?? ""}
-        setData={setEmotion}
+        data={emoji ?? ""}
+        setData={setEmoji}
       />
       <CheckboxInput
         name="isimageshown"

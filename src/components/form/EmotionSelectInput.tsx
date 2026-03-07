@@ -48,16 +48,16 @@ const EmotionSelectInput = ({
       <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
         {emotions.map((emotion) => (
           <button
-            key={emotion.value}
+            key={emotion.emoji}
             type="button"
-            disabled={disabled}
-            onClick={() => setData(emotion.value)}
+            disabled={disabled}            
+            onClick={() => setData(emotion.emoji)}
             style={{
               padding: "8px 12px",
               borderRadius: "8px",
               border:
                 data === emotion.value ? "2px solid #4CAF50" : "1px solid #ccc",
-              background: data === emotion.value ? "#E8F5E9" : "white",
+              background: data === emotion.emoji ? "#E8F5E9" : "white",
               cursor: "pointer",
             }}
           >

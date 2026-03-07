@@ -11,6 +11,7 @@ export type DiaryRequestType = {
   content: string;
   visibility: string;
   weather: string;
+  emoji: string;
 };
 
 export type DiaryResponseType = {
@@ -24,6 +25,7 @@ export type DiaryResponseType = {
   likesCount: number;
   isLiked: boolean;
   imageResponses: ImageResponseType[];
+  emoji: string | null;
   createdAt: string;
 };
 
