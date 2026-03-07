@@ -122,6 +122,10 @@ const getLogMessagesByUserApi = async () => {
   return api.get(`/activitylog/user`);
 };
 
+const getEmotionsApi = async () => {
+  return api.get(`/emotion/all`);
+}
+
 export {
   UserLoginApi,
   UserSignupApi,
@@ -141,4 +145,5 @@ export {
   insertLikeApi,
   deleteLikeApi,
   getLogMessagesByUserApi,
+  getEmotionsApi,
 };

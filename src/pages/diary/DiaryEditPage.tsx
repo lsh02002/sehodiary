@@ -13,7 +13,11 @@ import {
   isLikedApi,
 } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
-import { DiaryRequestType, DiaryResponseType, ImageResponseType } from "../../types/type";
+import {
+  DiaryRequestType,
+  DiaryResponseType,
+  ImageResponseType,
+} from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
@@ -22,6 +26,7 @@ import { AiFillLike } from "react-icons/ai";
 import { toast } from "react-toastify";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import ImageInput from "../../components/form/ImageInput";
+import EmotionSelectInput from "../../components/form/EmotionSelectInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -35,8 +40,9 @@ const DiaryEditPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
-  const [imageResponses, setImageResponses] = useState<ImageResponseType[]>([])
+  const [imageResponses, setImageResponses] = useState<ImageResponseType[]>([]);
   const [createdAt, setCreatedAt] = useState("");
+  const [emotion, setEmotion] = useState<string>();
 
   const [isImagesShown, setIsImagesShown] = useState(true);
   const { isLogin, diary, setDiary, setDiaryList, setOpen } = useLogin();
@@ -62,7 +68,11 @@ const DiaryEditPage = () => {
         setCommentsCount(res.data.commentsCount);
         setLikesCount(res.data.likesCount);
         setImageResponses(res.data.imageResponses);
-        setImageUrls(res.data.imageResponses.map((image: ImageResponseType) => image.fileUrl));
+        setImageUrls(
+          res.data.imageResponses.map(
+            (image: ImageResponseType) => image.fileUrl,
+          ),
+        );
         setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);
@@ -112,7 +122,7 @@ const DiaryEditPage = () => {
       new Blob([JSON.stringify(data)], { type: "application/json" }),
     );
 
-    (images ?? []).forEach((file) => {      
+    (images ?? []).forEach((file) => {
       formDataToSend.append("files", file);
     });
 
@@ -267,6 +277,12 @@ const DiaryEditPage = () => {
           )}
         </div>
       </div>
+      <EmotionSelectInput
+        name="emotion"
+        title="이모션"
+        data={emotion ?? ""}
+        setData={setEmotion}
+      />
       <CheckboxInput
         name="isimageshown"
         title="이미지입력창"

@@ -58,3 +58,11 @@ export type ActivityLogResponseType = {
   message: string;
   createdAt: string;
 };
+
+export type EmotionResponseType = {
+  id: number;
+  name: string;
+  emoji: string;
+  createdAt: string;
+  updatedAt: string;
+}
