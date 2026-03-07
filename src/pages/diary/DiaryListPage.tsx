@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getDiariesByPublicApi,
 } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import styled from "styled-components";
 import DiaryCard0 from "../../components/card/DiaryCard0";
-import { useLogin } from "../../context/LoginContext";
 
 const DiaryListPage = () => {
-  const { diaryList, setDiaryList } = useLogin();  
+  const [ diaryList, setDiaryList ] = useState([]);  
 
   useEffect(() => {
     getDiariesByPublicApi()

@@ -12,9 +12,7 @@ type LoginContextValue = {
   isLogin: boolean;
   setIsLogin: Dispatch<SetStateAction<boolean>>;
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  diaryList?: DiaryResponseType[];
-  setDiaryList: Dispatch<SetStateAction<DiaryResponseType[] | undefined>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;  
   diary?: DiaryResponseType;
   setDiary: Dispatch<SetStateAction<DiaryResponseType | undefined>>;
   commentList?: CommentResponseType[];
@@ -27,8 +25,7 @@ export const LoginContext = createContext<LoginContextValue | undefined>(
 
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [diaryList, setDiaryList] = useState<DiaryResponseType[]>();
+  const [open, setOpen] = useState(false);  
   const [diary, setDiary] = useState<DiaryResponseType>();
   const [commentList, setCommentList] = useState<CommentResponseType[]>();
 
@@ -36,9 +33,7 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
     isLogin,
     setIsLogin,
     open,
-    setOpen,
-    diaryList,
-    setDiaryList,
+    setOpen,    
     diary,
     setDiary,
     commentList,

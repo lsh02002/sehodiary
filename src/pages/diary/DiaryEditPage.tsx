@@ -14,8 +14,7 @@ import {
 } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import {
-  DiaryRequestType,
-  DiaryResponseType,
+  DiaryRequestType,  
   ImageResponseType,
 } from "../../types/type";
 import { useParams } from "react-router-dom";
@@ -45,7 +44,7 @@ const DiaryEditPage = () => {
   const [emotion, setEmotion] = useState<string>();
 
   const [isImagesShown, setIsImagesShown] = useState(true);
-  const { isLogin, diary, setDiary, setDiaryList, setOpen } = useLogin();
+  const { isLogin, diary, setDiary, setOpen } = useLogin();
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState([]);
 
@@ -144,17 +143,6 @@ const DiaryEditPage = () => {
             console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount - 1);
-
-            setDiaryList((prev) => {
-              if (prev === undefined) {
-                return;
-              }
-              return prev.map((diary: DiaryResponseType) =>
-                diary.id === Number(diaryId)
-                  ? { ...diary, likesCount: likesCount - 1 }
-                  : diary,
-              );
-            });
           })
           .catch((err) => {
             console.error(err);
@@ -165,17 +153,6 @@ const DiaryEditPage = () => {
             console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount + 1);
-
-            setDiaryList((prev) => {
-              if (prev === undefined) {
-                return;
-              }
-              return prev.map((diary: DiaryResponseType) =>
-                diary.id === Number(diaryId)
-                  ? { ...diary, likesCount: likesCount + 1 }
-                  : diary,
-              );
-            });
           })
           .catch((err) => {
             console.error(err);

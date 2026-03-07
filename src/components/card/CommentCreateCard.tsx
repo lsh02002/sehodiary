@@ -4,12 +4,12 @@ import TextInput from "../form/TextInput";
 import TextAreaInput from "../form/TextAreaInput";
 import { TwoDiv } from "../form/TwoDiv";
 import ConfirmButton from "../form/ConfirmButton";
-import { CommentRequestType, DiaryResponseType } from "../../types/type";
+import { CommentRequestType } from "../../types/type";
 import { createCommentApi } from "../../api/sehodiary-api";
 import { useLogin } from "../../context/LoginContext";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
-  const { setDiary, setDiaryList, setCommentList } = useLogin();
+  const { setDiary, setCommentList } = useLogin();
   const [nickname, setNickname] = useState(
     localStorage.getItem("nickname") ?? "",
   );
@@ -30,17 +30,6 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
             return;
           }
           return [...prev, res.data];
-        });
-
-        setDiaryList((prev) => {
-          if (prev === undefined) {
-            return;
-          }
-          return prev.map((diary: DiaryResponseType) =>
-            diary.id === diaryId
-              ? { ...diary, commentsCount: diary?.commentsCount + 1 }
-              : diary,
-          );
         });
 
         setDiary((prev) => {
