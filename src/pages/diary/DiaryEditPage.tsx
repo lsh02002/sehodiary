@@ -20,6 +20,8 @@ import { useLogin } from "../../context/LoginContext";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import { toast } from "react-toastify";
+import CheckboxInput from "../../components/form/CheckboxInput";
+import ImageInput from "../../components/form/ImageInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -31,7 +33,11 @@ const DiaryEditPage = () => {
   const [commentsCount, setCommentsCount] = useState(-1);
   const [likesCount, setLikesCount] = useState(-1);
   const [isLiked, setIsLiked] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [createdAt, setCreatedAt] = useState("");
+
+  const [isImagesShown, setIsImagesShown] = useState(true);
   const { isLogin, diary, setDiary, setDiaryList, setOpen } = useLogin();
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState([]);
@@ -54,6 +60,7 @@ const DiaryEditPage = () => {
         setContent(res.data.content);
         setCommentsCount(res.data.commentsCount);
         setLikesCount(res.data.likesCount);
+        setImageUrls(res.data.images.map((image: any) => image.fileUrl));
         setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);
@@ -97,7 +104,17 @@ const DiaryEditPage = () => {
       content,
     };
 
-    editDiaryApi(Number(diaryId), data)
+    const formDataToSend = new FormData();
+    formDataToSend.append(
+      "request",
+      new Blob([JSON.stringify(data)], { type: "application/json" }),
+    );
+
+    (images ?? []).forEach((file) => {      
+      formDataToSend.append("files", file);
+    });
+
+    editDiaryApi(Number(diaryId), formDataToSend)
       .then((res) => {
         console.log(res);
         toast.success("글 수정이 되었습니다.");
@@ -247,6 +264,24 @@ const DiaryEditPage = () => {
           )}
         </div>
       </div>
+      <CheckboxInput
+        name="isimageshown"
+        title="이미지입력창"
+        checked={isImagesShown}
+        setChecked={setIsImagesShown}
+      />
+      {isImagesShown && (
+        <>
+          <ImageInput
+            name="images"
+            title="이미지들"
+            data={images ?? []}
+            setData={setImages}
+            previewUrls={imageUrls}
+            setPreviewUrls={setImageUrls}
+          />
+        </>
+      )}
       <ConfirmButton title="일기 수정" onClick={handleEditDiary} />
     </PageContainer>
   );

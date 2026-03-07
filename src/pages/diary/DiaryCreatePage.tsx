@@ -8,13 +8,20 @@ import { createDiaryApi } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import { DiaryRequestType } from "../../types/type";
 import { toast } from "react-toastify";
+import ImageInput from "../../components/form/ImageInput";
+import CheckboxInput from "../../components/form/CheckboxInput";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
-  const [nickname, setNickname] = useState(localStorage.getItem("nickname") ?? "");
+  const [nickname, setNickname] = useState(
+    localStorage.getItem("nickname") ?? "",
+  );
   const [weather, setWeather] = useState("");
   const [visibility, setVisibility] = useState("PRIVATE");
   const [content, setContent] = useState("");
+  const [isImagesShown, setIsImagesShown] = useState(true);
+  const [images, setImages] = useState<File[] | null>(null);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -30,14 +37,24 @@ const DiaryCreatePage = () => {
       content,
     };
 
-    createDiaryApi(data)
-    .then(res=>{
-      console.log(res);
-      toast.success("글 생성이 되었습니다.");
-    })
-    .catch(err=>{
-      console.error(err);
+    const formDataToSend = new FormData();
+    formDataToSend.append(
+      "request",
+      new Blob([JSON.stringify(data)], { type: "application/json" }),
+    );
+
+    (images ?? []).forEach((file) => {
+      formDataToSend.append("files", file);
     });
+
+    createDiaryApi(formDataToSend)
+      .then((res) => {
+        console.log(res);
+        toast.success("글 생성이 되었습니다.");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -72,6 +89,24 @@ const DiaryCreatePage = () => {
         setData={setContent}
         rows={10}
       />
+      <CheckboxInput
+        name="isimageshown"
+        title="이미지입력창"
+        checked={isImagesShown}
+        setChecked={setIsImagesShown}
+      />
+      {isImagesShown && (
+        <>
+          <ImageInput
+            name="images"
+            title="이미지들"
+            data={images ?? []}
+            setData={setImages}
+            previewUrls={imageUrls}
+            setPreviewUrls={setImageUrls}
+          />
+        </>
+      )}
       <ConfirmButton title="일기 생성" onClick={handleCreateDiary} />
     </PageContainer>
   );

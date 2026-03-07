@@ -2,8 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import { toast } from "react-toastify";
 import {
-  CommentRequestType,
-  DiaryRequestType,
+  CommentRequestType,  
   UserSignupType,
 } from "../types/type";
 
@@ -79,11 +78,11 @@ const getOneDiaryApi = async (diaryId: number) => {
   return api.get(`/diary/${diaryId}`);
 };
 
-const createDiaryApi = async (data: DiaryRequestType) => {
+const createDiaryApi = async (data: FormData) => {
   return api.post(`/diary/create`, data);
 };
 
-const editDiaryApi = async (diaryId: number, data: DiaryRequestType) => {
+const editDiaryApi = async (diaryId: number, data: FormData) => {
   return api.post(`/diary/edit/${diaryId}`, data);
 };
 
@@ -93,7 +92,7 @@ const getCommentsByDiaryApi = async (diaryId: number) => {
 
 const getCommentsByUserApi = async () => {
   return api.get(`/comment/user`);
-}
+};
 
 const createCommentApi = async (data: CommentRequestType) => {
   return api.post(`/comment/create`, data);
