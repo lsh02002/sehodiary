@@ -62,7 +62,7 @@ const DiaryEditPage = () => {
         setCommentsCount(res.data.commentsCount);
         setLikesCount(res.data.likesCount);
         setImageResponses(res.data.imageResponses);
-        setImageUrls(res.data.images.map((image: ImageResponseType) => image.fileUrl));
+        setImageUrls(res.data.imageResponses.map((image: ImageResponseType) => image.fileUrl));
         setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);

@@ -11,7 +11,11 @@ const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
     <PageContainer>
       <Wrapper>
         <IconAndContent>
-          <IoPersonOutline style={{ marginRight: "5px" }} />
+          {comment?.profileImage ? (
+            <img width="28px" height="28px" src={comment?.profileImage} alt="그림" />
+          ) : (
+            <IoPersonOutline style={{ marginRight: "5px" }} />
+          )}
           {comment?.content}
         </IconAndContent>
         <TwoDiv>

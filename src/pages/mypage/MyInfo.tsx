@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getUserInfoApi } from "../../api/sehodiary-api";
+import {
+  getUserInfoApi,
+  UserSetProfileImagesApi,
+} from "../../api/sehodiary-api";
 import TextInput from "../../components/form/TextInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
 import styled from "styled-components";
+import ImageInput from "../../components/form/ImageInput";
+import { toast } from "react-toastify";
 
 const MyInfo = () => {
   const [id, setId] = useState(-1);
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
 
   useEffect(() => {
     getUserInfoApi()
@@ -19,12 +25,29 @@ const MyInfo = () => {
         setId(res?.data.id);
         setEmail(res?.data.email);
         setNickname(res?.data.nickname);
-        setProfileImage(res?.data.profileImage);
+        setImageUrls(res?.data.profileImages);
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
+
+  const handleSetProfiles = () => {
+    const formDataToSend = new FormData();
+
+    (images ?? []).forEach((file) => {
+      formDataToSend.append("files", file);
+    });
+
+    UserSetProfileImagesApi(formDataToSend)
+      .then((res) => {
+        console.log(res);
+        toast.success("프로필 사진 수정이 되었습니다.");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <>
@@ -49,16 +72,18 @@ const MyInfo = () => {
         data={nickname}
         setData={setNickname}
       />
-      <TextInput
-        name="profileimage"
-        title="프로필"
-        data={profileImage}
-        setData={setProfileImage}
+      <ImageInput
+        name="images"
+        title="이미지들"
+        data={images}
+        setData={setImages}
+        previewUrls={imageUrls}
+        setPreviewUrls={setImageUrls}
       />
       <Message>프로필 사진 이외는 가입할때 정해짐!!!</Message>
       <TwoDiv>
         <div style={{ width: "450px" }} />
-        <ConfirmButton title="프로필설정" onClick={() => {}} />
+        <ConfirmButton title="프로필설정" onClick={handleSetProfiles} />
       </TwoDiv>
     </>
   );

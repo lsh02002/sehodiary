@@ -62,6 +62,10 @@ const UserLogoutApi = async () => {
   return api.delete(`/user/logout`);
 };
 
+const UserSetProfileImagesApi = async (data: FormData) => {
+  return api.post(`/user/profile`, data);
+}
+
 const getUserInfoApi = async () => {
   return api.get(`/user/info`);
 };
@@ -122,6 +126,7 @@ export {
   UserLoginApi,
   UserSignupApi,
   UserLogoutApi,
+  UserSetProfileImagesApi,
   getUserInfoApi,
   getDiariesByPublicApi,
   getDiariesByUserApi,
