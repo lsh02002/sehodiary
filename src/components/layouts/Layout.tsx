@@ -264,10 +264,10 @@ const TopBarInner = styled.div`
 `;
 
 const Main = styled.main`
-  max-width: 768px;
+  max-width: 640px;
   margin: 0 auto;
   padding-bottom: 100px;
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     padding: 24px;
   }
 `;

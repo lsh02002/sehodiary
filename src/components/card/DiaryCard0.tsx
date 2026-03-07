@@ -22,6 +22,7 @@ import {
   isLikedApi,
 } from "../../api/sehodiary-api";
 import styled from "styled-components";
+import ImageCard from "./ImageCard";
 
 const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const navigator = useNavigate();
@@ -112,6 +113,11 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
           </TwoDiv>
           <ContentField onClick={() => navigator(`/edit/${diary0?.id}`)}>
             내용: {diary0?.content}
+          </ContentField>
+          <ContentField>
+            {diary0?.imageResponses?.map((image) => (
+              <ImageCard imageUrl={image?.fileUrl} />
+            ))}
           </ContentField>
           <TwoDiv>
             <SlugField>작성자: {diary0?.nickname}</SlugField>

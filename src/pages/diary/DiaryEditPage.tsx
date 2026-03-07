@@ -13,7 +13,7 @@ import {
   isLikedApi,
 } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
-import { DiaryRequestType, DiaryResponseType } from "../../types/type";
+import { DiaryRequestType, DiaryResponseType, ImageResponseType } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
@@ -35,6 +35,7 @@ const DiaryEditPage = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
+  const [imageResponses, setImageResponses] = useState<ImageResponseType[]>([])
   const [createdAt, setCreatedAt] = useState("");
 
   const [isImagesShown, setIsImagesShown] = useState(true);
@@ -60,7 +61,8 @@ const DiaryEditPage = () => {
         setContent(res.data.content);
         setCommentsCount(res.data.commentsCount);
         setLikesCount(res.data.likesCount);
-        setImageUrls(res.data.images.map((image: any) => image.fileUrl));
+        setImageResponses(res.data.imageResponses);
+        setImageUrls(res.data.images.map((image: ImageResponseType) => image.fileUrl));
         setCreatedAt(res.data.createdAt);
 
         setDiary(res.data);
@@ -190,6 +192,7 @@ const DiaryEditPage = () => {
       commentsCount: cCount,
       likesCount,
       isLiked,
+      imageResponses: imageResponses,
       createdAt,
     };
     setDiary(data);

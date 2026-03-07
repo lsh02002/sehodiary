@@ -23,6 +23,7 @@ export type DiaryResponseType = {
   commentsCount: number;
   likesCount: number;
   isLiked: boolean;
+  imageResponses: ImageResponseType[];
   createdAt: string;
 };
 
@@ -39,6 +40,17 @@ export type CommentResponseType = {
   content: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type ImageResponseType = {
+  id: number;
+  diaryId: number;
+  uploaderId: number;
+  fileName: string;
+  fileUrl: string;
+  mimeType: string;
+  sizeBytes: number;
+  deleted: boolean;
 };
 
 export type ActivityLogResponseType = {

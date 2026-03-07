@@ -39,4 +39,5 @@ export default DiaryListPage;
 const PageContainer = styled.div`
   margin-top: 20px;
   padding: 0 20px;
+  margin-bottom: 100px;
 `;

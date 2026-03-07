@@ -26,14 +26,14 @@ export const CardWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center;  
 `;
 
 export const IdField = styled.div`
   color: #4680ff;
   font-weight: 600;
   margin-bottom: 4px;
-  transition: color 0.15s ease;   
+  transition: color 0.15s ease;  
 
   ${CardContainer}:hover & {
     color: #2e63d4;
@@ -72,6 +72,7 @@ export const SlugField = styled.div`
 export const ContentField = styled.div`
   margin-top: 2px;
   font-size: 0.9rem;
+  width: 100%;
 `;
 
 export const EditButtonField = styled.span`
@@ -102,5 +103,6 @@ export const InfoBoxField = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-direction: column;  
+  flex-direction: column;
+  width: 100%;
 `;
