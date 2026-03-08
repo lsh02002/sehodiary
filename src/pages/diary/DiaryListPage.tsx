@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  getDiariesByPublicApi,
-} from "../../api/sehodiary-api";
+import { getDiariesByPublicApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import styled from "styled-components";
 import DiaryCard0 from "../../components/card/DiaryCard0";
+import { useLogin } from "../../context/LoginContext";
 
 const DiaryListPage = () => {
-  const [ diaryList, setDiaryList ] = useState([]);  
+  const { diary } = useLogin();
+  const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
   useEffect(() => {
     getDiariesByPublicApi()
@@ -18,7 +18,14 @@ const DiaryListPage = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [setDiaryList]);
+  }, []);
+
+  useEffect(() => {
+    setDiaryList((prev) => {
+      if (!prev) return prev;
+      return prev.map((i) => (i.id === diary?.id ? diary : i));
+    });
+  }, [diary]);
 
   return (
     <PageContainer>
@@ -28,7 +35,7 @@ const DiaryListPage = () => {
         ))
       ) : (
         <div>해당 글이 없습니다!</div>
-      )}            
+      )}
     </PageContainer>
   );
 };
