@@ -19,7 +19,7 @@ const MyDiaries = () => {
       });
   }, []);
 
-  useEffect(() => {    
+  useEffect(() => {
     setDiaryList((prev) => {
       if (!prev) return prev;
       return prev.map((i) => (i.id === diary?.id ? diary : i));
@@ -28,7 +28,9 @@ const MyDiaries = () => {
 
   return (
     <>
-      <h4 style={{ marginBottom: "20px" }}>내가쓴일기</h4>
+      <h4 style={{ marginBottom: "20px" }}>
+        내가쓴일기({diaryList?.length})
+      </h4>
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
           <DiaryCard0 key={diary?.id} diary0={diary} />

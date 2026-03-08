@@ -19,7 +19,7 @@ const MyActivityLogs = () => {
 
   return (
     <>
-      <div>내 활동 내역</div>
+      <div>내 활동 내역({logMessages?.length})</div>
       {logMessages &&
         (logMessages?.length > 0 ? (
           logMessages?.map((log: ActivityLogResponseType) => (
