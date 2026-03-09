@@ -25,6 +25,7 @@ export type DiaryResponseType = {
   likesCount: number;
   isLiked: boolean;
   imageResponses: ImageResponseType[];
+  profileImage: string;
   emoji: string | null;
   createdAt: string;
 };

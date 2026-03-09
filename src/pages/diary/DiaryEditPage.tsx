@@ -40,6 +40,7 @@ const DiaryEditPage = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [imageResponses, setImageResponses] = useState<ImageResponseType[]>([]);
+  const [profileImage, setProfileImage] = useState("");
   const [createdAt, setCreatedAt] = useState("");
   const [emoji, setEmoji] = useState<string>();
 
@@ -67,6 +68,7 @@ const DiaryEditPage = () => {
         setCommentsCount(res.data.commentsCount);
         setLikesCount(res.data.likesCount);
         setImageResponses(res.data.imageResponses);
+        setProfileImage(res.data.profileImage);
         setImageUrls(
           res.data.imageResponses.map(
             (image: ImageResponseType) => image.fileUrl,
@@ -182,6 +184,7 @@ const DiaryEditPage = () => {
       likesCount,
       isLiked,
       imageResponses: imageResponses,
+      profileImage,
       emoji: emoji ?? "",
       createdAt,
     };

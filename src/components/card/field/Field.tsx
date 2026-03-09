@@ -67,7 +67,7 @@ export const SlugField = styled.div`
   color: gray;
   font-size: 0.9rem;
   font-style: italic;
-  width: 110px;  
+  width: 120px;  
 `;
 
 export const ContentField = styled.div`

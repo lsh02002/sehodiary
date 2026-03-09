@@ -23,6 +23,7 @@ import {
 } from "../../api/sehodiary-api";
 import styled from "styled-components";
 import ImageCard from "./ImageCard";
+import { IoPersonOutline } from "react-icons/io5";
 
 const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const navigator = useNavigate();
@@ -124,11 +125,21 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: "100%",
+              width: "100%",              
             }}
           >
+            {diary0?.profileImage ? (
+              <img
+                width="40px"
+                height="40px"
+                src={diary0?.profileImage}
+                alt="그림"
+              />
+            ) : (
+              <IoPersonOutline style={{ marginRight: "5px" }} />
+            )}
             <SlugField>작성자: {diary0?.nickname}</SlugField>
-            <div style={{display: "flex", alignItems: "center"}}>
+            <div style={{ display: "flex", justifyContent: "end", alignItems: "center", width: "120%" }}>
               <EmojiField>{diary0?.emoji}</EmojiField>
               <FaRegCommentDots onClick={handleEditComment} />
               <div
