@@ -14,7 +14,7 @@ const ActivityLogCard = ({ log }: { log: ActivityLogResponseType }) => {
       <CardWrapper>
         <InfoBoxField>
           <ContentField>{log?.message}</ContentField>
-          <SlugField>{log?.createdAt}</SlugField>
+          <SlugField style={{width: "100%"}}>{log?.createdAt}</SlugField>
         </InfoBoxField>
       </CardWrapper>
     </CardContainer>

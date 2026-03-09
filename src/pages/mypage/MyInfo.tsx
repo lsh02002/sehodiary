@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   getUserInfoApi,
+  showToast,
   UserSetProfileImagesApi,
 } from "../../api/sehodiary-api";
 import TextInput from "../../components/form/TextInput";
@@ -8,7 +9,6 @@ import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
 import styled from "styled-components";
 import ImageInput from "../../components/form/ImageInput";
-import { toast } from "react-toastify";
 
 const MyInfo = () => {
   const [id, setId] = useState(-1);
@@ -42,7 +42,7 @@ const MyInfo = () => {
     UserSetProfileImagesApi(formDataToSend)
       .then((res) => {
         console.log(res);
-        toast.success("프로필 사진 수정이 되었습니다.");
+        showToast("프로필 사진 수정이 되었습니다.", "success")
       })
       .catch((err) => {
         console.error(err);

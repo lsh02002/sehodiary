@@ -10,13 +10,22 @@ const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
   return (
     <PageContainer>
       <Wrapper>
-        <IconAndContent>
-          <IoPersonOutline style={{ marginRight: "5px" }} />
-          {comment?.content}
-        </IconAndContent>
+        <IconAndContent><div style={{color: "blue", marginRight: "5px"}}>#{comment?.commentId}</div> {comment?.content}</IconAndContent>
         <Diary>글아이디: {comment?.diaryId}</Diary>
         <TwoDiv>
-          <Nickname>작성자: {comment?.nickname}</Nickname>
+          <Nickname>
+            {comment?.profileImage ? (
+              <img
+                width="40px"
+                height="40px"
+                src={comment?.profileImage}
+                alt="그림"
+              />
+            ) : (
+              <IoPersonOutline style={{ marginRight: "5px" }} />
+            )}
+            작성자: {comment?.nickname}
+          </Nickname>
           <CreatedAt>{createdAt}</CreatedAt>
         </TwoDiv>
       </Wrapper>
@@ -49,11 +58,14 @@ const IconAndContent = styled.div`
 const Diary = styled.div`
   font-style: italic;
   color: gray;
+  padding-left: 5px;
 `;
 
 const Nickname = styled.div`
   font-style: italic;
   color: gray;
+  display: flex;
+  align-items: center;
 `;
 
 const CreatedAt = styled.div`

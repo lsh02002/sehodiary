@@ -11,6 +11,7 @@ import {
   getOneDiaryApi,
   insertLikeApi,
   isLikedApi,
+  showToast,
 } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import {
@@ -22,7 +23,6 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
-import { toast } from "react-toastify";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import ImageInput from "../../components/form/ImageInput";
 import EmotionSelectInput from "../../components/form/EmotionSelectInput";
@@ -132,7 +132,7 @@ const DiaryEditPage = () => {
     editDiaryApi(Number(diaryId), formDataToSend)
       .then((res) => {
         console.log(res);
-        toast.success("글 수정이 되었습니다.");
+        showToast("글 수정이 되었습니다.", "success");
       })
       .catch((err) => {
         console.error(err);

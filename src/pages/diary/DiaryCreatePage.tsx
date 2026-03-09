@@ -4,10 +4,9 @@ import TextInput from "../../components/form/TextInput";
 import TextAreaInput from "../../components/form/TextAreaInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
-import { createDiaryApi } from "../../api/sehodiary-api";
+import { createDiaryApi, showToast } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
 import { DiaryRequestType } from "../../types/type";
-import { toast } from "react-toastify";
 import ImageInput from "../../components/form/ImageInput";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import EmotionSelectInput from "../../components/form/EmotionSelectInput";
@@ -53,7 +52,7 @@ const DiaryCreatePage = () => {
     createDiaryApi(formDataToSend)
       .then((res) => {
         console.log(res);
-        toast.success("글 생성이 되었습니다.");
+        showToast("글 생성이 되었습니다.", "success");
       })
       .catch((err) => {
         console.error(err);
