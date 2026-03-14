@@ -5,6 +5,7 @@ import { AddDiaryButton } from "../form/AddDiaryButton";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
+import { BackwardButton } from "../form/BackwardButton";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -37,7 +38,7 @@ export default function Layout({
   children,
 }: Props) {
   const navigator = useNavigate();
-  const {open, setOpen} = useLogin();
+  const { open, setOpen } = useLogin();
 
   // 포커스 트랩 단순 구현: 열릴 때 첫 링크에 포커스
   const firstLinkRef = React.useRef<HTMLAnchorElement | null>(null);
@@ -89,7 +90,10 @@ export default function Layout({
       </TopBar>
 
       {/* 메인 컨텐츠 */}
-      <Main id="main">{children}</Main>
+      <Main id="main">
+        <BackwardButton />
+        {children}
+      </Main>
 
       <LockBodyScroll when={open} />
       <AddDiaryButton onClick={() => navigator("/create")}>+</AddDiaryButton>
@@ -183,7 +187,7 @@ const Sidebar = styled.aside<{ $open: boolean }>`
   top: 200px;
   left: 0;
   right: 0;
-  bottom: 0;  
+  bottom: 0;
   width: 100%;
   background: white;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
@@ -230,8 +234,8 @@ const CloseX = styled.button`
   }
 `;
 
-const Nav = styled.nav`  
-  padding: 8px;  
+const Nav = styled.nav`
+  padding: 8px;
   ul {
     list-style: none;
     padding: 0;
