@@ -5,25 +5,28 @@ import styled from "styled-components";
 import DiaryCard0 from "../../components/card/DiaryCard0";
 import { useLogin } from "../../context/LoginContext";
 import { useScroll } from "../../context/ScrollContext";
-import { useLocation } from "react-router-dom";
 
 const DiaryListPage = () => {
   const { diary } = useLogin();
   const { mainPageScroll } = useScroll();
-  const location = useLocation();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
-  const isMainPage = location.pathname === "/";
-
   useEffect(() => {
+    let mounted = true;
+
     getDiariesByPublicApi()
       .then((res) => {
+        if (!mounted) return;
         console.log(res);
         setDiaryList(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -34,13 +37,17 @@ const DiaryListPage = () => {
   }, [diary]);
 
   useLayoutEffect(() => {
-    if (isMainPage) {
-      setTimeout(() => {
-        window.scrollTo(mainPageScroll.x, mainPageScroll.y);
-      }, 10);      
-    }
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({
+        left: mainPageScroll.x,
+        top: mainPageScroll.y,
+        behavior: "auto",
+      });
+    });
+
+    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMainPage]);
+  }, [diaryList?.length]);
 
   return (
     <PageContainer>

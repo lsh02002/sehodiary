@@ -28,20 +28,26 @@ export const ScrollContext = createContext<ScrollContextValue | undefined>(
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [mypageTab, setMypageTab] = useState("info");
-  const [mainPageScroll, setMainPageScroll] = useState<ScrollPositionType>({ x: 0, y: 0 });
-  const [myDiaryScroll, setMyDiaryScroll] = useState<ScrollPositionType>({ x: 0, y: 0 });
+  const [mainPageScroll, setMainPageScroll] = useState<ScrollPositionType>({
+    x: 0,
+    y: 0,
+  });
+  const [myDiaryScroll, setMyDiaryScroll] = useState<ScrollPositionType>({
+    x: 0,
+    y: 0,
+  });
 
   const value = useMemo<ScrollContextValue>(
-  () => ({
-    mypageTab,
-    setMypageTab,
-    mainPageScroll,
-    setMainPageScroll,
-    myDiaryScroll,
-    setMyDiaryScroll,
-  }),
-  [mypageTab, mainPageScroll, myDiaryScroll]
-);
+    () => ({
+      mypageTab,
+      setMypageTab,
+      mainPageScroll,
+      setMainPageScroll,
+      myDiaryScroll,
+      setMyDiaryScroll,
+    }),
+    [mypageTab, mainPageScroll, myDiaryScroll],
+  );
 
   return (
     <ScrollContext.Provider value={value}>{children}</ScrollContext.Provider>
@@ -51,6 +57,7 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
 export function useScroll() {
   const ctx = useContext(ScrollContext);
 
-  if (!ctx) throw new Error("useControll must be used within <ControllProvider>");
+  if (!ctx)
+    throw new Error("useControll must be used within <ControllProvider>");
   return ctx;
 }

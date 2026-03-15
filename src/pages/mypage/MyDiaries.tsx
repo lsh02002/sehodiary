@@ -3,17 +3,12 @@ import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCard0 from "../../components/card/DiaryCard0";
 import { useLogin } from "../../context/LoginContext";
-import { useSearchParams } from "react-router-dom";
 import { useScroll } from "../../context/ScrollContext";
 
 const MyDiaries = () => {
   const { diary } = useLogin();
   const { myDiaryScroll } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
-  const [searchParams] = useSearchParams();
-  const tab = searchParams.get("tab");
-
-  const isMyDiaryPage = tab === "mydiary";
 
   useEffect(() => {
     let mounted = true;
@@ -26,7 +21,7 @@ const MyDiaries = () => {
       })
       .catch((err) => {
         console.error(err);
-      })
+      });
 
     return () => {
       mounted = false;
@@ -41,13 +36,17 @@ const MyDiaries = () => {
   }, [diary]);
 
   useLayoutEffect(() => {
-    if (isMyDiaryPage) {
-      setTimeout(() => {
-        window.scrollTo(myDiaryScroll.x, myDiaryScroll.y);
-      }, 10);
-    }
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({
+        left: myDiaryScroll.x,
+        top: myDiaryScroll.y,
+        behavior: "auto",
+      });
+    });
+
+    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMyDiaryPage]);
+  }, [diaryList.length]);
 
   return (
     <>

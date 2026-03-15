@@ -23,6 +23,12 @@ function App() {
     }
   }, [setIsLogin]);
 
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
   return (
     <Layout>
       <Routes>

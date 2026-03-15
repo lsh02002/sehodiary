@@ -44,8 +44,10 @@ export default function Layout({
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
 
-  const { setMainPageScroll, setMyDiaryScroll } =
-    useScroll();
+  const {
+    setMainPageScroll,    
+    setMyDiaryScroll,
+  } = useScroll();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -53,29 +55,31 @@ export default function Layout({
   const isMyDiaryPage = tab === "mydiary";
 
   useEffect(() => {
+    if (!isMainPage && !isMyDiaryPage) return;
+
     const handleWindowScroll = () => {
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
       }
 
       scrollTimer.current = setTimeout(() => {
-        if (isMainPage) {
-          setMainPageScroll({
-            x: window.scrollX,
-            y: window.scrollY,
-          });
-        }
 
         if (isMyDiaryPage) {
           setMyDiaryScroll({
             x: window.scrollX,
             y: window.scrollY,
           });
+          return;
+        }
+
+        if (isMainPage) {
+          setMainPageScroll({
+            x: window.scrollX,
+            y: window.scrollY,
+          });
         }
       }, 150);
     };
-
-    if (!isMainPage && !isMyDiaryPage) return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -86,7 +90,12 @@ export default function Layout({
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
+  }, [
+    isMainPage,
+    isMyDiaryPage,
+    setMainPageScroll,
+    setMyDiaryScroll,
+  ]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
