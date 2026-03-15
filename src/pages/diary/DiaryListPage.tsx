@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getDiariesByPublicApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import styled from "styled-components";
 import DiaryCard0 from "../../components/card/DiaryCard0";
 import { useLogin } from "../../context/LoginContext";
+import { useScroll } from "../../context/ScrollContext";
+import { useLocation } from "react-router-dom";
 
 const DiaryListPage = () => {
   const { diary } = useLogin();
+  const { mainPageScroll } = useScroll();
+  const location = useLocation();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
+
+  const isMainPage = location.pathname === "/";
 
   useEffect(() => {
     getDiariesByPublicApi()
@@ -26,6 +32,15 @@ const DiaryListPage = () => {
       return prev.map((i) => (i.id === diary?.id ? diary : i));
     });
   }, [diary]);
+
+  useLayoutEffect(() => {
+    if (isMainPage) {
+      setTimeout(() => {
+        window.scrollTo(mainPageScroll.x, mainPageScroll.y);
+      }, 10);      
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMainPage]);
 
   return (
     <PageContainer>

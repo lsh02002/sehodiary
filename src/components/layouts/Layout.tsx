@@ -44,12 +44,8 @@ export default function Layout({
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
 
-  const {
-    mainPageScroll,
-    setMainPageScroll,
-    myDiaryScroll,
-    setMyDiaryScroll,
-  } = useScroll();
+  const { setMainPageScroll, setMyDiaryScroll } =
+    useScroll();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -90,42 +86,13 @@ export default function Layout({
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [
-    isMainPage,
-    isMyDiaryPage,
-    setMainPageScroll,
-    setMyDiaryScroll,
-  ]);
+  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
 
   useEffect(() => {
-    if (!isMainPage) return;
-
-    const timer = setTimeout(() => {
-      window.scrollTo({
-        left: mainPageScroll.x,
-        top: mainPageScroll.y,
-        behavior: "auto",
-      });
-    }, 150);
-
-    return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMainPage]);
-
-  useEffect(() => {
-    if (!isMyDiaryPage) return;
-
-    const timer = setTimeout(() => {
-      window.scrollTo({
-        left: myDiaryScroll.x,
-        top: myDiaryScroll.y,
-        behavior: "auto",
-      });
-    }, 150);
-
-    return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMyDiaryPage]);
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
 
   return (
     <Container data-overlay-open={open}>
@@ -195,7 +162,7 @@ function LockBodyScroll({ when }: { when: boolean }) {
 const Container = styled.div`
   /* background: #fafafa; */
   background: white;
-  color: #111827;  
+  color: #111827;
 `;
 
 const SkipLink = styled.a`
