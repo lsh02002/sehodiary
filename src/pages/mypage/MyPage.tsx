@@ -5,73 +5,74 @@ import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
 import MyActivityLogs from "./MyActivityLogs";
 import MyInfo from "./MyInfo";
+import { useScroll } from "../../context/ScrollContext";
+import { useEffect } from "react";
 
 const MyPage = () => {
-  const navigator = useNavigate();
-  const [currentTab] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isLogin } = useLogin();
+  const { mypageTab, setMypageTab } = useScroll();
+
+  const tab = searchParams.get("tab") || "info";
+
+  useEffect(() => {
+    if (tab !== mypageTab) {
+      navigate(`?tab=${mypageTab}`, { replace: true });
+    }
+  }, [mypageTab, tab, navigate]);
+
+  const handleTabChange = (nextTab: "info" | "mydiary" | "activitylog") => {
+    setMypageTab(nextTab);
+    navigate(`?tab=${nextTab}`);
+  };
 
   return (
     <Container>
       <Wrapper>
         {isLogin && (
           <>
-            <Title>
+            <Title role="tablist" aria-label="마이페이지 탭">
               <TabH3
                 role="tab"
-                aria-selected={currentTab.get("tab") === "info"}
-                $active={currentTab.get("tab") === "info"}
+                aria-selected={tab === "info"}
+                $active={tab === "info"}
                 tabIndex={0}
-                onClick={() => {
-                  navigator(`?tab=info`);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    navigator(`?tab=info`);
-                }}
+                onClick={() => handleTabChange("info")}
               >
                 회원 정보
               </TabH3>
+
               <TabH3
                 role="tab"
-                aria-selected={currentTab.get("tab") === "mydiary"}
-                $active={currentTab.get("tab") === "mydiary"}
+                aria-selected={tab === "mydiary"}
+                $active={tab === "mydiary"}
                 tabIndex={0}
-                onClick={() => {
-                  navigator(`?tab=mydiary`);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    navigator(`?tab=mydiary`);
-                }}
+                onClick={() => handleTabChange("mydiary")}
               >
                 내가쓴일기
               </TabH3>
+
               <TabH3
                 role="tab"
-                aria-selected={currentTab.get("tab") === "activitylog"}
-                $active={currentTab.get("tab") === "activitylog"}
+                aria-selected={tab === "activitylog"}
+                $active={tab === "activitylog"}
                 tabIndex={0}
-                onClick={() => {
-                  navigator(`?tab=activitylog`);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ")
-                    navigator(`?tab=activitylog`);
-                }}
+                onClick={() => handleTabChange("activitylog")}
               >
                 활동 로그 내역
               </TabH3>
             </Title>
+
             <Section>
-              {currentTab.get("tab") === "info" && <MyInfo />}
-              {currentTab.get("tab") === "mydiary" && (
+              {tab === "info" && <MyInfo />}
+              {tab === "mydiary" && (
                 <>
                   <MyDiaries />
                   <MyComments />
                 </>
               )}
-              {currentTab.get("tab") === "activitylog" && <MyActivityLogs />}
+              {tab === "activitylog" && <MyActivityLogs />}
             </Section>
           </>
         )}
@@ -81,12 +82,11 @@ const MyPage = () => {
 };
 
 export default MyPage;
-
 const Container = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
 `;
 
 const Wrapper = styled.div`
@@ -94,7 +94,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;  
+  flex-direction: column;
 `;
 
 const Title = styled.div`
@@ -103,7 +103,7 @@ const Title = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  box-sizing: border-box;  
+  box-sizing: border-box;
   top: 50px;
   left: 0;
   background-color: white;
@@ -119,7 +119,7 @@ const Title = styled.div`
 `;
 
 const TabH3 = styled.h3<{ $active?: boolean }>`
-  position: relative;  
+  position: relative;
   margin: 0;
   padding: 10px 4px;
   font-weight: 700;

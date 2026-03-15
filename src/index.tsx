@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { LoginProvider } from "./context/LoginContext";
+import { ScrollProvider } from "./context/ScrollContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <LoginProvider>
-      <App />
+      <ScrollProvider>
+        <App />
+      </ScrollProvider>
     </LoginProvider>
   </BrowserRouter>,
 );

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { Menu } from "lucide-react";
 import { AddDiaryButton } from "../form/AddDiaryButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
 import { BackwardButton } from "../form/BackwardButton";
+import { useScroll } from "../../context/ScrollContext";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -38,29 +39,107 @@ export default function Layout({
   children,
 }: Props) {
   const navigator = useNavigate();
+  const location = useLocation();
   const { open, setOpen } = useLogin();
+  const [searchParams] = useSearchParams();
+  const tab = searchParams.get("tab");
 
-  // 포커스 트랩 단순 구현: 열릴 때 첫 링크에 포커스
-  const firstLinkRef = React.useRef<HTMLAnchorElement | null>(null);
-  React.useEffect(() => {
-    if (open && firstLinkRef.current) firstLinkRef.current.focus();
-  }, [open]);
+  const {
+    mainPageScroll,
+    setMainPageScroll,
+    myDiaryScroll,
+    setMyDiaryScroll,
+  } = useScroll();
+
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isMainPage = location.pathname === "/";
+  const isMyDiaryPage = tab === "mydiary";
+
+  useEffect(() => {
+    const handleWindowScroll = () => {
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);
+      }
+
+      scrollTimer.current = setTimeout(() => {
+        if (isMainPage) {
+          setMainPageScroll({
+            x: window.scrollX,
+            y: window.scrollY,
+          });
+        }
+
+        if (isMyDiaryPage) {
+          setMyDiaryScroll({
+            x: window.scrollX,
+            y: window.scrollY,
+          });
+        }
+      }, 150);
+    };
+
+    if (!isMainPage && !isMyDiaryPage) return;
+
+    window.addEventListener("scroll", handleWindowScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);
+      }
+    };
+  }, [
+    isMainPage,
+    isMyDiaryPage,
+    setMainPageScroll,
+    setMyDiaryScroll,
+  ]);
+
+  useEffect(() => {
+    if (!isMainPage) return;
+
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        left: mainPageScroll.x,
+        top: mainPageScroll.y,
+        behavior: "auto",
+      });
+    }, 150);
+
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMainPage]);
+
+  useEffect(() => {
+    if (!isMyDiaryPage) return;
+
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        left: myDiaryScroll.x,
+        top: myDiaryScroll.y,
+        behavior: "auto",
+      });
+    }, 150);
+
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMyDiaryPage]);
 
   return (
     <Container data-overlay-open={open}>
-      {/* 스킵 링크 */}
       <SkipLink href="#main">본문으로 건너뛰기</SkipLink>
-      {/* 최상단 왼쪽 모서리 햄버거 버튼 (고정) */}
+
       <BurgerButton
         aria-label="메뉴 열기"
         aria-expanded={open}
         aria-controls="side-nav"
-        // onClick={() => setOpen(true)}
+        onClick={() => setOpen(true)}
       >
         <Menu className="icon" />
       </BurgerButton>
 
-      {/* 오버레이 */}
       <Overlay
         role="presentation"
         $open={open}
@@ -68,7 +147,6 @@ export default function Layout({
         aria-hidden={!open}
       />
 
-      {/* 사이드바 */}
       <Sidebar id="side-nav" $open={open} aria-hidden={!open}>
         <SidebarHeader>
           <MenuTitle>{"댓글 창"}</MenuTitle>
@@ -82,14 +160,12 @@ export default function Layout({
         </Nav>
       </Sidebar>
 
-      {/* 상단 바 (선택) */}
       <TopBar>
         <TopBarInner>
           <strong>{appName}</strong>
         </TopBarInner>
       </TopBar>
 
-      {/* 메인 컨텐츠 */}
       <Main id="main">
         <BackwardButton />
         {children}
@@ -100,26 +176,26 @@ export default function Layout({
     </Container>
   );
 }
-
-// 메뉴가 열렸을 때 body 스크롤을 잠그는 보조 컴포넌트
 function LockBodyScroll({ when }: { when: boolean }) {
   React.useEffect(() => {
     if (!when) return;
+
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = original;
     };
   }, [when]);
+
   return null;
 }
 
 // ================= styled-components =================
 const Container = styled.div`
-  min-height: 100vh;
   /* background: #fafafa; */
   background: white;
-  color: #111827;
+  color: #111827;  
 `;
 
 const SkipLink = styled.a`
@@ -271,6 +347,7 @@ const Main = styled.main`
   max-width: 640px;
   margin: 0 auto;
   padding-bottom: 100px;
+  overflow: auto;
   @media (min-width: 640px) {
     padding: 24px;
   }
