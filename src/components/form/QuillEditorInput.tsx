@@ -34,6 +34,7 @@ const QuillEditorInput = ({
               : [
                 //   [{ header: [1, 2, 3, false] }], 나중에 필요하면 주석제거!
                   ["bold", "italic", "underline", "strike"],
+                  [{ color: [] }, { background: [] }],
                   [{ list: "ordered" }, { list: "bullet" }],
                   ["blockquote", "link"],
                   ["clean"],
