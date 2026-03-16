@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const PasswordInput = ({
-  isPasswordVisible = false,
+  isPasswordVisible,
   disabled,
   name,
   title,

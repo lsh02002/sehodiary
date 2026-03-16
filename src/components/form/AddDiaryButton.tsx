@@ -1,6 +1,24 @@
 import styled from "styled-components";
 
-export const AddDiaryButton = styled.button`
+const AddDiaryButton = ({
+  disabled,
+  title,
+  onClick,
+}: {
+  disabled?: boolean;
+  title: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}) => {
+  return (
+    <Button disabled={disabled} onClick={onClick}>
+      {title}
+    </Button>
+  );
+};
+
+export default AddDiaryButton;
+
+const Button = styled.button`
   position: fixed;
   width: 50px;
   height: 50px;

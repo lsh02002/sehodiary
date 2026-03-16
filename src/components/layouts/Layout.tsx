@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { Menu } from "lucide-react";
-import { AddDiaryButton } from "../form/AddDiaryButton";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
 import { BackwardButton } from "../form/BackwardButton";
 import { useScroll } from "../../context/ScrollContext";
+import AddDiaryButton from "../form/AddDiaryButton";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -44,10 +44,7 @@ export default function Layout({
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
 
-  const {
-    setMainPageScroll,    
-    setMyDiaryScroll,
-  } = useScroll();
+  const { setMainPageScroll, setMyDiaryScroll } = useScroll();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -63,7 +60,6 @@ export default function Layout({
       }
 
       scrollTimer.current = setTimeout(() => {
-
         if (isMyDiaryPage) {
           setMyDiaryScroll({
             x: window.scrollX,
@@ -90,12 +86,7 @@ export default function Layout({
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [
-    isMainPage,
-    isMyDiaryPage,
-    setMainPageScroll,
-    setMyDiaryScroll,
-  ]);
+  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -148,7 +139,7 @@ export default function Layout({
       </Main>
 
       <LockBodyScroll when={open} />
-      <AddDiaryButton onClick={() => navigator("/create")}>+</AddDiaryButton>
+      <AddDiaryButton title="+" onClick={() => navigator("/create")} />
     </Container>
   );
 }
