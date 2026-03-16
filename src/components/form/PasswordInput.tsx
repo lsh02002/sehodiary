@@ -1,12 +1,14 @@
 import styled from "styled-components";
 
 const PasswordInput = ({
+  isPasswordVisible = false,
   disabled,
   name,
   title,
   data,
   setData,
 }: {
+  isPasswordVisible?: boolean;
   disabled?: boolean;
   name: string;
   title: string;
@@ -18,7 +20,7 @@ const PasswordInput = ({
       <label htmlFor={name}>{title}</label>
       <input
         disabled={disabled}
-        type="password"
+        type={isPasswordVisible ? "text" : "password"}
         name={name}
         value={data}
         onChange={(e) => setData(e.target.value)}
@@ -55,7 +57,9 @@ const Container = styled.div`
     box-sizing: border-box;
     color: #111827;
     line-height: 1.5;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
       background-color 0.2s ease;
     &:focus {
       outline: none;

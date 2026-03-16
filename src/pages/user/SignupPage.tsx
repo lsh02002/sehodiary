@@ -7,6 +7,7 @@ import PasswordInput from "../../components/form/PasswordInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { FaRegistered } from "react-icons/fa6";
 import { UserSignupType } from "../../types/type";
+import CheckboxInput from "../../components/form/CheckboxInput";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const SignupPage = () => {
   // const [profileImage, setProfileImage] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const OnSignupSubmit = () => {
     localStorage.removeItem("userId");
@@ -67,14 +69,22 @@ const SignupPage = () => {
         <PasswordInput
           name="password"
           title="비밀번호"
+          isPasswordVisible={isPasswordVisible}
           data={password}
           setData={setPassword}
         />
         <PasswordInput
           name="passwordConfirm"
           title="비밀번호 확인"
+          isPasswordVisible={isPasswordVisible}
           data={passwordConfirm}
           setData={setPasswordConfirm}
+        />
+        <CheckboxInput
+          name="istext"
+          title="암호보기"
+          checked={isPasswordVisible}
+          setChecked={setIsPasswordVisible}
         />
         <ConfirmButton title="회원 가입" onClick={OnSignupSubmit} />
       </Wrapper>
