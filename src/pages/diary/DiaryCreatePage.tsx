@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TextInput from "../../components/form/TextInput";
-import TextAreaInput from "../../components/form/TextAreaInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
 import { createDiaryApi, showToast } from "../../api/sehodiary-api";
@@ -10,6 +9,7 @@ import { DiaryRequestType } from "../../types/type";
 import ImageInput from "../../components/form/ImageInput";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import EmotionSelectInput from "../../components/form/EmotionSelectInput";
+import QuillEditorInput from "../../components/form/QuillEditorInput";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -84,7 +84,7 @@ const DiaryCreatePage = () => {
           options={visibilityOptions}
         />
       </TwoDiv>
-      <TextAreaInput
+      <QuillEditorInput
         name="content"
         title="내용"
         data={content}

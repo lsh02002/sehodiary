@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
+import DOMPurify from "dompurify";
 
 const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
   const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
@@ -12,11 +13,20 @@ const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
       <Wrapper>
         <IconAndContent>
           {comment?.profileImage ? (
-            <img width="28px" height="28px" src={comment?.profileImage} alt="그림" />
+            <img
+              width="28px"
+              height="28px"
+              src={comment?.profileImage}
+              alt="그림"
+            />
           ) : (
             <IoPersonOutline style={{ marginRight: "5px" }} />
           )}
-          {comment?.content}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(comment?.content ?? ""),
+            }}
+          />
         </IconAndContent>
         <TwoDiv>
           <Nickname>작성자: {comment?.nickname}</Nickname>

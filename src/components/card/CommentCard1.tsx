@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
+import DOMPurify from "dompurify";
 
 const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
   const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
@@ -10,7 +11,16 @@ const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
   return (
     <PageContainer>
       <Wrapper>
-        <IconAndContent><div style={{color: "blue", marginRight: "5px"}}>#{comment?.commentId}</div> {comment?.content}</IconAndContent>
+        <IconAndContent>
+          <div style={{ color: "blue", marginRight: "5px" }}>
+            #{comment?.commentId}
+          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(comment?.content ?? ""),
+            }}
+          />
+        </IconAndContent>
         <Diary>글아이디: {comment?.diaryId}</Diary>
         <TwoDiv>
           <Nickname>

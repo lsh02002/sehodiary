@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TextInput from "../../components/form/TextInput";
-import TextAreaInput from "../../components/form/TextAreaInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
 import {
@@ -26,6 +25,7 @@ import { AiFillLike } from "react-icons/ai";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import ImageInput from "../../components/form/ImageInput";
 import EmotionSelectInput from "../../components/form/EmotionSelectInput";
+import QuillEditorInput from "../../components/form/QuillEditorInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -218,7 +218,7 @@ const DiaryEditPage = () => {
           options={visibilityOptions}
         />
       </TwoDiv>
-      <TextAreaInput
+      <QuillEditorInput
         name="content"
         title="내용"
         data={content}

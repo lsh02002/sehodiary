@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TextInput from "../form/TextInput";
-import TextAreaInput from "../form/TextAreaInput";
 import { TwoDiv } from "../form/TwoDiv";
 import ConfirmButton from "../form/ConfirmButton";
 import { CommentRequestType } from "../../types/type";
 import { createCommentApi } from "../../api/sehodiary-api";
 import { useLogin } from "../../context/LoginContext";
+import QuillEditorInput from "../form/QuillEditorInput";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   const { setDiary, setCommentList } = useLogin();
@@ -53,12 +53,12 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
     <Container>
       <Wrapper>
         <TwoDiv style={{ alignItems: "start" }}>
-          <TextAreaInput
+          <QuillEditorInput
             name="content"
             title="댓글 내용"
             data={content}
             setData={setContent}
-            rows={5}
+            rows={2}
           />
           <DivBox>
             <TextInput

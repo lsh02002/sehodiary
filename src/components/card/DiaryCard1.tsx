@@ -10,6 +10,7 @@ import {
   SlugField,
 } from "./field/Field";
 import { TwoDiv } from "../form/TwoDiv";
+import DOMPurify from "dompurify";
 
 const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
   const createdAt = `${new Date(diary?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
@@ -22,7 +23,11 @@ const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
             <IdField>#{diary?.id}</IdField>
             <NameField>{diary?.title}</NameField>
           </TwoDiv>
-          <ContentField>내용: {diary?.content}</ContentField>
+          <ContentField
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(diary?.content ?? ""),
+            }}
+          />
           <TwoDiv>
             <SlugField>작성자: {diary?.nickname}</SlugField>
             <div

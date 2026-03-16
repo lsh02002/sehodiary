@@ -24,6 +24,7 @@ import {
 import styled from "styled-components";
 import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
+import DOMPurify from "dompurify";
 
 const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const navigator = useNavigate();
@@ -112,9 +113,12 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
             <IdField>#{diary0?.id}</IdField>
             <NameField>{diary0?.title}</NameField>
           </TwoDiv>
-          <ContentField onClick={() => navigator(`/edit/${diary0?.id}`)}>
-            내용: {diary0?.content}
-          </ContentField>
+          <ContentField
+            onClick={() => navigator(`/edit/${diary0?.id}`)}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(diary0?.content ?? ""),
+            }}
+          />
           <ContentField>
             {diary0?.imageResponses?.map((image) => (
               <ImageCard key={image?.id} imageUrl={image?.fileUrl} />
