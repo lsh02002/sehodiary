@@ -5,6 +5,7 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
+  useMemo,
 } from "react";
 import { CommentResponseType, DiaryResponseType } from "../types/type";
 
@@ -12,7 +13,7 @@ type LoginContextValue = {
   isLogin: boolean;
   setIsLogin: Dispatch<SetStateAction<boolean>>;
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;  
+  setOpen: Dispatch<SetStateAction<boolean>>;
   diary?: DiaryResponseType;
   setDiary: Dispatch<SetStateAction<DiaryResponseType | undefined>>;
   commentList?: CommentResponseType[];
@@ -25,20 +26,23 @@ export const LoginContext = createContext<LoginContextValue | undefined>(
 
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(false);
-  const [open, setOpen] = useState(false);  
+  const [open, setOpen] = useState(false);
   const [diary, setDiary] = useState<DiaryResponseType>();
   const [commentList, setCommentList] = useState<CommentResponseType[]>();
 
-  const value: LoginContextValue = {
-    isLogin,
-    setIsLogin,
-    open,
-    setOpen,    
-    diary,
-    setDiary,
-    commentList,
-    setCommentList,
-  };
+  const value = useMemo<LoginContextValue>(
+    () => ({
+      isLogin,
+      setIsLogin,
+      open,
+      setOpen,
+      diary,
+      setDiary,
+      commentList,
+      setCommentList,
+    }),
+    [commentList, diary, isLogin, open],
+  );
 
   return (
     <LoginContext.Provider value={value}>{children}</LoginContext.Provider>
