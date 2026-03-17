@@ -15,12 +15,9 @@ const CommentPage = () => {
     if (diary?.id) {
       getCommentsByDiaryApi(diary?.id ?? -1)
         .then((res) => {
-          console.log(res);
           setCommentList(res.data);
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch(() => {});
     }
   }, [diary?.id, setCommentList]);
 
@@ -49,6 +46,7 @@ const PageContainer = styled.div`
 
 const Wrapper = styled.div`
   overflow-y: auto;
-  height: calc(100vh - 460px);
+  margin-bottom: 100px;
+  height: calc(100vh - 560px);
   border-top: 1px solid #e5e7eb;
 `;

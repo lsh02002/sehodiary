@@ -41,12 +41,9 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
     if (isLogin) {
       isLikedApi(diary0?.id ?? -1)
         .then((res) => {
-          console.log(res);
           setIsLiked(res.data);
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch(() => {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary0?.id]);
@@ -55,12 +52,9 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
     if (isMouseOverOnce) {
       getLikingNicknameByDiaryApi(diary0?.id ?? -1)
         .then((res) => {
-          console.log("마우스 호버", res);
           setNicknameList(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch(() => {});
     }
   }, [diary0?.id, isMouseOverOnce, likesCount]);
 
@@ -69,23 +63,17 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
       if (isLiked) {
         deleteLikeApi(diary0?.id ?? -1)
           .then((res) => {
-            console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount - 1);
           })
-          .catch((err) => {
-            console.error(err);
-          });
+          .catch(() => {});
       } else {
         insertLikeApi(diary0?.id ?? -1)
           .then((res) => {
-            console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount + 1);
           })
-          .catch((err) => {
-            console.error(err);
-          });
+          .catch(() => {});
       }
     }
   };

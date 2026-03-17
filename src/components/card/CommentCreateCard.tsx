@@ -23,8 +23,6 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
 
     createCommentApi(data)
       .then((res) => {
-        console.log(res);
-
         setCommentList((prev) => {
           if (prev === undefined) {
             return;
@@ -44,9 +42,7 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
 
         setContent("");
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   };
 
   return (

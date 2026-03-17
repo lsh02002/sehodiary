@@ -51,12 +51,9 @@ const DiaryCreatePage = () => {
 
     createDiaryApi(formDataToSend)
       .then((res) => {
-        console.log(res);
         showToast("글 생성이 되었습니다.", "success");
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   };
 
   return (
@@ -89,7 +86,6 @@ const DiaryCreatePage = () => {
         title="내용"
         data={content}
         setData={setContent}
-        rows={10}
       />
       <EmotionSelectInput
         name="emotion"
@@ -124,4 +120,5 @@ export default DiaryCreatePage;
 
 const PageContainer = styled.div`
   padding: 0 20px;
+  margin-bottom: 100px;
 `;

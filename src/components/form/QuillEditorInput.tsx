@@ -9,7 +9,7 @@ const QuillEditorInput = ({
   title,
   data,
   setData,
-  rows = 6,
+  rows = 8,
 }: {
   disabled?: boolean;
   name: string;

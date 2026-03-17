@@ -16,8 +16,7 @@ const LoginPage = () => {
 
   const OnLoginSubmit = () => {
     UserLoginApi(email, password)
-      .then((res) => {
-        console.log("login ", res);
+      .then((res) => {        
         localStorage.setItem("userId", res.data.data.userId);
         localStorage.setItem("nickname", res.data.data.nickname);
         localStorage.setItem("accessToken", res.headers.accesstoken);

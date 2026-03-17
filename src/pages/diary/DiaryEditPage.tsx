@@ -13,10 +13,7 @@ import {
   showToast,
 } from "../../api/sehodiary-api";
 import SelectInput, { Option } from "../../components/form/SelectInput";
-import {
-  DiaryRequestType,  
-  ImageResponseType,
-} from "../../types/type";
+import { DiaryRequestType, ImageResponseType } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
@@ -58,8 +55,6 @@ const DiaryEditPage = () => {
   useEffect(() => {
     getOneDiaryApi(Number(diaryId))
       .then((res) => {
-        console.log(res);
-
         setNickname(res.data.nickname);
         setTitle(res.data.title);
         setWeather(res.data.weather);
@@ -79,19 +74,14 @@ const DiaryEditPage = () => {
 
         setDiary(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
 
     if (isLogin) {
       isLikedApi(Number(diaryId) ?? -1)
         .then((res) => {
-          console.log(res);
           setIsLiked(res.data);
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch(() => {});
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,12 +91,9 @@ const DiaryEditPage = () => {
     if (isMouseOverOnce) {
       getLikingNicknameByDiaryApi(Number(diaryId) ?? -1)
         .then((res) => {
-          console.log("마우스 호버", res);
           setNicknameList(res.data);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch(() => {});
     }
   }, [diaryId, isMouseOverOnce, likesCount]);
 
@@ -131,12 +118,9 @@ const DiaryEditPage = () => {
 
     editDiaryApi(Number(diaryId), formDataToSend)
       .then((res) => {
-        console.log(res);
         showToast("글 수정이 되었습니다.", "success");
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   };
 
   const handleLikeClick = () => {
@@ -144,23 +128,17 @@ const DiaryEditPage = () => {
       if (isLiked) {
         deleteLikeApi(Number(diaryId) ?? -1)
           .then((res) => {
-            console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount - 1);
           })
-          .catch((err) => {
-            console.error(err);
-          });
+          .catch(() => {});
       } else {
         insertLikeApi(Number(diaryId) ?? -1)
           .then((res) => {
-            console.log(res);
             setIsLiked(res.data);
             setLikesCount(likesCount + 1);
           })
-          .catch((err) => {
-            console.error(err);
-          });
+          .catch(() => {});
       }
     }
   };
@@ -223,7 +201,6 @@ const DiaryEditPage = () => {
         title="내용"
         data={content}
         setData={setContent}
-        rows={10}
       />
       <div style={{ display: "flex", alignItems: "center" }}>
         <FaRegCommentDots onClick={handleOpenComment} />
@@ -293,6 +270,7 @@ export default DiaryEditPage;
 
 const PageContainer = styled.div`
   padding: 0 20px;
+  margin-bottom: 100px;
 `;
 
 const NicknameListBox = styled.div`

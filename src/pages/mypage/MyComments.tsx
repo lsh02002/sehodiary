@@ -9,12 +9,9 @@ const MyComments = () => {
   useEffect(() => {
     getCommentsByUserApi()
       .then((res) => {
-        console.log(res);
         setCommentList(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   }, []);
 
   return (

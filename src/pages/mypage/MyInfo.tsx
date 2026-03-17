@@ -20,16 +20,12 @@ const MyInfo = () => {
   useEffect(() => {
     getUserInfoApi()
       .then((res) => {
-        console.log(res);
-
         setId(res?.data.id);
         setEmail(res?.data.email);
         setNickname(res?.data.nickname);
         setImageUrls(res?.data.profileImages);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   }, []);
 
   const handleSetProfiles = () => {
@@ -41,12 +37,9 @@ const MyInfo = () => {
 
     UserSetProfileImagesApi(formDataToSend)
       .then((res) => {
-        console.log(res);
-        showToast("프로필 사진 수정이 되었습니다.", "success")
+        showToast("프로필 사진 수정이 되었습니다.", "success");
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   };
 
   return (

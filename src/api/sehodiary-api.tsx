@@ -2,6 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import { toast } from "react-toastify";
 import { CommentRequestType, UserSignupType } from "../types/type";
+import { IS_LOGGING_ENABLED } from "./IS_LOGGING_ENABLED";
 
 type ToastType = "success" | "error" | "info" | "warning";
 
@@ -38,6 +39,11 @@ api.interceptors.response.use(
     if (newAccessToken) {
       localStorage.setItem("accessToken", newAccessToken);
     }
+
+    if (IS_LOGGING_ENABLED) {
+      console.log(response?.config?.url, response);
+    }
+
     return response;
   },
   (error) => {
@@ -49,7 +55,11 @@ api.interceptors.response.use(
     if (error.message === "Network Error") {
       showToast(error.message);
     }
-    console.error("⚠️ Axios Error:", error);
+
+    if (IS_LOGGING_ENABLED) {
+      console.error(error);
+    }
+
     return Promise.reject(error);
   },
 );

@@ -88,12 +88,6 @@ export default function Layout({
     };
   }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
 
-  useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
-    }
-  }, []);
-
   return (
     <Container data-overlay-open={open}>
       <SkipLink href="#main">본문으로 건너뛰기</SkipLink>

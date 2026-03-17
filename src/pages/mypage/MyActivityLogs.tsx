@@ -9,12 +9,9 @@ const MyActivityLogs = () => {
   useEffect(() => {
     getLogMessagesByUserApi()
       .then((res) => {
-        console.log(res);
         setLogMessages(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   }, []);
 
   return (

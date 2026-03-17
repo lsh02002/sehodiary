@@ -33,11 +33,10 @@ const SignupPage = () => {
     };
 
     UserSignupApi(userInfo)
-      .then((res) => {
-        console.log(res);
+      .then((res) => {        
         navigate("/login");
       })
-      .catch((err) => {});
+      .catch(() => {});
   };
 
   return (

@@ -27,8 +27,6 @@ const EmotionSelectInput = ({
   useEffect(() => {
     getEmotionsApi()
       .then((res) => {
-        console.log(res);
-
         setEmotions(
           res?.data?.map((emotion: EmotionResponseType) => ({
             value: emotion.name,
@@ -37,9 +35,7 @@ const EmotionSelectInput = ({
           })),
         );
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch(() => {});
   }, []);
   return (
     <Container>
@@ -50,7 +46,7 @@ const EmotionSelectInput = ({
           <button
             key={emotion.emoji}
             type="button"
-            disabled={disabled}            
+            disabled={disabled}
             onClick={() => setData(emotion.emoji)}
             style={{
               padding: "8px 12px",
