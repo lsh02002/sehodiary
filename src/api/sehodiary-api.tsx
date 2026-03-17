@@ -52,7 +52,7 @@ api.interceptors.response.use(
       showToast(error.response.data.detailMessage);
     }
     // 그 외의 에러도 같이 로깅
-    if (error.message === "Network Error") {
+    else {
       showToast(error.message);
     }
 
