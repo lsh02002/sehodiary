@@ -2,7 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "./BASE_URL";
 import { toast } from "react-toastify";
 import { CommentRequestType, UserSignupType } from "../types/type";
-import { IS_LOGGING_ENABLED } from "./IS_LOGGING_ENABLED";
+import { DEBUG } from "./DEBUG";
 
 type ToastType = "success" | "error" | "info" | "warning";
 
@@ -40,7 +40,7 @@ api.interceptors.response.use(
       localStorage.setItem("accessToken", newAccessToken);
     }
 
-    if (IS_LOGGING_ENABLED) {
+    if (DEBUG) {
       console.log(response?.config?.url, response);
     }
 
@@ -56,7 +56,7 @@ api.interceptors.response.use(
       showToast(error.message);
     }
 
-    if (IS_LOGGING_ENABLED) {
+    if (DEBUG) {
       console.error(error);
     }
 
