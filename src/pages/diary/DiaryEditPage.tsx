@@ -173,7 +173,16 @@ const DiaryEditPage = () => {
 
   return (
     <PageContainer>
-      <TextInput name="title" title="제목" data={title} setData={setTitle} />
+      <TwoDiv>
+        <TextInput
+          disabled
+          name="id"
+          title="아이디"
+          data={String(diaryId)}
+          setData={() => {}}
+        />
+        <TextInput name="title" title="제목" data={title} setData={setTitle} />
+      </TwoDiv>
       <TextInput
         disabled
         name="nickname"
