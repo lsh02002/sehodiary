@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { getCommentsByUserApi } from "../../api/sehodiary-api";
 import { CommentResponseType } from "../../types/type";
 import CommentCard1 from "../../components/card/CommentCard1";
+import { useLogin } from "../../context/LoginContext";
 
 const MyComments = () => {
+  const { diary } = useLogin();
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
@@ -12,7 +14,7 @@ const MyComments = () => {
         setCommentList(res.data);
       })
       .catch(() => {});
-  }, []);
+  }, [diary]);
 
   return (
     <>
