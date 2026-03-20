@@ -26,6 +26,7 @@ import QuillEditorInput from "../../components/form/QuillEditorInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
+  const [id, setId] = useState(-1);
   const [nickname, setNickname] = useState("");
   const [title, setTitle] = useState("");
   const [weather, setWeather] = useState("");
@@ -55,6 +56,7 @@ const DiaryEditPage = () => {
   useEffect(() => {
     getOneDiaryApi(Number(diaryId))
       .then((res) => {
+        setId(res.data.id);
         setNickname(res.data.nickname);
         setTitle(res.data.title);
         setWeather(res.data.weather);
@@ -178,8 +180,8 @@ const DiaryEditPage = () => {
           disabled
           name="id"
           title="아이디"
-          data={String(diaryId)}
-          setData={() => {}}
+          data={String(id)}
+          setData={(v)=>setId(Number(v))}
         />
         <TextInput name="title" title="제목" data={title} setData={setTitle} />
       </TwoDiv>
