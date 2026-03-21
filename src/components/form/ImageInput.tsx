@@ -52,7 +52,15 @@ const ImageInput = ({
         onChange={handleChange}
       />
 
-      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: 8,
+          marginTop: 10,
+        }}
+      >
         {previewUrls.map((url, i) => (
           <img
             key={`old-${i}`}

@@ -79,14 +79,14 @@ const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
               style={{
                 width: "100%",
                 height: "100%",
-                objectFit: "cover",
+                objectFit: "contain",
                 display: "block",
               }}
             />
+            <div>파일명: {image.fileName}</div>            
           </SwiperSlide>
         ))}
       </Swiper>
-
       <SelectInput
         name="effects"
         title="효과"
