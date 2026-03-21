@@ -1,12 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { Menu } from "lucide-react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {  
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
 import { BackwardButton } from "../form/BackwardButton";
 import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../form/AddDiaryButton";
+import { UserLogoutApi } from "../../api/sehodiary-api";
 
 // 사용 예시
 // <HamburgerLayoutSC
@@ -40,9 +45,10 @@ export default function Layout({
 }: Props) {
   const navigator = useNavigate();
   const location = useLocation();
-  const { open, setOpen } = useLogin();
+  const { isLogin, setIsLogin, open, setOpen } = useLogin();
   const [searchParams] = useSearchParams();
   const tab = searchParams.get("tab");
+  const navigate = useNavigate();
 
   const { setMainPageScroll, setMyDiaryScroll } = useScroll();
 
@@ -125,6 +131,34 @@ export default function Layout({
         <TopBarInner>
           <strong>{appName}</strong>
         </TopBarInner>
+        {isLogin ? (
+          <span            
+            onClick={() => {
+              if (window.confirm("로그아웃 하시겠습니까?") === false) {
+                return;
+              }
+
+              UserLogoutApi()
+                .then((res) => {
+                  console.log(res);
+                })
+                .catch(() => {});
+
+              localStorage.removeItem("userId");
+              localStorage.removeItem("nickname");
+              localStorage.removeItem("accessToken");
+              localStorage.removeItem("refreshToken");
+
+              setIsLogin(false);
+              navigate("/login");
+            }}
+          >
+            <div>{localStorage.getItem("nickname")}</div>
+            <div>로그아웃</div>
+          </span>
+        ) : (
+          <span onClick={() => navigate("/login")}>로그인</span>
+        )}
       </TopBar>
 
       <Main id="main">
@@ -288,6 +322,12 @@ const TopBar = styled.header`
   backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  margin: 0 16px;
+  span {
+    font-size: 0.8rem;
+  }
 `;
 
 const TopBarInner = styled.div`

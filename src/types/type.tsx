@@ -68,4 +68,4 @@ export type EmotionResponseType = {
   emoji: string;
   createdAt: string;
   updatedAt: string;
-}
+};
