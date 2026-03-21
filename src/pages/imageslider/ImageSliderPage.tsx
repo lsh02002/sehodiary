@@ -23,7 +23,7 @@ import { TwoDiv } from "../../components/form/TwoDiv";
 type SwiperEffectType = "slide" | "fade" | "cube" | "coverflow" | "flip";
 type SwiperDelayType = 1000 | 2000 | 3000;
 
-const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
+const ImageSliderPage = ({ diary }: { diary: DiaryResponseType }) => {
   const [effect, setEffect] = useState<SwiperEffectType>("fade");
   const [delay, setDelay] = useState<SwiperDelayType>(1000);
 
@@ -118,4 +118,4 @@ const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
   );
 };
 
-export default ImageSlider;
+export default ImageSliderPage;

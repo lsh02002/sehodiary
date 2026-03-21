@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import ImageSlider from "../../pages/imageslider/ImageSlider";
+import ImageSliderPage from "../../pages/imageslider/ImageSliderPage";
 import { DiaryResponseType } from "../../types/type";
 
 const ImageCard = ({
@@ -48,7 +48,7 @@ const ImageCard = ({
               </CloseX>
             </SidebarHeader>
             <Nav role="navigation" aria-label="주 메뉴">
-              <ImageSlider diary={diary} />
+              <ImageSliderPage diary={diary} />
             </Nav>
           </Sidebar>
         </>
