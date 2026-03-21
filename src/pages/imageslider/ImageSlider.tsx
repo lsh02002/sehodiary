@@ -18,11 +18,14 @@ import "swiper/css/effect-flip";
 
 import { DiaryResponseType } from "../../types/type";
 import SelectInput from "../../components/form/SelectInput";
+import { TwoDiv } from "../../components/form/TwoDiv";
 
 type SwiperEffectType = "slide" | "fade" | "cube" | "coverflow" | "flip";
+type SwiperDelayType = 1000 | 2000 | 3000;
 
 const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
   const [effect, setEffect] = useState<SwiperEffectType>("fade");
+  const [delay, setDelay] = useState<SwiperDelayType>(1000);
 
   const effectOptions = [
     { label: "페이드", value: "fade" },
@@ -30,6 +33,14 @@ const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
     { label: "큐브", value: "cube" },
     { label: "커버플로우", value: "coverflow" },
     { label: "플립", value: "flip" },
+  ];
+
+  const delayOptions = [
+    { label: "1000 ms", value: "1000" },
+    { label: "2000 ms", value: "2000" },
+    { label: "3000 ms", value: "3000" },
+    { label: "4000 ms", value: "4000" },
+    { label: "5000 ms", value: "5000" },
   ];
 
   return (
@@ -46,7 +57,7 @@ const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
         ]}
         pagination={{ clickable: true }}
         effect={effect}
-        autoplay={{ delay: 1000, disableOnInteraction: false }}
+        autoplay={{ delay: Number(delay), disableOnInteraction: false }}
         loop={true}
         observer={true}
         observeParents={true}
@@ -83,17 +94,26 @@ const ImageSlider = ({ diary }: { diary: DiaryResponseType }) => {
                 display: "block",
               }}
             />
-            <div>파일명: {image.fileName}</div>            
+            <div>파일명: {image.fileName}</div>
           </SwiperSlide>
         ))}
       </Swiper>
-      <SelectInput
-        name="effects"
-        title="효과"
-        value={effect}
-        setValue={(v: string) => setEffect(v as SwiperEffectType)}
-        options={effectOptions}
-      />
+      <TwoDiv>
+        <SelectInput
+          name="effects"
+          title="효과"
+          value={effect}
+          setValue={(v: string) => setEffect(v as SwiperEffectType)}
+          options={effectOptions}
+        />
+        <SelectInput
+          name="delays"
+          title="시간지연"
+          value={String(delay)}
+          setValue={(v: String) => setDelay(Number(v) as SwiperDelayType)}
+          options={delayOptions}
+        />
+      </TwoDiv>
     </>
   );
 };
