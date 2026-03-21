@@ -14,7 +14,7 @@ const MyPage = () => {
   const { isLogin } = useLogin();
   const { mypageTab, setMypageTab } = useScroll();
 
-  const tab = searchParams.get("tab") || "info";
+  const tab = searchParams.get("tab");
 
   useEffect(() => {
     if (tab !== mypageTab) {
@@ -28,10 +28,10 @@ const MyPage = () => {
   };
 
   return (
-    <Container>
-      <Wrapper>
-        {isLogin && (
-          <>
+    <>
+      {isLogin ? (
+        <Container>
+          <Wrapper>
             <Title role="tablist" aria-label="마이페이지 탭">
               <TabH3
                 role="tab"
@@ -74,10 +74,12 @@ const MyPage = () => {
               )}
               {tab === "activitylog" && <MyActivityLogs />}
             </Section>
-          </>
-        )}
-      </Wrapper>
-    </Container>
+          </Wrapper>
+        </Container>
+      ) : (
+        <div>마이페이지는 로그인 후 이용할 수 있습니다.</div>
+      )}
+    </>
   );
 };
 

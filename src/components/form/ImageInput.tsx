@@ -33,7 +33,7 @@ const ImageInput = ({
     const files = e.target.files;
     if (!files) return;
 
-    const selected = Array.from(files).slice(0, 2);
+    const selected = Array.from(files).slice(0, 4);
     setData(selected);
     setPreviewUrls([]); // 새 파일 선택 시 기존 이미지 숨김
   };

@@ -10,6 +10,7 @@ import DiaryCreatePage from "./pages/diary/DiaryCreatePage";
 import DiaryEditPage from "./pages/diary/DiaryEditPage";
 import DiaryListPage from "./pages/diary/DiaryListPage";
 import MyPage from "./pages/mypage/MyPage";
+import NotFoundPage from "./pages/notfound/NotFoundPage";
 
 function App() {
   const { setIsLogin } = useLogin();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/create" element={<DiaryCreatePage />} />
         <Route path="/edit/:diaryId" element={<DiaryEditPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       <StyledToastContainer

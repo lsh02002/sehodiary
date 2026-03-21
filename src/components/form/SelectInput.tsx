@@ -65,7 +65,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   margin: 10px 0;
-  height: 100%;
+  height: auto;
   box-sizing: border-box;
 
   label {
