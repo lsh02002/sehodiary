@@ -1,48 +1,19 @@
 import React, { useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { Menu } from "lucide-react";
-import {  
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
 import { BackwardButton } from "../form/BackwardButton";
 import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
-
-// 사용 예시
-// <HamburgerLayoutSC
-//   appName="My App"
-//   navItems={[
-//     { label: "홈", icon: Home, href: "/" },
-//     { label: "대시보드", icon: LayoutDashboard, href: "/dashboard" },
-//     { label: "설정", icon: Settings, href: "/settings" },
-//     { label: "도움말", icon: HelpCircle, href: "/help" },
-//   ]}
-// >
-//   <YourPage />
-// </HamburgerLayoutSC>
-
-export type NavItem = {
-  label: string;
-  href: string;
-  icon?: React.ComponentType<{ className?: string }>;
-};
-
 interface Props {
   appName?: string;
-  navItems?: NavItem[];
   children: React.ReactNode;
 }
 
-export default function Layout({
-  appName = "앱",
-  navItems = [],
-  children,
-}: Props) {
+export default function Layout({ appName = "앱", children }: Props) {
   const navigator = useNavigate();
   const location = useLocation();
   const { isLogin, setIsLogin, open, setOpen } = useLogin();
@@ -132,7 +103,7 @@ export default function Layout({
           <strong>{appName}</strong>
         </TopBarInner>
         {isLogin ? (
-          <span            
+          <span
             onClick={() => {
               if (window.confirm("로그아웃 하시겠습니까?") === false) {
                 return;
@@ -327,6 +298,7 @@ const TopBar = styled.header`
   margin: 0 16px;
   span {
     font-size: 0.8rem;
+    cursor: pointer;
   }
 `;
 

@@ -18,19 +18,7 @@ const BottomNav = () => {
             <img src={Home} alt="" />
           </div>
           <div>홈</div>
-        </IconLink>
-        {/* <IconLink to={`/inbox`}>
-          <div>
-            <img src={Inbox} alt="" />
-          </div>
-          <div>인박스</div>
-        </IconLink>
-        <IconLink to={`/task-list`}>
-          <div>
-            <img src={TaskList} alt="" />
-          </div>
-          <div>나의 태스크들</div>
-        </IconLink> */}
+        </IconLink>        
         {isLogin && (
           <IconLink to="/mypage?tab=info">
             <div>

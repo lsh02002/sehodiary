@@ -10,13 +10,10 @@ export type CompleteArrayInputPropsType = {
   setValues: React.Dispatch<React.SetStateAction<string[]>>;
   fetchOptions: (query: string) => Promise<Option[]>;
   createOption?: (name: string) => Promise<Option>;
-  deleteOption?: (id: string) => Promise<void>;
   hydrateSelected?: (ids: string[]) => Promise<Option[]>;
   placeholder?: string;
   debounceMs?: number;
   maxMenuHeight?: number;
-  noOptionsText?: string;
-  loadingText?: string;
   onError?: (err: unknown) => void;
 };
 
@@ -27,20 +24,16 @@ export const CompleteArrayInput: React.FC<CompleteArrayInputPropsType> = ({
   setValues,
   fetchOptions,
   createOption,
-  deleteOption,
   hydrateSelected,
   placeholder = "추가...",
   debounceMs = 250,
   maxMenuHeight = 240,
-  noOptionsText = "검색 결과가 없어요",
-  loadingText = "불러오는 중…",
   onError,
 }) => {
   const [input, setInput] = useState("");
   const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
-  // const [menuOpen, setMenuOpen] = useState(false);
   const [selectedMap, setSelectedMap] = useState<Map<string, Option>>(
     () => new Map()
   );
@@ -133,28 +126,6 @@ export const CompleteArrayInput: React.FC<CompleteArrayInputPropsType> = ({
     }
   }, [createOption, input, addId, onError]);
 
-  // const handleDelete = useCallback(
-  //   async (id: string) => {
-  //     if (!deleteOption) return;
-  //     try {
-  //       setLoading(true);
-  //       await deleteOption(id);
-  //       setOptions((prev) => prev.filter((o) => o.id !== id));
-  //       removeId(id);
-  //       setSelectedMap((prev) => {
-  //         const m = new Map(prev);
-  //         m.delete(id);
-  //         return m;
-  //       });
-  //     } catch (err) {
-  //       onError?.(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   },
-  //   [deleteOption, removeId, onError]
-  // );
-
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!options.length) return;
     if (e.key === "ArrowDown") {
@@ -197,40 +168,11 @@ export const CompleteArrayInput: React.FC<CompleteArrayInputPropsType> = ({
         name={name}
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        onKeyDown={onKeyDown}
-        // onFocus={()=>setMenuOpen(true)}
+        onKeyDown={onKeyDown}        
         placeholder={placeholder}
       />
 
-      <Menu $maxHeight={maxMenuHeight}>
-        {/* {loading && <InfoText>{loadingText}</InfoText>}
-        {!loading && options.length === 0 && (
-          <InfoText>{noOptionsText}</InfoText>
-        )}
-        {!loading &&
-          menuOpen &&
-          options.map((opt, idx) => {
-            const active = idx === focusedIndex;
-            const selected = values.includes(opt.id);
-            return (
-              <OptionRow key={opt.id} $active={active}>
-                <OptionButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleId(opt.id);
-                  }}
-                >
-                  <CheckBox>{selected ? "✓" : ""}</CheckBox>
-                  {opt.name}
-                </OptionButton>
-                {deleteOption && (
-                  <DeleteBtn onClick={() => handleDelete(opt.id)}>
-                    삭제
-                  </DeleteBtn>
-                )}
-              </OptionRow>
-            );
-          })} */}
+      <Menu $maxHeight={maxMenuHeight}>        
         {!loading && createOption && input.trim() && (
           <CreateBtn onClick={() => handleCreate()}>
             “{input.trim()}” 추가
@@ -316,51 +258,6 @@ const Menu = styled.div<{ $maxHeight: number }>`
   right: 0;
   top: 100px;
 `;
-
-// const InfoText = styled.div`
-//   padding: 8px 10px;
-//   font-size: 0.85rem;
-//   color: #666;
-// `;
-
-// const OptionRow = styled.div<{ $active: boolean }>`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding: 6px 10px;
-//   background-color: ${(p) => (p.$active ? "#f0f8ff" : "white")};
-//   &:hover {
-//     background-color: #f0f8ff;
-//   }
-// `;
-
-// const OptionButton = styled.button`
-//   flex: 1;
-//   text-align: left;
-//   background: none;
-//   border: none;
-//   padding: 0;
-//   font-size: 0.9rem;
-//   cursor: pointer;
-// `;
-
-// const CheckBox = styled.span`
-//   display: inline-block;
-//   width: 18px;
-// `;
-
-// const DeleteBtn = styled.button`
-//   border: none;
-//   background: none;
-//   color: #d33;
-//   font-size: 0.8rem;
-//   cursor: pointer;
-//   padding: 2px 6px;
-//   border-radius: 4px;
-//   &:hover {
-//     background-color: #ffecec;
-//   }
-// `;
 
 const CreateBtn = styled.button`
   width: 100%;
