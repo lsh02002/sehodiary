@@ -4,10 +4,10 @@ import {
   showToast,
   UserSetProfileImagesApi,
 } from "../../api/sehodiary-api";
-import TextInput from "../../components/form/TextInput";
-import ConfirmButton from "../../components/form/ConfirmButton";
-import { TwoDiv } from "../../components/form/TwoDiv";
-import ImageInput from "../../components/form/ImageInput";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
+import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
+import ImageInput from "../../components/bootstrap-form/ImageInput";
 
 const MyInfo = () => {
   const [id, setId] = useState(-1);
@@ -72,7 +72,9 @@ const MyInfo = () => {
         previewUrls={imageUrls}
         setPreviewUrls={setImageUrls}
       />
-      <div className="text-danger mt-3">프로필 사진 이외는 가입할때 정해짐!!!</div>
+      <div className="text-danger mt-3">
+        프로필 사진 이외는 가입할때 정해짐!!!
+      </div>
       <TwoDiv>
         <div style={{ width: "450px" }} />
         <ConfirmButton title="프로필설정" onClick={handleSetProfiles} />
@@ -82,4 +84,3 @@ const MyInfo = () => {
 };
 
 export default MyInfo;
-

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DiaryResponseType } from "../../types/type";
-import { TwoDiv } from "../form/TwoDiv";
+import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import { FaRegCommentDots } from "react-icons/fa";
@@ -87,9 +87,16 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
     <div className="card border-0 shadow-sm mb-3">
       <div className="card-body p-3">
         <div className="w-100 d-flex flex-column gap-3">
-          <TwoDiv onClick={() => navigator(`/edit/${diary0?.id}`)} style={{ cursor: "pointer" }}>
-            <div className="text-primary fw-semibold flex-shrink-0">#{diary0?.id}</div>
-            <div className="fw-semibold text-body text-end flex-grow-1">{diary0?.title}</div>
+          <TwoDiv
+            onClick={() => navigator(`/edit/${diary0?.id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="text-primary fw-semibold flex-shrink-0">
+              #{diary0?.id}
+            </div>
+            <div className="fw-semibold text-body text-end flex-grow-1">
+              {diary0?.title}
+            </div>
           </TwoDiv>
           <div
             className="text-body"
@@ -123,12 +130,19 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
                   style={{ width: "40px", height: "40px", marginRight: "5px" }}
                 />
               )}
-              <div className="fst-italic text-secondary small">작성자: {diary0?.nickname}</div>
+              <div className="fst-italic text-secondary small">
+                작성자: {diary0?.nickname}
+              </div>
             </div>
             <div className="d-flex justify-content-end align-items-center flex-wrap gap-2 ms-auto position-relative">
               <div>{diary0?.emoji}</div>
-              <FaRegCommentDots onClick={handleEditComment} style={{ cursor: "pointer" }} />
-              <div className="fst-italic text-secondary me-2">({diary0?.commentsCount})</div>
+              <FaRegCommentDots
+                onClick={handleEditComment}
+                style={{ cursor: "pointer" }}
+              />
+              <div className="fst-italic text-secondary me-2">
+                ({diary0?.commentsCount})
+              </div>
               <div
                 onMouseOver={() => setIsMouseOverOnce(true)}
                 onMouseLeave={() => setIsMouseOverOnce(false)}

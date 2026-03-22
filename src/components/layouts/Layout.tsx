@@ -3,9 +3,9 @@ import { Menu } from "lucide-react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
-import { BackwardButton } from "../form/BackwardButton";
+import { BackwardButton } from "../bootstrap-form/BackwardButton";
 import { useScroll } from "../../context/ScrollContext";
-import AddDiaryButton from "../form/AddDiaryButton";
+import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 
 interface Props {
@@ -152,7 +152,10 @@ export default function Layout({ appName = "앱", children }: Props) {
         style={sidebarStyle(open)}
         aria-hidden={!open}
       >
-        <div className="d-flex align-items-center justify-content-between border-bottom px-3" style={{ height: "56px" }}>
+        <div
+          className="d-flex align-items-center justify-content-between border-bottom px-3"
+          style={{ height: "56px" }}
+        >
           <h2 className="h6 mb-0 fw-bold">댓글 창</h2>
           <button
             type="button"
@@ -169,9 +172,19 @@ export default function Layout({ appName = "앱", children }: Props) {
         </nav>
       </aside>
 
-      <header className="sticky-top border-bottom bg-white bg-opacity-75" style={{ backdropFilter: "blur(6px)", zIndex: 30 }}>
+      <header
+        className="sticky-top border-bottom bg-white bg-opacity-75"
+        style={{ backdropFilter: "blur(6px)", zIndex: 30 }}
+      >
         <div className="container-fluid px-3">
-          <div className="d-flex align-items-center justify-content-between mx-auto" style={{ minHeight: "56px", maxWidth: "1024px", paddingLeft: "56px" }}>
+          <div
+            className="d-flex align-items-center justify-content-between mx-auto"
+            style={{
+              minHeight: "56px",
+              maxWidth: "1024px",
+              paddingLeft: "56px",
+            }}
+          >
             <strong className="small text-secondary-emphasis">{appName}</strong>
             {isLogin ? (
               <span
@@ -201,7 +214,11 @@ export default function Layout({ appName = "앱", children }: Props) {
                 <div>로그아웃</div>
               </span>
             ) : (
-              <span className="small" role="button" onClick={() => navigate("/login")}>
+              <span
+                className="small"
+                role="button"
+                onClick={() => navigate("/login")}
+              >
                 로그인
               </span>
             )}
@@ -209,7 +226,11 @@ export default function Layout({ appName = "앱", children }: Props) {
         </div>
       </header>
 
-      <main id="main" className="container-fluid px-3 px-sm-4 mx-auto" style={mainStyle}>
+      <main
+        id="main"
+        className="container-fluid px-3 px-sm-4 mx-auto"
+        style={mainStyle}
+      >
         <BackwardButton />
         {children}
       </main>

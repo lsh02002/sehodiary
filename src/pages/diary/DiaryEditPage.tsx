@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import TextInput from "../../components/form/TextInput";
-import ConfirmButton from "../../components/form/ConfirmButton";
-import { TwoDiv } from "../../components/form/TwoDiv";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
+import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
 import {
   deleteLikeApi,
   editDiaryApi,
@@ -11,17 +11,19 @@ import {
   isLikedApi,
   showToast,
 } from "../../api/sehodiary-api";
-import SelectInput, { Option } from "../../components/form/SelectInput";
+import SelectInput, {
+  Option,
+} from "../../components/bootstrap-form/SelectInput";
 import { DiaryRequestType, ImageResponseType } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../context/LoginContext";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
-import CheckboxInput from "../../components/form/CheckboxInput";
-import ImageInput from "../../components/form/ImageInput";
-import EmotionSelectInput from "../../components/form/EmotionSelectInput";
-import QuillEditorInput from "../../components/form/QuillEditorInput";
+import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
+import ImageInput from "../../components/bootstrap-form/ImageInput";
+import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInput";
+import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();

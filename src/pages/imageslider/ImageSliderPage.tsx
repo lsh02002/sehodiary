@@ -17,8 +17,8 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/effect-flip";
 
 import { DiaryResponseType } from "../../types/type";
-import SelectInput from "../../components/form/SelectInput";
-import { TwoDiv } from "../../components/form/TwoDiv";
+import SelectInput from "../../components/bootstrap-form/SelectInput";
+import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
 
 type SwiperEffectType = "slide" | "fade" | "cube" | "coverflow" | "flip";
 type SwiperDelayType = 500 | 1000 | 2000 | 3000 | 4000;

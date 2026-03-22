@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserSignupApi } from "../../api/sehodiary-api";
-import TextInput from "../../components/form/TextInput";
-import PasswordInput from "../../components/form/PasswordInput";
-import ConfirmButton from "../../components/form/ConfirmButton";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import PasswordInput from "../../components/bootstrap-form/PasswordInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { FaRegistered } from "react-icons/fa6";
 import { UserSignupType } from "../../types/type";
-import CheckboxInput from "../../components/form/CheckboxInput";
+import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
 
 const SignupPage = () => {
   const navigate = useNavigate();

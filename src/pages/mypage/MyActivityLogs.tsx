@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
-import ActivityLogCard from "../../components/card/ActivityLogCard";
+import ActivityLogCard from "../../components/bootstrap-card/ActivityLogCard";
 
 const MyActivityLogs = () => {
   const [logMessages, setLogMessages] = useState([]);

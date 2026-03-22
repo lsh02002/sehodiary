@@ -1,6 +1,6 @@
 import React from "react";
 import { CommentResponseType } from "../../types/type";
-import { TwoDiv } from "../form/TwoDiv";
+import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
 
@@ -19,7 +19,9 @@ const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
               }}
             />
           </div>
-          <div className="fst-italic text-secondary ps-1 mb-2">글아이디: {comment?.diaryId}</div>
+          <div className="fst-italic text-secondary ps-1 mb-2">
+            글아이디: {comment?.diaryId}
+          </div>
           <TwoDiv>
             <div className="fst-italic text-secondary d-flex align-items-center gap-2">
               {comment?.profileImage ? (

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useLogin } from "../../context/LoginContext";
-import DiaryCard1 from "../../components/card/DiaryCard1";
-import CommentCreateCard from "../../components/card/CommentCreateCard";
+import DiaryCard1 from "../../components/bootstrap-card/DiaryCard1";
+import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import { getCommentsByDiaryApi } from "../../api/sehodiary-api";
 import { CommentResponseType } from "../../types/type";
-import CommentCard0 from "../../components/card/CommentCard0";
+import CommentCard0 from "../../components/bootstrap-card/CommentCard0";
 
 const CommentPage = () => {
   const { diary } = useLogin();

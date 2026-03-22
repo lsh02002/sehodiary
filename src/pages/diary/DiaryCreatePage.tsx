@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import TextInput from "../../components/form/TextInput";
-import ConfirmButton from "../../components/form/ConfirmButton";
-import { TwoDiv } from "../../components/form/TwoDiv";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
+import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
 import { createDiaryApi, showToast } from "../../api/sehodiary-api";
-import SelectInput, { Option } from "../../components/form/SelectInput";
+import SelectInput, {
+  Option,
+} from "../../components/bootstrap-form/SelectInput";
 import { DiaryRequestType } from "../../types/type";
-import ImageInput from "../../components/form/ImageInput";
-import CheckboxInput from "../../components/form/CheckboxInput";
-import EmotionSelectInput from "../../components/form/EmotionSelectInput";
-import QuillEditorInput from "../../components/form/QuillEditorInput";
+import ImageInput from "../../components/bootstrap-form/ImageInput";
+import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
+import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInput";
+import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import { useNavigate } from "react-router-dom";
 
 const DiaryCreatePage = () => {

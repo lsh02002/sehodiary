@@ -1,6 +1,6 @@
 import React from "react";
 import { CommentResponseType } from "../../types/type";
-import { TwoDiv } from "../form/TwoDiv";
+import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
 
@@ -30,7 +30,9 @@ const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
             />
           </div>
           <TwoDiv>
-            <div className="fst-italic text-secondary">작성자: {comment?.nickname}</div>
+            <div className="fst-italic text-secondary">
+              작성자: {comment?.nickname}
+            </div>
             <div className="fst-italic text-secondary">{createdAt}</div>
           </TwoDiv>
         </div>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserLoginApi } from "../../api/sehodiary-api";
-import TextInput from "../../components/form/TextInput";
-import PasswordInput from "../../components/form/PasswordInput";
-import ConfirmButton from "../../components/form/ConfirmButton";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import PasswordInput from "../../components/bootstrap-form/PasswordInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { SlLogin } from "react-icons/sl";
 import { useLogin } from "../../context/LoginContext";
 

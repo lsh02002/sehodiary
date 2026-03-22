@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import TextInput from "../form/TextInput";
-import { TwoDiv } from "../form/TwoDiv";
-import ConfirmButton from "../form/ConfirmButton";
+import TextInput from "../bootstrap-form/TextInput";
+import { TwoDiv } from "../bootstrap-form/TwoDiv";
+import ConfirmButton from "../bootstrap-form/ConfirmButton";
 import { CommentRequestType } from "../../types/type";
 import { createCommentApi } from "../../api/sehodiary-api";
 import { useLogin } from "../../context/LoginContext";
-import QuillEditorInput from "../form/QuillEditorInput";
+import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   const { setDiary, setCommentList } = useLogin();
@@ -65,7 +65,10 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
                   data={nickname}
                   setData={setNickname}
                 />
-                <ConfirmButton title="댓글 입력" onClick={handleCreateComment} />
+                <ConfirmButton
+                  title="댓글 입력"
+                  onClick={handleCreateComment}
+                />
               </div>
             </TwoDiv>
           </div>
