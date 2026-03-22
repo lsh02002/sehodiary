@@ -97,7 +97,7 @@ const Sidebar = styled.aside<{ $imageOpen: boolean }>`
   z-index: 300;
 
   width: min(780px, calc(100vw - 32px));
-  height: min(640px, calc(100vh - 32px));
+  height: min(640px, calc(100vh - 200px));
   overflow: hidden;
 
   opacity: 0;

@@ -10,6 +10,7 @@ import ImageInput from "../../components/form/ImageInput";
 import CheckboxInput from "../../components/form/CheckboxInput";
 import EmotionSelectInput from "../../components/form/EmotionSelectInput";
 import QuillEditorInput from "../../components/form/QuillEditorInput";
+import { useNavigate } from "react-router-dom";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -23,6 +24,9 @@ const DiaryCreatePage = () => {
   const [images, setImages] = useState<File[] | null>(null);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [emoji, setEmoji] = useState<string>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigate = useNavigate();
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -30,7 +34,10 @@ const DiaryCreatePage = () => {
     { label: "FRIENDS", value: "FRIENDS" },
   ];
 
-  const handleCreateDiary = () => {
+  const handleCreateDiary = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const data: DiaryRequestType = {
       title,
       weather,
@@ -49,11 +56,16 @@ const DiaryCreatePage = () => {
       formDataToSend.append("files", file);
     });
 
-    createDiaryApi(formDataToSend)
+    await createDiaryApi(formDataToSend)
       .then((res) => {
         showToast("글 생성이 되었습니다.", "success");
+
+        navigate(`/edit/${res.data.id}`, { replace: true });
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -100,18 +112,21 @@ const DiaryCreatePage = () => {
         setChecked={setIsImagesShown}
       />
       {isImagesShown && (
-        <>
-          <ImageInput
-            name="images"
-            title="이미지들"
-            data={images ?? []}
-            setData={setImages}
-            previewUrls={imageUrls}
-            setPreviewUrls={setImageUrls}
-          />
-        </>
+        <ImageInput
+          name="images"
+          title="이미지들"
+          data={images ?? []}
+          setData={setImages}
+          previewUrls={imageUrls}
+          setPreviewUrls={setImageUrls}
+        />
       )}
-      <ConfirmButton title="일기 생성" onClick={handleCreateDiary} />
+
+      <ConfirmButton
+        title="일기 생성"
+        onClick={handleCreateDiary}
+        disabled={isSubmitting}
+      />
     </PageContainer>
   );
 };

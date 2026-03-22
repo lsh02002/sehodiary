@@ -10,7 +10,7 @@ const ConfirmButton = ({
   title: string;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {
-  return <Button disabled={disabled} onClick={onClick}>{title}</Button>;
+  return <Button type="button" disabled={disabled} onClick={onClick}>{title}</Button>;
 };
 
 export default ConfirmButton;

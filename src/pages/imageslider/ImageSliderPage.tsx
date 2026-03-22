@@ -21,7 +21,7 @@ import SelectInput from "../../components/form/SelectInput";
 import { TwoDiv } from "../../components/form/TwoDiv";
 
 type SwiperEffectType = "slide" | "fade" | "cube" | "coverflow" | "flip";
-type SwiperDelayType = 1000 | 2000 | 3000;
+type SwiperDelayType = 500 | 1000 | 2000 | 3000 | 4000;
 
 const ImageSliderPage = ({ diary }: { diary: DiaryResponseType }) => {
   const [effect, setEffect] = useState<SwiperEffectType>("fade");
@@ -36,11 +36,11 @@ const ImageSliderPage = ({ diary }: { diary: DiaryResponseType }) => {
   ];
 
   const delayOptions = [
-    { label: "1000 ms", value: "1000" },
-    { label: "2000 ms", value: "2000" },
-    { label: "3000 ms", value: "3000" },
-    { label: "4000 ms", value: "4000" },
-    { label: "5000 ms", value: "5000" },
+    { label: "0.5 초", value: "500" },
+    { label: "1 초", value: "1000" },
+    { label: "2 초", value: "2000" },
+    { label: "3 초", value: "3000" },
+    { label: "4 초", value: "4000" },
   ];
 
   return (

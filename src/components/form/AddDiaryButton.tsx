@@ -10,7 +10,7 @@ const AddDiaryButton = ({
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {
   return (
-    <Button disabled={disabled} onClick={onClick}>
+    <Button type="button" disabled={disabled} onClick={onClick}>
       {title}
     </Button>
   );
