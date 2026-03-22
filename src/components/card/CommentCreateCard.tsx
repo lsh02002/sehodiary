@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import TextInput from "../form/TextInput";
 import { TwoDiv } from "../form/TwoDiv";
 import ConfirmButton from "../form/ConfirmButton";
@@ -46,50 +45,34 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <TwoDiv style={{ alignItems: "start" }}>
-          <QuillEditorInput
-            name="content"
-            title="댓글 내용"
-            data={content}
-            setData={setContent}
-            rows={2}
-          />
-          <DivBox>
-            <TextInput
-              disabled
-              name="nickname"
-              title="댓글 작성자"
-              data={nickname}
-              setData={setNickname}
-            />
-            <ConfirmButton title="댓글 입력" onClick={handleCreateComment} />
-          </DivBox>
-        </TwoDiv>
-      </Wrapper>
-    </Container>
+    <div className="w-100 d-flex justify-content-center align-items-center">
+      <div className="w-100 d-flex justify-content-center align-items-center flex-column box-sizing-border-box">
+        <div className="card border-0 shadow-sm w-100">
+          <div className="card-body p-3">
+            <TwoDiv style={{ alignItems: "start" }}>
+              <QuillEditorInput
+                name="content"
+                title="댓글 내용"
+                data={content}
+                setData={setContent}
+                rows={2}
+              />
+              <div>
+                <TextInput
+                  disabled
+                  name="nickname"
+                  title="댓글 작성자"
+                  data={nickname}
+                  setData={setNickname}
+                />
+                <ConfirmButton title="댓글 입력" onClick={handleCreateComment} />
+              </div>
+            </TwoDiv>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default CommentCreateCard;
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  //   max-width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  //   padding: 20px;
-  box-sizing: border-box;
-`;
-
-const DivBox = styled.div``;

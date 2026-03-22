@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import TextInput from "../../components/form/TextInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
@@ -174,14 +173,14 @@ const DiaryEditPage = () => {
   };
 
   return (
-    <PageContainer>
+    <div className="px-3 mb-5" style={{ marginBottom: "100px" }}>
       <TwoDiv>
         <TextInput
           disabled
           name="id"
           title="아이디"
           data={String(id)}
-          setData={(v)=>setId(Number(v))}
+          setData={(v) => setId(Number(v))}
         />
         <TextInput name="title" title="제목" data={title} setData={setTitle} />
       </TwoDiv>
@@ -237,14 +236,20 @@ const DiaryEditPage = () => {
         >
           {likesCount}
           {isMouseOverOnce && nicknameList.length > 0 && (
-            <NicknameListBox
+            <div
+              className="position-absolute bg-white border"
+              style={{
+                padding: "10px",
+                left: "-15px",
+                top: "25px",
+              }}
               onMouseOver={() => setIsMouseOverOnce(true)}
               onMouseLeave={() => setIsMouseOverOnce(false)}
             >
               {nicknameList?.map((list) => (
                 <div>{list}</div>
               ))}
-            </NicknameListBox>
+            </div>
           )}
         </div>
       </div>
@@ -273,22 +278,8 @@ const DiaryEditPage = () => {
         </>
       )}
       <ConfirmButton title="일기 수정" onClick={handleEditDiary} />
-    </PageContainer>
+    </div>
   );
 };
 
 export default DiaryEditPage;
-
-const PageContainer = styled.div`
-  padding: 0 20px;
-  margin-bottom: 100px;
-`;
-
-const NicknameListBox = styled.div`
-  border: 1px solid black;
-  position: absolute;
-  background-color: white;
-  padding: 10px;
-  left: -15px;
-  top: 25px;
-`;

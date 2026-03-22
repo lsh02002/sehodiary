@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
@@ -9,76 +8,39 @@ const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
   const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
-    <PageContainer>
-      <Wrapper>
-        <IconAndContent>
-          <div style={{ color: "blue", marginRight: "5px" }}>
-            #{comment?.commentId}
+    <div className="card border-0 shadow-sm mb-3">
+      <div className="card-body p-3">
+        <div className="d-flex flex-column justify-content-center">
+          <div className="d-flex justify-content-start align-items-center gap-2 mb-2">
+            <div className="text-primary me-1">#{comment?.commentId}</div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(comment?.content ?? ""),
+              }}
+            />
           </div>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(comment?.content ?? ""),
-            }}
-          />
-        </IconAndContent>
-        <Diary>글아이디: {comment?.diaryId}</Diary>
-        <TwoDiv>
-          <Nickname>
-            {comment?.profileImage ? (
-              <img
-                width="40px"
-                height="40px"
-                src={comment?.profileImage}
-                alt="그림"
-              />
-            ) : (
-              <IoPersonOutline style={{ marginRight: "5px" }} />
-            )}
-            작성자: {comment?.nickname}
-          </Nickname>
-          <CreatedAt>{createdAt}</CreatedAt>
-        </TwoDiv>
-      </Wrapper>
-    </PageContainer>
+          <div className="fst-italic text-secondary ps-1 mb-2">글아이디: {comment?.diaryId}</div>
+          <TwoDiv>
+            <div className="fst-italic text-secondary d-flex align-items-center gap-2">
+              {comment?.profileImage ? (
+                <img
+                  width="40px"
+                  height="40px"
+                  src={comment?.profileImage}
+                  alt="그림"
+                  className="rounded-circle"
+                />
+              ) : (
+                <IoPersonOutline style={{ marginRight: "5px" }} />
+              )}
+              작성자: {comment?.nickname}
+            </div>
+            <div className="fst-italic text-secondary">{createdAt}</div>
+          </TwoDiv>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default CommentCard1;
-
-const PageContainer = styled.div`
-  border: 1px solid #e5e7eb;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  alignitems: center;
-  flex-direction: column;
-`;
-
-const IconAndContent = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const Diary = styled.div`
-  font-style: italic;
-  color: gray;
-  padding-left: 5px;
-`;
-
-const Nickname = styled.div`
-  font-style: italic;
-  color: gray;
-  display: flex;
-  align-items: center;
-`;
-
-const CreatedAt = styled.div`
-  font-style: italic;
-  color: gray;
-`;

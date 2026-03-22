@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { getEmotionsApi } from "../../api/sehodiary-api";
 import { EmotionResponseType } from "../../types/type";
 
@@ -32,107 +31,37 @@ const EmotionSelectInput = ({
             value: emotion.name,
             label: emotion.name,
             emoji: emotion.emoji,
-          })),
+          }))
         );
       })
       .catch(() => {});
   }, []);
-  return (
-    <Container>
-      <label>{title}</label>
 
-      <div style={{ display: "flex", gap: "8px", marginTop: "8px" }}>
-        {emotions.map((emotion) => (
-          <button
-            key={emotion.emoji}
-            type="button"
-            disabled={disabled}
-            onClick={() => setData(emotion.emoji)}
-            style={{
-              padding: "8px 12px",
-              borderRadius: "8px",
-              border:
-                data === emotion.value ? "2px solid #4CAF50" : "1px solid #ccc",
-              background: data === emotion.emoji ? "#E8F5E9" : "white",
-              cursor: "pointer",
-            }}
-          >
-            {emotion.emoji} {emotion.label}
-          </button>
-        ))}
+  return (
+    <div className="w-100 mb-3">
+      <label htmlFor={name} className="form-label fw-semibold">
+        {title}
+      </label>
+
+      <div className="d-flex flex-wrap gap-2 mt-2">
+        {emotions.map((emotion) => {
+          const isActive = data === emotion.emoji || data === emotion.value;
+          return (
+            <button
+              key={emotion.emoji}
+              id={name}
+              type="button"
+              disabled={disabled}
+              onClick={() => setData(emotion.emoji)}
+              className={`btn ${isActive ? "btn-success" : "btn-outline-secondary"}`}
+            >
+              {emotion.emoji} {emotion.label}
+            </button>
+          );
+        })}
       </div>
-    </Container>
+    </div>
   );
 };
 
 export default EmotionSelectInput;
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
-  margin: 10px 0;
-
-  label {
-    width: 100%;
-    display: block;
-    margin-bottom: 8px;
-    color: #111827;
-    font-weight: 600;
-    font-size: 0.9rem;
-  }
-
-  input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    background: #ffffff;
-    box-sizing: border-box;
-    color: #111827;
-    line-height: 1.5;
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      background-color 0.2s ease;
-    &:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
-    }
-    &::placeholder {
-      color: #9ca3af;
-    }
-    &:disabled {
-      background: #f9fafb;
-      color: #9ca3af;
-      cursor: not-allowed;
-    }
-  }
-
-  &:hover,
-  &:focus {
-    /* border-bottom: 1px solid #4680ff; */
-    cursor: text;
-  }
-
-  &::placeholder {
-    color: gray;
-    font-style: italic;
-  }
-
-  @media (max-width: 640px) {
-    label {
-      font-size: 0.85rem;
-    }
-    input,
-    select,
-    textarea {
-      font-size: 16px;
-      padding: 12px;
-      min-height: 44px;
-    }
-  }
-`;

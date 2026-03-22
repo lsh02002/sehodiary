@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useLogin } from "../../context/LoginContext";
-import styled from "styled-components";
 import DiaryCard1 from "../../components/card/DiaryCard1";
 import CommentCreateCard from "../../components/card/CommentCreateCard";
 import { getCommentsByDiaryApi } from "../../api/sehodiary-api";
@@ -22,31 +21,30 @@ const CommentPage = () => {
   }, [diary?.id, setCommentList]);
 
   return (
-    <PageContainer>
+    <div className="px-2">
       <DiaryCard1 diary={diary} />
-      <Wrapper>
+
+      <div
+        className="overflow-auto border-top"
+        style={{
+          marginBottom: "100px",
+          height: "calc(100vh - 560px)",
+        }}
+      >
         <CommentCreateCard diaryId={diary?.id ?? -1} />
+
         {commentList && commentList.length > 0 ? (
           commentList.map((comment: CommentResponseType) => (
             <CommentCard0 key={comment?.commentId} comment={comment} />
           ))
         ) : (
-          <div>해당 댓글이 없습니다!</div>
+          <div className="text-center py-3 text-secondary">
+            해당 댓글이 없습니다!
+          </div>
         )}
-      </Wrapper>
-    </PageContainer>
+      </div>
+    </div>
   );
 };
 
 export default CommentPage;
-
-const PageContainer = styled.div`
-  padding: 0 10px;
-`;
-
-const Wrapper = styled.div`
-  overflow-y: auto;
-  margin-bottom: 100px;
-  height: calc(100vh - 560px);
-  border-top: 1px solid #e5e7eb;
-`;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { UserSignupApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/form/TextInput";
@@ -16,7 +15,7 @@ const SignupPage = () => {
   // const [profileImage, setProfileImage] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const OnSignupSubmit = () => {
     localStorage.removeItem("userId");
@@ -33,91 +32,85 @@ const SignupPage = () => {
     };
 
     UserSignupApi(userInfo)
-      .then((res) => {        
+      .then((res) => {
         navigate("/login");
       })
       .catch(() => {});
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <Title>
-          <h3>
+    <div className="d-flex justify-content-center align-items-center w-100">
+      <div
+        className="d-flex flex-column align-items-center w-100 p-3"
+        style={{ maxWidth: "400px" }}
+      >
+        <div className="d-flex justify-content-between align-items-center w-100 mb-3">
+          <h3 className="fw-medium mb-0">
             <FaRegistered /> 회원가입
           </h3>
+
           <Link
-            style={{ color: "#4680ff", textDecoration: "none" }}
             to="/login"
+            className="text-decoration-none"
+            style={{ color: "#4680ff" }}
           >
             이미 계정이 있으세요?
           </Link>
-        </Title>
-        <TextInput
-          name="email"
-          title="이메일 주소"
-          data={email}
-          setData={setEmail}
-        />
-        <TextInput
-          name="nickname"
-          title="닉네임"
-          data={nickname}
-          setData={setNickname}
-        />
-        <PasswordInput
-          name="password"
-          title="비밀번호"
-          isPasswordVisible={isPasswordVisible}
-          data={password}
-          setData={setPassword}
-        />
-        <PasswordInput
-          name="passwordConfirm"
-          title="비밀번호 확인"
-          isPasswordVisible={isPasswordVisible}
-          data={passwordConfirm}
-          setData={setPasswordConfirm}
-        />
-        <CheckboxInput
-          name="istext"
-          title="암호보기"
-          checked={isPasswordVisible}
-          setChecked={setIsPasswordVisible}
-        />
-        <ConfirmButton title="회원 가입" onClick={OnSignupSubmit} />
-      </Wrapper>
-    </Container>
+        </div>
+
+        <div className="w-100 mb-3">
+          <TextInput
+            name="email"
+            title="이메일 주소"
+            data={email}
+            setData={setEmail}
+          />
+        </div>
+
+        <div className="w-100 mb-3">
+          <TextInput
+            name="nickname"
+            title="닉네임"
+            data={nickname}
+            setData={setNickname}
+          />
+        </div>
+
+        <div className="w-100 mb-3">
+          <PasswordInput
+            name="password"
+            title="비밀번호"
+            isPasswordVisible={isPasswordVisible}
+            data={password}
+            setData={setPassword}
+          />
+        </div>
+
+        <div className="w-100 mb-3">
+          <PasswordInput
+            name="passwordConfirm"
+            title="비밀번호 확인"
+            isPasswordVisible={isPasswordVisible}
+            data={passwordConfirm}
+            setData={setPasswordConfirm}
+          />
+        </div>
+
+        <div className="w-100 mb-3">
+          <CheckboxInput
+            name="istext"
+            title="암호보기"
+            checked={isPasswordVisible}
+            setChecked={setIsPasswordVisible}
+          />
+        </div>
+
+        <div className="w-100">
+          <ConfirmButton title="회원 가입" onClick={OnSignupSubmit} />
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default SignupPage;
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-`;
-
-const Title = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h3 {
-    font-weight: 500;
-  }
-`;

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
 import ImageSliderPage from "../../pages/imageslider/ImageSliderPage";
 import { DiaryResponseType } from "../../types/type";
 
@@ -14,7 +13,7 @@ const ImageCard = ({
 
   return (
     <>
-      <Container>
+      <div className="d-flex justify-content-center box-sizing-border-box py-2">
         <img
           style={{ objectFit: "fill", cursor: "pointer" }}
           width="100%"
@@ -22,35 +21,49 @@ const ImageCard = ({
           src={imageUrl}
           alt="그림"
           onClick={() => setImageOpen(true)}
+          className="rounded"
         />
-      </Container>
+      </div>
 
       {imageOpen && (
         <>
-          <Overlay
+          <div
             role="presentation"
-            $imageOpen={imageOpen}
             onClick={() => setImageOpen(false)}
             aria-hidden={!imageOpen}
+            className="position-fixed top-0 start-0 w-100 h-100"
+            style={{ background: "rgba(0, 0, 0, 0.4)", zIndex: 1040 }}
           />
-          <Sidebar
+          <aside
             id="side-nav"
-            $imageOpen={imageOpen}
             aria-hidden={!imageOpen}
+            className="position-fixed top-50 start-50 translate-middle bg-white rounded-4 shadow overflow-hidden"
+            style={{
+              zIndex: 1050,
+              width: "min(780px, calc(100vw - 32px))",
+              height: "min(640px, calc(100vh - 200px))",
+            }}
           >
-            <SidebarHeader>
-              <MenuTitle>이미지 슬라이더(사진 여러장 등록시)</MenuTitle>
-              <CloseX
+            <div className="d-flex align-items-center justify-content-between px-3 border-bottom" style={{ height: 56 }}>
+              <h2 className="m-0 fs-6 fw-bold">이미지 슬라이더(사진 여러장 등록시)</h2>
+              <button
                 onClick={() => setImageOpen(false)}
                 aria-label="슬라이더 닫기"
+                className="btn btn-link text-secondary text-decoration-none p-0"
+                style={{ fontSize: 28, lineHeight: 1 }}
               >
                 ×
-              </CloseX>
-            </SidebarHeader>
-            <Nav role="navigation" aria-label="주 메뉴">
+              </button>
+            </div>
+            <nav
+              role="navigation"
+              aria-label="주 메뉴"
+              className="overflow-auto"
+              style={{ height: "calc(100% - 56px)", padding: 8 }}
+            >
               <ImageSliderPage diary={diary} />
-            </Nav>
-          </Sidebar>
+            </nav>
+          </aside>
         </>
       )}
     </>
@@ -58,98 +71,3 @@ const ImageCard = ({
 };
 
 export default ImageCard;
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  box-sizing: border-box;
-  padding: 10px 0;
-`;
-
-const Overlay = styled.div<{ $imageOpen: boolean }>`
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 200;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 220ms ease;
-
-  ${({ $imageOpen }) =>
-    $imageOpen &&
-    css`
-      opacity: 1;
-      pointer-events: auto;
-    `}
-`;
-
-const Sidebar = styled.aside<{ $imageOpen: boolean }>`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  box-sizing: border-box;
-  background: white;
-  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
-  z-index: 300;
-
-  width: min(780px, calc(100vw - 32px));
-  height: min(640px, calc(100vh - 200px));
-  overflow: hidden;
-
-  opacity: 0;
-  pointer-events: none;
-
-  ${({ $imageOpen }) =>
-    $imageOpen &&
-    css`
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -50%) scale(1);
-    `}
-`;
-
-const SidebarHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-  padding: 0 16px;
-  border-bottom: 1px solid #e5e7eb;
-`;
-
-const MenuTitle = styled.h2`
-  margin: 0;
-  font-size: 16px;
-  font-weight: 700;
-`;
-
-const CloseX = styled.button`
-  border: 0;
-  background: transparent;
-  font-size: 28px;
-  line-height: 1;
-  padding: 0 4px;
-  color: #6b7280;
-  cursor: pointer;
-
-  &:hover {
-    color: #111827;
-  }
-
-  &:focus-visible {
-    outline: 2px solid #111827;
-    outline-offset: 2px;
-  }
-`;
-
-const Nav = styled.nav`
-  height: calc(100% - 56px);
-  padding: 8px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
-`;

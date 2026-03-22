@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import TextInput from "../../components/form/TextInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
@@ -69,7 +68,7 @@ const DiaryCreatePage = () => {
   };
 
   return (
-    <PageContainer>
+    <div className="px-3 mb-5" style={{ marginBottom: "100px" }}>
       <TextInput name="title" title="제목" data={title} setData={setTitle} />
       <TextInput
         disabled
@@ -127,13 +126,8 @@ const DiaryCreatePage = () => {
         onClick={handleCreateDiary}
         disabled={isSubmitting}
       />
-    </PageContainer>
+    </div>
   );
 };
 
 export default DiaryCreatePage;
-
-const PageContainer = styled.div`
-  padding: 0 20px;
-  margin-bottom: 100px;
-`;

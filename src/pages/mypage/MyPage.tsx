@@ -1,5 +1,4 @@
 import { useLogin } from "../../context/LoginContext";
-import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
@@ -30,41 +29,92 @@ const MyPage = () => {
   return (
     <>
       {isLogin ? (
-        <Container>
-          <Wrapper>
-            <Title role="tablist" aria-label="마이페이지 탭">
-              <TabH3
+        <div
+          className="w-100 d-flex justify-content-center align-items-center"
+          style={{ marginBottom: "100px" }}
+        >
+          <div className="w-100 d-flex flex-column justify-content-center align-items-center">
+            <div
+              role="tablist"
+              aria-label="마이페이지 탭"
+              className="w-100 d-flex justify-content-between align-items-center p-3 bg-white"
+              style={{
+                top: "50px",
+                left: 0,
+                zIndex: 10,
+              }}
+            >
+              <h3
                 role="tab"
                 aria-selected={tab === "info"}
-                $active={tab === "info"}
                 tabIndex={0}
                 onClick={() => handleTabChange("info")}
+                className={`position-relative m-0 px-1 py-2 fw-bold fs-6 ${
+                  tab === "info" ? "text-dark" : "text-secondary"
+                }`}
+                style={{ cursor: "pointer", userSelect: "none" }}
               >
                 회원 정보
-              </TabH3>
+                <span
+                  className="position-absolute start-0 rounded"
+                  style={{
+                    bottom: "-1px",
+                    height: "3px",
+                    width: tab === "info" ? "100%" : "0",
+                    background: "#3b82f6",
+                    transition: "width 0.2s ease",
+                  }}
+                />
+              </h3>
 
-              <TabH3
+              <h3
                 role="tab"
                 aria-selected={tab === "mydiary"}
-                $active={tab === "mydiary"}
                 tabIndex={0}
                 onClick={() => handleTabChange("mydiary")}
+                className={`position-relative m-0 px-1 py-2 fw-bold fs-6 ${
+                  tab === "mydiary" ? "text-dark" : "text-secondary"
+                }`}
+                style={{ cursor: "pointer", userSelect: "none" }}
               >
                 내가쓴일기
-              </TabH3>
+                <span
+                  className="position-absolute start-0 rounded"
+                  style={{
+                    bottom: "-1px",
+                    height: "3px",
+                    width: tab === "mydiary" ? "100%" : "0",
+                    background: "#3b82f6",
+                    transition: "width 0.2s ease",
+                  }}
+                />
+              </h3>
 
-              <TabH3
+              <h3
                 role="tab"
                 aria-selected={tab === "activitylog"}
-                $active={tab === "activitylog"}
                 tabIndex={0}
                 onClick={() => handleTabChange("activitylog")}
+                className={`position-relative m-0 px-1 py-2 fw-bold fs-6 ${
+                  tab === "activitylog" ? "text-dark" : "text-secondary"
+                }`}
+                style={{ cursor: "pointer", userSelect: "none" }}
               >
                 활동 로그 내역
-              </TabH3>
-            </Title>
+                <span
+                  className="position-absolute start-0 rounded"
+                  style={{
+                    bottom: "-1px",
+                    height: "3px",
+                    width: tab === "activitylog" ? "100%" : "0",
+                    background: "#3b82f6",
+                    transition: "width 0.2s ease",
+                  }}
+                />
+              </h3>
+            </div>
 
-            <Section>
+            <div className="w-100 p-3" style={{ margin: "10px 0" }}>
               {tab === "info" && <MyInfo />}
               {tab === "mydiary" && (
                 <>
@@ -73,9 +123,9 @@ const MyPage = () => {
                 </>
               )}
               {tab === "activitylog" && <MyActivityLogs />}
-            </Section>
-          </Wrapper>
-        </Container>
+            </div>
+          </div>
+        </div>
       ) : (
         <div>마이페이지는 로그인 후 이용할 수 있습니다.</div>
       )}
@@ -84,74 +134,3 @@ const MyPage = () => {
 };
 
 export default MyPage;
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 100px;
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const Title = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  box-sizing: border-box;
-  top: 50px;
-  left: 0;
-  background-color: white;
-  z-index: 10;
-
-  h3 {
-    font-weight: 500;
-  }
-
-  a {
-    font-size: 0.7rem;
-  }
-`;
-
-const TabH3 = styled.h3<{ $active?: boolean }>`
-  position: relative;
-  margin: 0;
-  padding: 10px 4px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: ${({ $active }) => ($active ? "#111827" : "#6b7280")};
-  cursor: pointer;
-  user-select: none;
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -1px;
-    height: 3px;
-    width: ${({ $active }) => ($active ? "100%" : "0")};
-    background: #3b82f6;
-    border-radius: 2px;
-    transition: width 0.2s ease;
-  }
-
-  &:hover {
-    color: #111827;
-  }
-`;
-
-const Section = styled.div`
-  margin: 10px 0;
-  padding: 20px;
-  // margin-top: 70px;
-  width: 100%;
-  box-sizing: border-box;
-`;

@@ -1,5 +1,3 @@
-import styled from "styled-components";
-
 const AddDiaryButton = ({
   disabled,
   title,
@@ -10,23 +8,22 @@ const AddDiaryButton = ({
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {
   return (
-    <Button type="button" disabled={disabled} onClick={onClick}>
+    <button
+      type="button"
+      className="btn btn-info rounded-circle position-fixed d-flex align-items-center justify-content-center p-0"
+      disabled={disabled}
+      onClick={onClick}
+      style={{
+        width: "50px",
+        height: "50px",
+        right: "10px",
+        bottom: "80px",
+        zIndex: 200,
+      }}
+    >
       {title}
-    </Button>
+    </button>
   );
 };
 
 export default AddDiaryButton;
-
-const Button = styled.button`
-  position: fixed;
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  border: none;
-  background-color: lightblue;
-  font-size: 25px;
-  right: 10px;
-  bottom: 80px;
-  z-index: 200;
-`;

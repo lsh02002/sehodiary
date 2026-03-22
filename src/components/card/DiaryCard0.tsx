@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DiaryResponseType } from "../../types/type";
-import {
-  CardContainer,
-  CardWrapper,
-  ContentField,
-  IdField,
-  InfoBoxField,
-  NameField,
-  SlugField,
-} from "./field/Field";
 import { TwoDiv } from "../form/TwoDiv";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
@@ -21,7 +12,6 @@ import {
   insertLikeApi,
   isLikedApi,
 } from "../../api/sehodiary-api";
-import styled from "styled-components";
 import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
@@ -32,7 +22,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(-1);
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
-  const [nicknameList, setNicknameList] = useState([]);
+  const [nicknameList, setNicknameList] = useState<string[]>([]);
   const createdAt = `${new Date(diary0?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   useEffect(() => {
@@ -82,7 +72,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
     e.stopPropagation();
 
     setDiary(() => {
-      if (!diary0) return diary0; // diary0가 undefined일 가능성이 있으면
+      if (!diary0) return diary0;
       return {
         ...diary0,
         isLiked,
@@ -94,20 +84,22 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   };
 
   return (
-    <CardContainer>
-      <CardWrapper>
-        <InfoBoxField>
-          <TwoDiv onClick={() => navigator(`/edit/${diary0?.id}`)}>
-            <IdField>#{diary0?.id}</IdField>
-            <NameField>{diary0?.title}</NameField>
+    <div className="card border-0 shadow-sm mb-3">
+      <div className="card-body p-3">
+        <div className="w-100 d-flex flex-column gap-3">
+          <TwoDiv onClick={() => navigator(`/edit/${diary0?.id}`)} style={{ cursor: "pointer" }}>
+            <div className="text-primary fw-semibold flex-shrink-0">#{diary0?.id}</div>
+            <div className="fw-semibold text-body text-end flex-grow-1">{diary0?.title}</div>
           </TwoDiv>
-          <ContentField
+          <div
+            className="text-body"
             onClick={() => navigator(`/edit/${diary0?.id}`)}
+            style={{ cursor: "pointer" }}
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(diary0?.content ?? ""),
             }}
           />
-          <ContentField>
+          <div className="d-flex flex-column gap-2">
             {diary0?.imageResponses?.map((image) => (
               <ImageCard
                 key={image?.id}
@@ -115,94 +107,58 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
                 diary={diary0}
               />
             ))}
-          </ContentField>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            {diary0?.profileImage ? (
-              <img
-                width="40px"
-                height="40px"
-                src={diary0?.profileImage}
-                alt="그림"
-              />
-            ) : (
-              <IoPersonOutline
-                style={{ width: "40px", height: "40px", marginRight: "5px" }}
-              />
-            )}
-            <SlugField>작성자: {diary0?.nickname}</SlugField>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "end",
-                alignItems: "center",
-                width: "120%",
-              }}
-            >
-              <EmojiField>{diary0?.emoji}</EmojiField>
-              <FaRegCommentDots onClick={handleEditComment} />
-              <div
-                style={{
-                  fontStyle: "italic",
-                  color: "gray",
-                  marginRight: "10px",
-                }}
-              >
-                ({diary0?.commentsCount})
-              </div>
+          </div>
+          <div className="d-flex justify-content-between align-items-center w-100 flex-wrap gap-2 mt-2">
+            <div className="d-flex align-items-center gap-2">
+              {diary0?.profileImage ? (
+                <img
+                  width="40px"
+                  height="40px"
+                  src={diary0?.profileImage}
+                  alt="그림"
+                  className="rounded-circle"
+                />
+              ) : (
+                <IoPersonOutline
+                  style={{ width: "40px", height: "40px", marginRight: "5px" }}
+                />
+              )}
+              <div className="fst-italic text-secondary small">작성자: {diary0?.nickname}</div>
+            </div>
+            <div className="d-flex justify-content-end align-items-center flex-wrap gap-2 ms-auto position-relative">
+              <div>{diary0?.emoji}</div>
+              <FaRegCommentDots onClick={handleEditComment} style={{ cursor: "pointer" }} />
+              <div className="fst-italic text-secondary me-2">({diary0?.commentsCount})</div>
               <div
                 onMouseOver={() => setIsMouseOverOnce(true)}
                 onMouseLeave={() => setIsMouseOverOnce(false)}
                 onClick={handleLikeClick}
+                style={{ cursor: "pointer" }}
               >
                 {isLiked ? <AiFillLike /> : <AiOutlineLike />}
               </div>
-              <div
-                style={{
-                  fontStyle: "italic",
-                  color: "gray",
-                  marginRight: "10px",
-                  position: "relative",
-                }}
-              >
+              <div className="fst-italic text-secondary me-2 position-relative">
                 {likesCount}
                 {isMouseOverOnce && nicknameList.length > 0 && (
-                  <NicknameListBox
+                  <div
+                    className="position-absolute bg-white border rounded shadow-sm p-2"
+                    style={{ left: -15, top: 25, zIndex: 10, minWidth: 120 }}
                     onMouseOver={() => setIsMouseOverOnce(true)}
                     onMouseLeave={() => setIsMouseOverOnce(false)}
                   >
                     {nicknameList?.map((list) => (
-                      <div>{list}</div>
+                      <div key={list}>{list}</div>
                     ))}
-                  </NicknameListBox>
+                  </div>
                 )}
               </div>
-              <div style={{ fontStyle: "italic", color: "gray" }}>
-                {createdAt}
-              </div>
+              <div className="fst-italic text-secondary small">{createdAt}</div>
             </div>
           </div>
-        </InfoBoxField>
-      </CardWrapper>
-    </CardContainer>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default DiaryCard0;
-
-const NicknameListBox = styled.div`
-  border: 1px solid black;
-  position: absolute;
-  background-color: white;
-  padding: 10px;
-  left: -15px;
-  top: 25px;
-`;
-
-const EmojiField = styled.div``;

@@ -1,32 +1,37 @@
-import { ToastContainer } from "react-toastify";
-import styled from "styled-components";
+import { ToastContainer, ToastContainerProps } from "react-toastify";
 
-export const StyledToastContainer = styled(ToastContainer)`
-  padding: 0 20px;
-  box-sizing: border-box;
-  margin-bottom: 70px;
-  .Toastify__toast {
-    color: white;
-    font-size: 0.9rem;
-  }
+export const BootstrapToastContainer = (props: ToastContainerProps) => (
+  <ToastContainer
+    position="bottom-center"
+    autoClose={3000}
+    hideProgressBar
+    closeOnClick
+    pauseOnHover={false}
+    limit={1}
+    {...props}
+    toastClassName={(context) => {
+      const type = context?.type;
+      const typeClass =
+        type === "success"
+          ? "bg-success text-white"
+          : type === "warning"
+          ? "bg-warning text-dark"
+          : type === "error"
+          ? "bg-danger text-white"
+          : "bg-info text-white";
 
-  /* 성공 */
-  .Toastify__toast--success {
-    background-color: #28a745;
-  }
-
-  /* 경고 */
-  .Toastify__toast--warning {
-    background-color: #f0ad4e;
-  }
-
-  /* 에러 */
-  .Toastify__toast--error {
-    background-color: #dc3545;
-  }
-
-  /* 정보 */
-  .Toastify__toast--info {
-    background-color: #17a2b8;
-  }
-`;
+      return `rounded-3 px-3 py-2 pe-4 position-relative ${typeClass}`;
+    }}
+    className="m-0 p-0"
+    closeButton={({ closeToast }) => (
+      <button
+        onClick={closeToast}
+        className="btn-close btn-close-white position-absolute top-0 end-0 m-2"
+      />
+    )}
+    style={{
+      bottom: "100px",
+      fontSize: "1rem",
+    }}
+  />
+);

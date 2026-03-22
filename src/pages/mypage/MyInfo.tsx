@@ -7,7 +7,6 @@ import {
 import TextInput from "../../components/form/TextInput";
 import ConfirmButton from "../../components/form/ConfirmButton";
 import { TwoDiv } from "../../components/form/TwoDiv";
-import styled from "styled-components";
 import ImageInput from "../../components/form/ImageInput";
 
 const MyInfo = () => {
@@ -73,7 +72,7 @@ const MyInfo = () => {
         previewUrls={imageUrls}
         setPreviewUrls={setImageUrls}
       />
-      <Message>프로필 사진 이외는 가입할때 정해짐!!!</Message>
+      <div className="text-danger mt-3">프로필 사진 이외는 가입할때 정해짐!!!</div>
       <TwoDiv>
         <div style={{ width: "450px" }} />
         <ConfirmButton title="프로필설정" onClick={handleSetProfiles} />
@@ -84,7 +83,3 @@ const MyInfo = () => {
 
 export default MyInfo;
 
-const Message = styled.div`
-  color: red;
-  margin-top: 15px;
-`;

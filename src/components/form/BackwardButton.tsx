@@ -7,7 +7,8 @@ export function BackwardButton() {
     <span
       role="button"
       onClick={() => navigate(-1)}
-      style={{ cursor: "pointer", fontSize: "32px", padding: "16px" }}
+      className="d-inline-block p-3"
+      style={{ cursor: "pointer", fontSize: "32px" }}
       aria-label="뒤로가기"
     >
       ←

@@ -1,9 +1,13 @@
-import styled from "styled-components";
+import React from "react";
 
-export const TwoDiv = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-`;
+export const TwoDiv = ({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className="d-flex w-100 align-items-center justify-content-between gap-3"
+    {...props}
+  >
+    {children}
+  </div>
+);

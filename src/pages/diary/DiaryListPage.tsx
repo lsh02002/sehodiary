@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getDiariesByPublicApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
-import styled from "styled-components";
 import DiaryCard0 from "../../components/card/DiaryCard0";
 import { useLogin } from "../../context/LoginContext";
 import { useScroll } from "../../context/ScrollContext";
@@ -47,7 +46,7 @@ const DiaryListPage = () => {
   }, [diaryList?.length]);
 
   return (
-    <PageContainer>
+    <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
           <DiaryCard0 key={diary?.id} diary0={diary} />
@@ -55,14 +54,8 @@ const DiaryListPage = () => {
       ) : (
         <div>해당 글이 없습니다!</div>
       )}
-    </PageContainer>
+    </div>
   );
 };
 
 export default DiaryListPage;
-
-const PageContainer = styled.div`
-  margin-top: 20px;
-  padding: 0 20px;
-  margin-bottom: 100px;
-`;

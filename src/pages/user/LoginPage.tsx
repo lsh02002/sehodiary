@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { UserLoginApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/form/TextInput";
@@ -16,7 +15,7 @@ const LoginPage = () => {
 
   const OnLoginSubmit = () => {
     UserLoginApi(email, password)
-      .then((res) => {        
+      .then((res) => {
         localStorage.setItem("userId", res.data.data.userId);
         localStorage.setItem("nickname", res.data.data.nickname);
         localStorage.setItem("accessToken", res.headers.accesstoken);
@@ -29,64 +28,48 @@ const LoginPage = () => {
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <Title>
-          <h3>
+    <div className="d-flex justify-content-center align-items-center w-100">
+      <div
+        className="d-flex flex-column align-items-center w-100 p-3"
+        style={{ maxWidth: "400px" }}
+      >
+        <div className="d-flex justify-content-between align-items-center w-100 mb-3">
+          <h3 className="fw-medium mb-0">
             <SlLogin /> 로그인
           </h3>
+
           <Link
-            style={{ color: "#4680ff", textDecoration: "none" }}
             to="/register"
+            className="text-decoration-none"
+            style={{ color: "#4680ff" }}
           >
             계정이 없으세요?
           </Link>
-        </Title>
-        <TextInput
-          name="email"
-          title="이메일 주소"
-          data={email}
-          setData={setEmail}
-        />
-        <PasswordInput
-          name="password"
-          title="비밀 번호"
-          data={password}
-          setData={setPassword}
-        />
-        <ConfirmButton title="로그인" onClick={OnLoginSubmit} />
-      </Wrapper>
-    </Container>
+        </div>
+
+        <div className="w-100 mb-3">
+          <TextInput
+            name="email"
+            title="이메일 주소"
+            data={email}
+            setData={setEmail}
+          />
+        </div>
+
+        <div className="w-100 mb-3">
+          <PasswordInput
+            name="password"
+            title="비밀 번호"
+            data={password}
+            setData={setPassword}
+          />
+        </div>
+
+        <div className="w-100">
+          <ConfirmButton title="로그인" onClick={OnLoginSubmit} />
+        </div>
+      </div>
+    </div>
   );
 };
-
 export default LoginPage;
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-`;
-
-const Title = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h3 {
-    font-weight: 500;
-  }
-`;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import styled from "styled-components";
 
 type Option = { id: string; name: string };
 
@@ -104,11 +103,11 @@ export const CompleteArrayInput: React.FC<CompleteArrayInputPropsType> = ({
 
   const handleCreate = useCallback(async () => {
     if (!createOption) return;
-    const name = input.trim();
-    if (!name) return;
+    const nextName = input.trim();
+    if (!nextName) return;
     try {
       setLoading(true);
-      const created = await createOption(name);
+      const created = await createOption(nextName);
       setOptions((prev) =>
         prev.some((o) => o.id === created.id) ? prev : [created, ...prev]
       );
@@ -145,130 +144,45 @@ export const CompleteArrayInput: React.FC<CompleteArrayInputPropsType> = ({
   };
 
   return (
-    <Container
-    // onBlur={() => setMenuOpen(false)}
-    >
-      {title && <Label>{title}</Label>}
+    <div className="w-100 mb-3 position-relative">
+      {title && <label className="form-label fw-semibold">{title}</label>}
 
       {values.length > 0 && (
-        <SelectedList>
+        <div className="d-flex flex-wrap gap-2 mb-2">
           {values.map((id) => {
             const label = selectedMap.get(id)?.name ?? id;
             return (
-              <SelectedItem key={id}>
+              <span key={id} className="badge text-bg-secondary d-inline-flex align-items-center gap-1 px-3 py-2">
                 {label}
-                <RemoveButton onClick={() => removeId(id)}>✕</RemoveButton>
-              </SelectedItem>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white ms-1"
+                  aria-label="삭제"
+                  onClick={() => removeId(id)}
+                  style={{ fontSize: "0.55rem" }}
+                />
+              </span>
             );
           })}
-        </SelectedList>
+        </div>
       )}
 
-      <Input
+      <input
         name={name}
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        onKeyDown={onKeyDown}        
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
+        className="form-control"
       />
 
-      <Menu $maxHeight={maxMenuHeight}>        
+      <div className="mt-2" style={{ maxHeight: `${maxMenuHeight}px`, overflowY: "auto" }}>
         {!loading && createOption && input.trim() && (
-          <CreateBtn onClick={() => handleCreate()}>
+          <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => handleCreate()}>
             “{input.trim()}” 추가
-          </CreateBtn>
+          </button>
         )}
-      </Menu>
-    </Container>
+      </div>
+    </div>
   );
 };
-
-/* ---------------------- styled-components ---------------------- */
-
-const Container = styled.div`
-  width: 100%;
-  font-family: system-ui, sans-serif;
-  position: relative;
-  margin: 10px 0;
-  margin-bottom: 20px;
-
-  &:hover {
-    background-color: #f7f9fc;
-  }
-`;
-
-const Label = styled.label`
-  width: 100%;
-  display: block;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: black;
-  margin-bottom: 4px;
-`;
-
-const SelectedList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 8px;
-`;
-
-const SelectedItem = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background-color: #f3f3f3;
-  border-radius: 16px;
-  padding: 4px 8px;
-  font-size: 0.95rem;
-`;
-
-const RemoveButton = styled.button`
-  border: none;
-  background: transparent;
-  color: #777;
-  cursor: pointer;
-  font-size: 0.95rem;
-  &:hover {
-    color: #000;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 8px 10px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  outline: none;
-  font-size: 0.95rem;
-  box-sizing: border-box;
-  background-color: transparent;
-  &:hover,
-  &:focus {
-    border-bottom: 1px solid #007bff;
-  }
-`;
-
-const Menu = styled.div<{ $maxHeight: number }>`
-  border-radius: 6px;
-  overflow-y: auto;
-  max-height: ${(p) => p.$maxHeight}px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100px;
-`;
-
-const CreateBtn = styled.button`
-  width: 100%;
-  padding: 8px 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 0 0 6px 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  &:hover {
-    background-color: #0064d6;
-  }
-`;

@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
@@ -9,62 +8,35 @@ const CommentCard0 = ({ comment }: { comment: CommentResponseType }) => {
   const createdAt = `${new Date(comment?.createdAt).getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
-    <PageContainer>
-      <Wrapper>
-        <IconAndContent>
-          {comment?.profileImage ? (
-            <img
-              width="28px"
-              height="28px"
-              src={comment?.profileImage}
-              alt="그림"
+    <div className="card border-0 shadow-sm mb-3">
+      <div className="card-body p-3">
+        <div className="d-flex flex-column justify-content-center">
+          <div className="d-flex justify-content-start align-items-center gap-2 mb-2">
+            {comment?.profileImage ? (
+              <img
+                width="28px"
+                height="28px"
+                src={comment?.profileImage}
+                alt="그림"
+                className="rounded-circle"
+              />
+            ) : (
+              <IoPersonOutline style={{ marginRight: "5px" }} />
+            )}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(comment?.content ?? ""),
+              }}
             />
-          ) : (
-            <IoPersonOutline style={{ marginRight: "5px" }} />
-          )}
-          <div
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(comment?.content ?? ""),
-            }}
-          />
-        </IconAndContent>
-        <TwoDiv>
-          <Nickname>작성자: {comment?.nickname}</Nickname>
-          <CreatedAt>{createdAt}</CreatedAt>
-        </TwoDiv>
-      </Wrapper>
-    </PageContainer>
+          </div>
+          <TwoDiv>
+            <div className="fst-italic text-secondary">작성자: {comment?.nickname}</div>
+            <div className="fst-italic text-secondary">{createdAt}</div>
+          </TwoDiv>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default CommentCard0;
-
-const PageContainer = styled.div`
-  border: 1px solid #e5e7eb;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  alignitems: center;
-  flex-direction: column;
-`;
-
-const IconAndContent = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const Nickname = styled.div`
-  font-style: italic;
-  color: gray;
-`;
-
-const CreatedAt = styled.div`
-  font-style: italic;
-  color: gray;
-`;
