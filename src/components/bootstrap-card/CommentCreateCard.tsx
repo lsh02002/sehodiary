@@ -9,9 +9,7 @@ import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   const { setDiary, setCommentList } = useLogin();
-  const [nickname, setNickname] = useState(
-    localStorage.getItem("nickname") ?? "",
-  );
+  const nickname = localStorage.getItem("nickname") ?? "";
   const [content, setContent] = useState("");
 
   const handleCreateComment = () => {
@@ -63,7 +61,7 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
                   name="nickname"
                   title="댓글 작성자"
                   data={nickname}
-                  setData={setNickname}
+                  setData={() => {}}
                 />
                 <ConfirmButton
                   title="댓글 입력"
