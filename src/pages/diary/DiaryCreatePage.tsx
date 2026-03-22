@@ -15,9 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
-  const [nickname, setNickname] = useState(
-    localStorage.getItem("nickname") ?? "",
-  );
+  const nickname = localStorage.getItem("nickname") ?? "";
   const [weather, setWeather] = useState("");
   const [visibility, setVisibility] = useState("PRIVATE");
   const [content, setContent] = useState("");
@@ -77,7 +75,7 @@ const DiaryCreatePage = () => {
         name="nickname"
         title="작성자"
         data={nickname}
-        setData={setNickname}
+        setData={() => {}}
       />
       <TwoDiv>
         <TextInput
