@@ -6,7 +6,13 @@ import DOMPurify from "dompurify";
 import { putCommentByIdApi, showToast } from "../../api/sehodiary-api";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
-const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
+const CommentCard1 = ({
+  comment,
+  handleRemoveSave,
+}: {
+  comment: CommentResponseType;
+  handleRemoveSave: (c: number) => void;
+}) => {
   const isEditing = comment?.nickname === localStorage.getItem("nickname");
   const [content, setContent] = useState(comment?.content ?? "");
 
@@ -60,6 +66,12 @@ const CommentCard1 = ({ comment }: { comment: CommentResponseType }) => {
                       onClick={handleEditSave}
                     >
                       수정
+                    </button>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleRemoveSave(comment?.commentId)}
+                    >
+                      삭제
                     </button>
                   </div>
                 </div>
