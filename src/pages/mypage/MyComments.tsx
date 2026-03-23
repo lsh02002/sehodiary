@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
+  putCommentByIdApi,
   showToast,
 } from "../../api/sehodiary-api";
-import { CommentResponseType } from "../../types/type";
+import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCard1 from "../../components/bootstrap-card/CommentCard1";
 import { useLogin } from "../../context/LoginContext";
 
 const MyComments = () => {
   const { diary, setDiary, setCommentList } = useLogin();
-  const [myCommentList, setMyCommentList] = useState([]);
+  const [myCommentList, setMyCommentList] = useState<CommentResponseType[]>([]);
 
   useEffect(() => {
     getCommentsByUserApi()
@@ -19,6 +20,31 @@ const MyComments = () => {
       })
       .catch(() => {});
   }, [diary]);
+
+  const handleEditSave = async (commentId: number, content: string) => {
+    const data: CommentRequestType = {
+      diaryId: diary?.id ?? -1,
+      content,
+    };
+
+    putCommentByIdApi(commentId, data)
+      .then((res) => {
+        setCommentList((prev) =>
+          prev?.map((comment: CommentResponseType) =>
+            comment.commentId === commentId ? { ...comment, content } : comment,
+          ),
+        );
+
+        setMyCommentList((prev) =>
+          prev?.map((comment: CommentResponseType) =>
+            comment.commentId === commentId ? { ...comment, content } : comment,
+          ),
+        );
+
+        showToast("댓글 수정이 되었습니다.", "success");
+      })
+      .catch(() => {});
+  };
 
   const handleRemoveSave = async (commentId: number) => {
     if (!window.confirm("해당 댓글을 삭제하시겠습니까?")) {
@@ -63,6 +89,7 @@ const MyComments = () => {
           <CommentCard1
             key={comment?.commentId}
             comment={comment}
+            handleEditSave={handleEditSave}
             handleRemoveSave={handleRemoveSave}
           />
         ))

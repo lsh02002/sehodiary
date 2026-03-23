@@ -1,36 +1,28 @@
-import React, { useState } from "react";
-import { CommentRequestType, CommentResponseType } from "../../types/type";
+import React, { useEffect, useState } from "react";
+import { CommentResponseType } from "../../types/type";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
-import { putCommentByIdApi, showToast } from "../../api/sehodiary-api";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
 const CommentCard1 = ({
   comment,
+  handleEditSave,
   handleRemoveSave,
 }: {
   comment: CommentResponseType;
+  handleEditSave: (commentId: number, content: string) => void;
   handleRemoveSave: (c: number) => void;
 }) => {
   const isEditing = comment?.nickname === localStorage.getItem("nickname");
-  const [content, setContent] = useState(comment?.content ?? "");
+  const [content, setContent] = useState("");
 
   const date = new Date(comment?.createdAt);
   const createdAt = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
-  const handleEditSave = async () => {
-    const data: CommentRequestType = {
-      diaryId: comment?.diaryId,
-      content,
-    };
-
-    putCommentByIdApi(comment?.commentId, data)
-      .then((res) => {
-        showToast("댓글 수정이 되었습니다.", "success");
-      })
-      .catch(() => {});
-  };
+  useEffect(() => {
+    setContent(comment?.content ?? "");
+  }, [comment?.content]);
 
   return (
     <div className="card border-0 shadow-sm mb-3">
@@ -63,7 +55,9 @@ const CommentCard1 = ({
                   <div className="d-flex gap-2">
                     <button
                       className="btn btn-sm btn-primary"
-                      onClick={handleEditSave}
+                      onClick={() =>
+                        handleEditSave(comment?.commentId, content)
+                      }
                     >
                       수정
                     </button>
