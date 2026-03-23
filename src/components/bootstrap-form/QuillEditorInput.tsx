@@ -29,8 +29,8 @@ const QuillEditorInput = ({
         className={`w-100 quill-editor-bootstrap ${disabled ? "is-disabled" : ""}`}
         style={
           {
-            ["--quill-min-height" as any]: `${Math.max(rows, 4) * 24 + 24}px`,
-            ["--quill-min-height-mobile" as any]: `${Math.max(rows, 4) * 24 + 32}px`,
+            ["--quill-min-height" as any]: `${Math.max(rows, 1) * 24 + 24}px`,
+            ["--quill-min-height-mobile" as any]: `${Math.max(rows, 1) * 24 + 32}px`,
           } as React.CSSProperties
         }
       >

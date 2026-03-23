@@ -119,6 +119,13 @@ const createCommentApi = async (data: CommentRequestType) => {
   return api.post(`/comment/create`, data);
 };
 
+const putCommentByIdApi = async (
+  commentId: number,
+  request: CommentRequestType,
+) => {
+  return api.post(`/comment/${commentId}`, request);
+};
+
 const getLikingNicknameByDiaryApi = async (diaryId: number) => {
   return api.get(`/like/nicknames/${diaryId}`);
 };
@@ -157,6 +164,7 @@ export {
   getCommentsByDiaryApi,
   getCommentsByUserApi,
   createCommentApi,
+  putCommentByIdApi,
   getLikingNicknameByDiaryApi,
   isLikedApi,
   insertLikeApi,
