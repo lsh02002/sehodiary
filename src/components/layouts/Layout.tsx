@@ -214,13 +214,22 @@ export default function Layout({ appName = "앱", children }: Props) {
                 <div>로그아웃</div>
               </span>
             ) : (
-              <span
-                className="small"
-                role="button"
-                onClick={() => navigate("/login")}
-              >
-                로그인
-              </span>
+              <div className="d-flex gap-3">
+                <span
+                  className="small"
+                  role="button"
+                  onClick={() => navigate("/login")}
+                >
+                  로그인
+                </span>
+                <span
+                  className="small"
+                  role="button"
+                  onClick={() => navigate("/register")}
+                >
+                  회원가입
+                </span>
+              </div>
             )}
           </div>
         </div>
