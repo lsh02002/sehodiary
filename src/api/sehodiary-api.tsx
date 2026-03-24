@@ -96,7 +96,7 @@ const getDiariesByUserApi = async () => {
 };
 
 const getOneDiaryApi = async (diaryId: number) => {
-  return api.get(`/diary/${diaryId}`);
+  return api.get(`/diary/one/${diaryId}`);
 };
 
 const createDiaryApi = async (data: FormData) => {
