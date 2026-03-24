@@ -199,15 +199,16 @@ export default function Layout({ appName = "앱", children }: Props) {
                     .then((res) => {
                       console.log(res);
                     })
-                    .catch(() => {});
+                    .catch(() => {})
+                    .finally(() => {
+                      localStorage.removeItem("userId");
+                      localStorage.removeItem("nickname");
+                      localStorage.removeItem("accessToken");
+                      localStorage.removeItem("refreshToken");
 
-                  localStorage.removeItem("userId");
-                  localStorage.removeItem("nickname");
-                  localStorage.removeItem("accessToken");
-                  localStorage.removeItem("refreshToken");
-
-                  setIsLogin(false);
-                  navigate("/login");
+                      setIsLogin(false);
+                      navigate("/login");
+                    });
                 }}
               >
                 <div>{localStorage.getItem("nickname")}</div>
