@@ -237,7 +237,7 @@ export default function Layout({ appName = "앱", children }: Props) {
 
       <main
         id="main"
-        className="container-fluid px-3 px-sm-4 mx-auto"
+        className="container-fluid px-1 px-sm-4 mx-auto"
         style={mainStyle}
       >
         <BackwardButton />
