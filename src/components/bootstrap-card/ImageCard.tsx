@@ -24,8 +24,12 @@ const ImageCard = ({
           className="rounded"
         />
       </div>
-
-      {imageOpen && (
+      {diary?.imageResponses?.length < 2 && (
+        <div className="alert alert-warning image-view-min-required small">
+          이미지 뷰는 이미지가 2개 이상이어야 합니다.
+        </div>
+      )}
+      {imageOpen && diary?.imageResponses?.length > 1 && (
         <>
           <div
             role="presentation"
@@ -44,8 +48,13 @@ const ImageCard = ({
               height: "min(640px, calc(100vh - 200px))",
             }}
           >
-            <div className="d-flex align-items-center justify-content-between px-3 border-bottom" style={{ height: 56 }}>
-              <h2 className="m-0 fs-6 fw-bold">이미지 슬라이더(사진 여러장 등록시)</h2>
+            <div
+              className="d-flex align-items-center justify-content-between px-3 border-bottom"
+              style={{ height: 56 }}
+            >
+              <h2 className="m-0 fs-6 fw-bold">
+                이미지 슬라이더(사진 여러장 등록시)
+              </h2>
               <button
                 onClick={() => setImageOpen(false)}
                 aria-label="슬라이더 닫기"
