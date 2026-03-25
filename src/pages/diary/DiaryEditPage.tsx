@@ -191,7 +191,6 @@ const DiaryEditPage = () => {
         <TextInput name="title" title="제목" data={title} setData={setTitle} />
       </TwoDiv>
       <TwoDiv>
-        <DateInput title="날짜" selected={date} setSelected={setDate} />
         <TextInput
           disabled
           name="nickname"
@@ -199,6 +198,7 @@ const DiaryEditPage = () => {
           data={nickname}
           setData={setNickname}
         />
+        <DateInput title="날짜" selected={date} setSelected={setDate} />
       </TwoDiv>
       <TwoDiv>
         <TextInput
