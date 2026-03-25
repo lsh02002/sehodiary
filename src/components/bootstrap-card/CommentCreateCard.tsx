@@ -8,7 +8,7 @@ import { useLogin } from "../../context/LoginContext";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
-  const { setDiary, setCommentList } = useLogin();
+  const { setDiary, setCommentList, setMyCommentList } = useLogin();
   const nickname = localStorage.getItem("nickname") ?? "";
   const [content, setContent] = useState("");
 
@@ -21,6 +21,13 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
     createCommentApi(data)
       .then((res) => {
         setCommentList((prev) => {
+          if (prev === undefined) {
+            return;
+          }
+          return [...prev, res.data];
+        });
+
+        setMyCommentList((prev) => {
           if (prev === undefined) {
             return;
           }

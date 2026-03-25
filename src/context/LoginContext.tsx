@@ -18,6 +18,8 @@ type LoginContextValue = {
   setDiary: Dispatch<SetStateAction<DiaryResponseType | undefined>>;
   commentList?: CommentResponseType[];
   setCommentList: Dispatch<SetStateAction<CommentResponseType[] | undefined>>;
+  myCommentList?: CommentResponseType[];
+  setMyCommentList: Dispatch<SetStateAction<CommentResponseType[] | undefined>>;
 };
 
 export const LoginContext = createContext<LoginContextValue | undefined>(
@@ -29,6 +31,7 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
   const [diary, setDiary] = useState<DiaryResponseType>();
   const [commentList, setCommentList] = useState<CommentResponseType[]>();
+  const [myCommentList, setMyCommentList] = useState<CommentResponseType[]>();
 
   const value = useMemo<LoginContextValue>(
     () => ({
@@ -40,8 +43,10 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
       setDiary,
       commentList,
       setCommentList,
+      myCommentList,
+      setMyCommentList,
     }),
-    [commentList, diary, isLogin, open],
+    [commentList, diary, isLogin, myCommentList, open],
   );
 
   return (

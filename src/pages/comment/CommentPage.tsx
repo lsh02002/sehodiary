@@ -13,6 +13,7 @@ import CommentCard0 from "../../components/bootstrap-card/CommentCard0";
 const CommentPage = () => {
   const { diary } = useLogin();
   const { commentList, setCommentList } = useLogin();
+  const { setMyCommentList } = useLogin();
 
   useEffect(() => {
     if (diary?.id) {
@@ -33,6 +34,12 @@ const CommentPage = () => {
     putCommentByIdApi(commentId, data)
       .then((res) => {
         setCommentList((prev) =>
+          prev?.map((comment: CommentResponseType) =>
+            comment.commentId === commentId ? { ...comment, content } : comment,
+          ),
+        );
+
+        setMyCommentList((prev) =>
           prev?.map((comment: CommentResponseType) =>
             comment.commentId === commentId ? { ...comment, content } : comment,
           ),

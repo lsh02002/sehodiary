@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
@@ -11,7 +11,7 @@ import { useLogin } from "../../context/LoginContext";
 
 const MyComments = () => {
   const { diary, setDiary, setCommentList } = useLogin();
-  const [myCommentList, setMyCommentList] = useState<CommentResponseType[]>([]);
+  const { myCommentList, setMyCommentList } = useLogin();
 
   useEffect(() => {
     getCommentsByUserApi()
@@ -19,7 +19,8 @@ const MyComments = () => {
         setMyCommentList(res.data);
       })
       .catch(() => {});
-  }, [diary]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleEditSave = async (commentId: number, content: string) => {
     const data: CommentRequestType = {
@@ -59,11 +60,12 @@ const MyComments = () => {
           ),
         );
 
-        setMyCommentList((prev) =>
-          prev.filter(
+        setMyCommentList((prev) => {
+          if (!prev) return;
+          return prev?.filter(
             (comment: CommentResponseType) => comment?.commentId !== commentId,
-          ),
-        );
+          );
+        });
 
         // 댓글 개수 감소
         setDiary((prev) => {
