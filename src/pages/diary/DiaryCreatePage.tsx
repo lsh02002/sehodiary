@@ -12,6 +12,7 @@ import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
 import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInput";
 import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import { useNavigate } from "react-router-dom";
+import DateInput from "../../components/bootstrap-form/DateInput";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -19,6 +20,7 @@ const DiaryCreatePage = () => {
   const [weather, setWeather] = useState("");
   const [visibility, setVisibility] = useState("PRIVATE");
   const [content, setContent] = useState("");
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [isImagesShown, setIsImagesShown] = useState(true);
   const [images, setImages] = useState<File[] | null>(null);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -42,6 +44,7 @@ const DiaryCreatePage = () => {
       weather,
       visibility,
       content,
+      date: date?.toLocaleDateString("sv-SE") ?? "",
       emoji: emoji ?? "",
     };
 
@@ -70,13 +73,16 @@ const DiaryCreatePage = () => {
   return (
     <div className="px-3 mb-5" style={{ marginBottom: "100px" }}>
       <TextInput name="title" title="제목" data={title} setData={setTitle} />
-      <TextInput
-        disabled
-        name="nickname"
-        title="작성자"
-        data={nickname}
-        setData={() => {}}
-      />
+      <TwoDiv>
+        <TextInput
+          disabled
+          name="nickname"
+          title="작성자"
+          data={nickname}
+          setData={() => {}}
+        />
+        <DateInput title="날짜" selected={date} setSelected={setDate} />
+      </TwoDiv>
       <TwoDiv>
         <TextInput
           name="weather"

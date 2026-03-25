@@ -9,6 +9,7 @@ export type UserSignupType = {
 export type DiaryRequestType = {
   title: string;
   content: string;
+  date: string;
   visibility: string;
   weather: string;
   emoji: string;
@@ -19,6 +20,7 @@ export type DiaryResponseType = {
   nickname: string;
   title: string;
   content: string;
+  date: string;
   visibility: string;
   weather: string;
   commentsCount: number;

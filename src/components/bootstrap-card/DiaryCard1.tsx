@@ -4,7 +4,7 @@ import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import DOMPurify from "dompurify";
 
 const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
-  const createdAt = `${new Date(diary?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+  const date = `${new Date(diary?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
     <div className="card border-0 shadow-sm mb-3">
@@ -28,7 +28,7 @@ const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
             <div className="fst-italic text-secondary small">
               작성자: {diary?.nickname}
             </div>
-            <div className="fst-italic text-secondary small">{createdAt}</div>
+            <div className="fst-italic text-secondary small">{date}</div>
           </TwoDiv>
         </div>
       </div>

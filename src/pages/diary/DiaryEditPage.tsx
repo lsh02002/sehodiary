@@ -24,6 +24,7 @@ import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
 import ImageInput from "../../components/bootstrap-form/ImageInput";
 import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInput";
 import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
+import DateInput from "../../components/bootstrap-form/DateInput";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -33,6 +34,7 @@ const DiaryEditPage = () => {
   const [weather, setWeather] = useState("");
   const [visibility, setVisibility] = useState("");
   const [content, setContent] = useState("");
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [commentsCount, setCommentsCount] = useState(-1);
   const [likesCount, setLikesCount] = useState(-1);
   const [isLiked, setIsLiked] = useState(false);
@@ -106,6 +108,7 @@ const DiaryEditPage = () => {
       weather,
       visibility,
       content,
+      date: date?.toLocaleDateString("sv-SE") ?? "",
       emoji: emoji ?? "",
     };
 
@@ -159,6 +162,7 @@ const DiaryEditPage = () => {
       nickname,
       title,
       content,
+      date: date?.toLocaleDateString("sv-SE") ?? "",
       visibility,
       weather,
       commentsCount: cCount,
@@ -186,13 +190,16 @@ const DiaryEditPage = () => {
         />
         <TextInput name="title" title="제목" data={title} setData={setTitle} />
       </TwoDiv>
-      <TextInput
-        disabled
-        name="nickname"
-        title="작성자"
-        data={nickname}
-        setData={setNickname}
-      />
+      <TwoDiv>
+        <DateInput title="날짜" selected={date} setSelected={setDate} />
+        <TextInput
+          disabled
+          name="nickname"
+          title="작성자"
+          data={nickname}
+          setData={setNickname}
+        />
+      </TwoDiv>
       <TwoDiv>
         <TextInput
           name="weather"

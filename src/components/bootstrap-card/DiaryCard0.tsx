@@ -23,7 +23,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const [likesCount, setLikesCount] = useState(-1);
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState<string[]>([]);
-  const createdAt = `${new Date(diary0?.createdAt ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+  const date = `${new Date(diary0?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   useEffect(() => {
     setLikesCount(diary0?.likesCount ?? -1);
@@ -166,7 +166,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
                   </div>
                 )}
               </div>
-              <div className="fst-italic text-secondary small">{createdAt}</div>
+              <div className="fst-italic text-secondary small">{date}</div>
             </div>
           </div>
         </div>
