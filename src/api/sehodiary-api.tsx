@@ -104,7 +104,7 @@ const createDiaryApi = async (data: FormData) => {
 };
 
 const editDiaryApi = async (diaryId: number, data: FormData) => {
-  return api.post(`/diary/edit/${diaryId}`, data);
+  return api.put(`/diary/edit/${diaryId}`, data);
 };
 
 const getCommentsByDiaryApi = async (diaryId: number) => {
@@ -128,7 +128,7 @@ const putCommentByIdApi = async (
 
 const deleteCommentByIdApi = async (commentId: number) => {
   return api.delete(`/comment/${commentId}`);
-}
+};
 
 const getLikingNicknameByDiaryApi = async (diaryId: number) => {
   return api.get(`/like/nicknames/${diaryId}`);
