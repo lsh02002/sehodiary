@@ -123,7 +123,7 @@ const putCommentByIdApi = async (
   commentId: number,
   request: CommentRequestType,
 ) => {
-  return api.post(`/comment/${commentId}`, request);
+  return api.put(`/comment/${commentId}`, request);
 };
 
 const deleteCommentByIdApi = async (commentId: number) => {
