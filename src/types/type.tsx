@@ -6,6 +6,16 @@ export type UserSignupType = {
   passwordConfirm: string;
 };
 
+export type UserInfoResponseType = {
+  userId: number;
+  email: string;
+  nickname: string;
+  profileImage: string;
+  introduction?: string | null;
+  followerCounter?: number;
+  followingCounter?: number;
+};
+
 export type DiaryRequestType = {
   title: string;
   content: string;

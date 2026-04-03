@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import LoginPage from "./pages/user/LoginPage";
 import { Route, Routes } from "react-router-dom";
 import SignupPage from "./pages/user/SignupPage";
@@ -34,9 +33,10 @@ function App() {
   return (
     <Layout>
       <Routes>
+        <Route path="/" element={<DiaryListPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
-        <Route path="/" element={<DiaryListPage />} />
+        <Route path="/list/:userId" element={<DiaryListPage />} />
         <Route path="/create" element={<DiaryCreatePage />} />
         <Route path="/edit/:diaryId" element={<DiaryEditPage />} />
         <Route path="/mypage" element={<MyPage />} />

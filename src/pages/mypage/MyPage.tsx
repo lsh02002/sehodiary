@@ -6,6 +6,7 @@ import MyActivityLogs from "./MyActivityLogs";
 import MyInfo from "./MyInfo";
 import { useScroll } from "../../context/ScrollContext";
 import { useEffect } from "react";
+import MyFollow from "./MyFollow";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -21,7 +22,9 @@ const MyPage = () => {
     }
   }, [mypageTab, tab, navigate]);
 
-  const handleTabChange = (nextTab: "info" | "mydiary" | "activitylog") => {
+  const handleTabChange = (
+    nextTab: "follow" | "info" | "mydiary" | "activitylog",
+  ) => {
     setMypageTab(nextTab);
     navigate(`?tab=${nextTab}`);
   };
@@ -44,6 +47,28 @@ const MyPage = () => {
                 zIndex: 10,
               }}
             >
+              <h3
+                role="tab"
+                aria-selected={tab === "follow"}
+                tabIndex={0}
+                onClick={() => handleTabChange("follow")}
+                className={`position-relative m-0 px-1 py-2 fw-bold fs-6 ${
+                  tab === "follow" ? "text-dark" : "text-secondary"
+                }`}
+                style={{ cursor: "pointer", userSelect: "none" }}
+              >
+                팔로우
+                <span
+                  className="position-absolute start-0 rounded"
+                  style={{
+                    bottom: "-1px",
+                    height: "3px",
+                    width: tab === "follow" ? "100%" : "0",
+                    background: "#3b82f6",
+                    transition: "width 0.2s ease",
+                  }}
+                />
+              </h3>
               <h3
                 role="tab"
                 aria-selected={tab === "info"}
@@ -115,6 +140,7 @@ const MyPage = () => {
             </div>
 
             <div className="w-100 p-3" style={{ margin: "10px 0" }}>
+              {tab === "follow" && <MyFollow />}
               {tab === "info" && <MyInfo />}
               {tab === "mydiary" && (
                 <>

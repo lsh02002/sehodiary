@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserSignupApi } from "../../api/sehodiary-api";
+import { showToast, UserSignupApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import PasswordInput from "../../components/bootstrap-form/PasswordInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
@@ -33,6 +33,7 @@ const SignupPage = () => {
 
     UserSignupApi(userInfo)
       .then((res) => {
+        showToast("회원가입에 성공했습니다.", "success");
         navigate("/login");
       })
       .catch(() => {});

@@ -80,7 +80,7 @@ const UserLogoutApi = async () => {
 };
 
 const UserSetProfileImagesApi = async (data: FormData) => {
-  return api.post(`/user/profile`, data);
+  return api.put(`/user/profile`, data);
 };
 
 const getUserInfoApi = async () => {
@@ -94,6 +94,10 @@ const getDiariesByPublicApi = async () => {
 const getDiariesByUserApi = async () => {
   return api.get(`/diary/user`);
 };
+
+const getDiariesTargetFollowingUserIdByUser = async (targetUserId: number) => {
+  return api.get(`/diary/${targetUserId}/user`);
+}
 
 const getOneDiaryApi = async (diaryId: number) => {
   return api.get(`/diary/one/${diaryId}`);
@@ -154,6 +158,22 @@ const getEmotionsApi = async () => {
   return api.get(`/emotion/all`);
 };
 
+const getFollowingListByUserApi = async () => {
+  return api.get(`/follow/following`);
+};
+
+const getFollowerListByUserApi = async () => {
+  return api.get(`/follow/follower`);
+};
+
+const getDiscoverListByUserApi = async () => {
+  return api.get(`/follow/discover`);
+};
+
+const createFollowApi = async (targetUserId: number) => {
+  return api.post(`/follow/${targetUserId}/follow`);
+};
+
 export {
   UserLoginApi,
   UserSignupApi,
@@ -162,6 +182,7 @@ export {
   getUserInfoApi,
   getDiariesByPublicApi,
   getDiariesByUserApi,
+  getDiariesTargetFollowingUserIdByUser,
   getOneDiaryApi,
   createDiaryApi,
   editDiaryApi,
@@ -176,4 +197,8 @@ export {
   deleteLikeApi,
   getLogMessagesByUserApi,
   getEmotionsApi,
+  getFollowingListByUserApi,
+  getFollowerListByUserApi,
+  getDiscoverListByUserApi,
+  createFollowApi,
 };

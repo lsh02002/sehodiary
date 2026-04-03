@@ -14,6 +14,8 @@ type LoginContextValue = {
   setIsLogin: Dispatch<SetStateAction<boolean>>;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  mypageTab: string;
+  setMypageTab: Dispatch<SetStateAction<string>>;
   diary?: DiaryResponseType;
   setDiary: Dispatch<SetStateAction<DiaryResponseType | undefined>>;
   commentList?: CommentResponseType[];
@@ -29,6 +31,7 @@ export const LoginContext = createContext<LoginContextValue | undefined>(
 export const LoginProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mypageTab, setMypageTab] = useState("follow");
   const [diary, setDiary] = useState<DiaryResponseType>();
   const [commentList, setCommentList] = useState<CommentResponseType[]>();
   const [myCommentList, setMyCommentList] = useState<CommentResponseType[]>();
@@ -39,6 +42,8 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
       setIsLogin,
       open,
       setOpen,
+      mypageTab,
+      setMypageTab,
       diary,
       setDiary,
       commentList,
@@ -46,7 +51,7 @@ export const LoginProvider = ({ children }: { children: ReactNode }) => {
       myCommentList,
       setMyCommentList,
     }),
-    [commentList, diary, isLogin, myCommentList, open],
+    [commentList, diary, isLogin, myCommentList, mypageTab, open],
   );
 
   return (

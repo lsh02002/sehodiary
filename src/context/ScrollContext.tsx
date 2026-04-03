@@ -27,7 +27,7 @@ export const ScrollContext = createContext<ScrollContextValue | undefined>(
 );
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
-  const [mypageTab, setMypageTab] = useState("info");
+  const [mypageTab, setMypageTab] = useState("follow");
   const [mainPageScroll, setMainPageScroll] = useState<ScrollPositionType>({
     x: 0,
     y: 0,

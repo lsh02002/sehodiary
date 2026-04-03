@@ -1,29 +1,36 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { getDiariesByPublicApi } from "../../api/sehodiary-api";
+import {
+  getDiariesByPublicApi,
+  getDiariesTargetFollowingUserIdByUser,
+} from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
 import { useLogin } from "../../context/LoginContext";
 import { useScroll } from "../../context/ScrollContext";
+import { useParams } from "react-router-dom";
+import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
 
 const DiaryListPage = () => {
-  const { diary } = useLogin();
+  const { userId } = useParams();
+  const { isLogin, diary } = useLogin();
   const { mainPageScroll } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
   useEffect(() => {
-    let mounted = true;
-
-    getDiariesByPublicApi()
-      .then((res) => {
-        if (!mounted) return;
-        setDiaryList(res.data);
-      })
-      .catch(() => {});
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    if (isLogin && userId != null) {
+      getDiariesTargetFollowingUserIdByUser(Number(userId) ?? -1).then(
+        (res) => {
+          setDiaryList(res.data ?? []);
+        },
+      );
+    } else {
+      getDiariesByPublicApi()
+        .then((res) => {
+          setDiaryList(res.data);
+        })
+        .catch(() => {});
+    }
+  }, [isLogin, userId]);
 
   useEffect(() => {
     setDiaryList((prev) => {
@@ -47,6 +54,7 @@ const DiaryListPage = () => {
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
+      {userId && <UserProfileCard userId={Number(userId)} />}
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
           <DiaryCard0 key={diary?.id} diary0={diary} />

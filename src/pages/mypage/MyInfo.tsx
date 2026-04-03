@@ -10,19 +10,21 @@ import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
 import ImageInput from "../../components/bootstrap-form/ImageInput";
 
 const MyInfo = () => {
-  const [id, setId] = useState(-1);
+  const [userId, setUserId] = useState(-1);
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
+  const [introduction, setIntroduction] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
 
   useEffect(() => {
     getUserInfoApi()
       .then((res) => {
-        setId(res?.data.id);
+        setUserId(res?.data.userId);
         setEmail(res?.data.email);
         setNickname(res?.data.nickname);
-        setImageUrls(res?.data.profileImages);
+        setIntroduction(res?.data.introduction);
+        setImageUrls([res?.data?.profileImage]);
       })
       .catch(() => {});
   }, []);
@@ -30,12 +32,14 @@ const MyInfo = () => {
   const handleSetProfiles = () => {
     const formDataToSend = new FormData();
 
+    formDataToSend.append("introduction", introduction);
+
     (images ?? []).forEach((file) => {
       formDataToSend.append("files", file);
     });
 
     UserSetProfileImagesApi(formDataToSend)
-      .then((res) => {
+      .then(() => {
         showToast("프로필 사진 수정이 되었습니다.", "success");
       })
       .catch(() => {});
@@ -47,8 +51,8 @@ const MyInfo = () => {
         disabled
         name="id"
         title="회원 아이디"
-        data={String(id)}
-        setData={(v) => setId(Number(v))}
+        data={String(userId)}
+        setData={(v) => setUserId(Number(v))}
       />
       <TextInput
         disabled
@@ -63,6 +67,12 @@ const MyInfo = () => {
         title="닉네임"
         data={nickname}
         setData={setNickname}
+      />
+      <TextInput
+        name="introduction"
+        title="소개글"
+        data={introduction}
+        setData={setIntroduction}
       />
       <ImageInput
         name="images"
