@@ -30,7 +30,8 @@ function App() {
     if (open) {
       setOpen(false);
     }
-  }, [location, open, setOpen]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
