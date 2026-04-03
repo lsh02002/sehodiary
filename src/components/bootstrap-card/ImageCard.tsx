@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageSliderPage from "../../pages/imageslider/ImageSliderPage";
 import { DiaryResponseType } from "../../types/type";
+import { useLocation } from "react-router-dom";
 
 const ImageCard = ({
   diary,
@@ -9,7 +10,14 @@ const ImageCard = ({
   diary: DiaryResponseType;
   imageUrl: string;
 }) => {
+  const location = useLocation();
   const [imageOpen, setImageOpen] = useState(false);
+
+  useEffect(() => {
+    setImageOpen(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
   return (
     <>
