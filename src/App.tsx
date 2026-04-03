@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import LoginPage from "./pages/user/LoginPage";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import SignupPage from "./pages/user/SignupPage";
 import { useLogin } from "./context/LoginContext";
 import Layout from "./components/layouts/Layout";
@@ -13,7 +13,8 @@ import NotFoundPage from "./pages/notfound/NotFoundPage";
 import { BootstrapToastContainer } from "./components/layouts/Toast";
 
 function App() {
-  const { setIsLogin } = useLogin();
+  const location = useLocation();
+  const { setIsLogin, open, setOpen } = useLogin();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -23,6 +24,13 @@ function App() {
       setIsLogin(false);
     }
   }, [setIsLogin]);
+
+  useEffect(() => {
+    // 라우트가 바뀔 때마다 모달 닫기
+    if (open) {
+      setOpen(false);
+    }
+  }, [location, open, setOpen]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
