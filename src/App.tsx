@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import LoginPage from "./pages/user/LoginPage";
 import { Route, Routes, useLocation } from "react-router-dom";
 import SignupPage from "./pages/user/SignupPage";
@@ -25,13 +25,37 @@ function App() {
     }
   }, [setIsLogin]);
 
+  const modalHistoryPushedRef = useRef(false);
+
+  // 🔹 라우트 변경 시 모달 닫기
   useEffect(() => {
-    // 라우트가 바뀔 때마다 모달 닫기
-    if (open) {
-      setOpen(false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setOpen(false);
+    modalHistoryPushedRef.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
+
+  // 🔹 모달 열릴 때 뒤로가기 대응
+  useEffect(() => {
+    if (!open) return;
+    if (modalHistoryPushedRef.current) return;
+
+    window.history.pushState({ modal: true }, "");
+    modalHistoryPushedRef.current = true;
+
+    const handlePopState = () => {
+      if (modalHistoryPushedRef.current) {
+        modalHistoryPushedRef.current = false;
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
