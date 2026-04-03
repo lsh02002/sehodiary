@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ImageSliderPage from "../../pages/imageslider/ImageSliderPage";
 import { DiaryResponseType } from "../../types/type";
 import { useLocation } from "react-router-dom";
@@ -12,12 +12,50 @@ const ImageCard = ({
 }) => {
   const location = useLocation();
   const [imageOpen, setImageOpen] = useState(false);
+  const modalHistoryPushedRef = useRef(false);
 
   useEffect(() => {
     setImageOpen(false);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    modalHistoryPushedRef.current = false;
   }, [location]);
+
+  useEffect(() => {
+    if (!imageOpen) return;
+    if (diary?.imageResponses?.length <= 1) return;
+    if (modalHistoryPushedRef.current) return;
+
+    window.history.pushState({ imageModal: true }, "");
+    modalHistoryPushedRef.current = true;
+
+    const handlePopState = () => {
+      if (modalHistoryPushedRef.current) {
+        modalHistoryPushedRef.current = false;
+        setImageOpen(false);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [imageOpen, diary?.imageResponses?.length]);
+
+  const handleOpenImage = () => {
+    if (diary?.imageResponses?.length > 1) {
+      setImageOpen(true);
+    }
+  };
+
+  const handleCloseImage = () => {
+    if (modalHistoryPushedRef.current) {
+      modalHistoryPushedRef.current = false;
+      window.history.back();
+      return;
+    }
+
+    setImageOpen(false);
+  };
 
   return (
     <>
@@ -28,20 +66,22 @@ const ImageCard = ({
           height="100%"
           src={imageUrl}
           alt="그림"
-          onClick={() => setImageOpen(true)}
+          onClick={handleOpenImage}
           className="rounded"
         />
       </div>
+
       {diary?.imageResponses?.length < 2 && (
         <div className="alert alert-warning image-view-min-required small">
           이미지 뷰는 이미지가 2개 이상이어야 합니다.
         </div>
       )}
+
       {imageOpen && diary?.imageResponses?.length > 1 && (
         <>
           <div
             role="presentation"
-            onClick={() => setImageOpen(false)}
+            onClick={handleCloseImage}
             aria-hidden={!imageOpen}
             className="position-fixed top-0 start-0 w-100 h-100"
             style={{ background: "rgba(0, 0, 0, 0.4)", zIndex: 1040 }}
@@ -64,7 +104,7 @@ const ImageCard = ({
                 이미지 슬라이더(사진 여러장 등록시)
               </h2>
               <button
-                onClick={() => setImageOpen(false)}
+                onClick={handleCloseImage}
                 aria-label="슬라이더 닫기"
                 className="btn btn-link text-secondary text-decoration-none p-0"
                 style={{ fontSize: 28, lineHeight: 1 }}
