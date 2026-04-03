@@ -196,9 +196,7 @@ export default function Layout({ appName = "앱", children }: Props) {
                   }
 
                   UserLogoutApi()
-                    .then((res) => {
-                      console.log(res);
-                    })
+                    .then(() => {})
                     .catch(() => {})
                     .finally(() => {
                       localStorage.removeItem("userId");
