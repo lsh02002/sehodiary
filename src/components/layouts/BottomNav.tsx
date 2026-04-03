@@ -16,7 +16,13 @@ const iconStyle: React.CSSProperties = {
 };
 
 const BottomNav = () => {
-  const { isLogin } = useLogin();
+  const { isLogin, open, setOpen } = useLogin();
+
+  const handleNavClick = () => {
+    if (open) {
+      setOpen(false);
+    }
+  };
 
   return (
     <nav
@@ -27,7 +33,7 @@ const BottomNav = () => {
         className="container-fluid h-100 d-flex align-items-center justify-content-evenly px-0"
         style={{ fontSize: "0.8rem" }}
       >
-        <NavLink to="/" className={getNavLinkClass}>
+        <NavLink to="/" className={getNavLinkClass} onClick={handleNavClick}>
           <div>
             <img src={Home} alt="홈" style={iconStyle} />
           </div>
@@ -35,7 +41,11 @@ const BottomNav = () => {
         </NavLink>
 
         {isLogin && (
-          <NavLink to="/mypage?tab=info" className={getNavLinkClass}>
+          <NavLink
+            to="/mypage?tab=info"
+            className={getNavLinkClass}
+            onClick={handleNavClick}
+          >
             <div>
               <img src={MyPage} alt="마이페이지" style={iconStyle} />
             </div>
