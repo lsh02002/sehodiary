@@ -87,6 +87,10 @@ const getUserInfoApi = async () => {
   return api.get(`/user/info`);
 };
 
+const getOtherUserInfoApi = async (otherId: number) => {
+  return api.get(`/user/othersInfo/${otherId}`);
+}
+
 const getDiariesByPublicApi = async () => {
   return api.get(`/diary/public`);
 };
@@ -180,6 +184,7 @@ export {
   UserLogoutApi,
   UserSetProfileImagesApi,
   getUserInfoApi,
+  getOtherUserInfoApi,
   getDiariesByPublicApi,
   getDiariesByUserApi,
   getDiariesTargetFollowingUserIdByUser,

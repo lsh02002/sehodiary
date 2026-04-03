@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserInfoResponseType } from "../../types/type";
 import { useLogin } from "../../context/LoginContext";
-import { getUserInfoApi } from "../../api/sehodiary-api";
+import { getOtherUserInfoApi } from "../../api/sehodiary-api";
 
 export default function UserProfileCard({ userId }: { userId: number }) {
   const [user, setUser] = useState<UserInfoResponseType>();
@@ -10,7 +10,7 @@ export default function UserProfileCard({ userId }: { userId: number }) {
   useEffect(() => {
     if (!isLogin || !userId) return;
 
-    getUserInfoApi()
+    getOtherUserInfoApi(userId)
       .then((res) => {
         setUser(res.data);
       })
