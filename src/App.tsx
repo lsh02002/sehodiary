@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useRef } from "react";
+import React, { lazy, Suspense, useEffect, useRef } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useLogin } from "./context/LoginContext";
 import Layout from "./components/layouts/Layout";
@@ -68,17 +68,18 @@ function App() {
 
   return (
     <Layout>
-      <Routes>
-        <Route path="/" element={<DiaryListPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<SignupPage />} />
-        <Route path="/list/:userId" element={<DiaryListPage />} />
-        <Route path="/create" element={<DiaryCreatePage />} />
-        <Route path="/edit/:diaryId" element={<DiaryEditPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-
+      <Suspense fallback={<div>로딩중...</div>}>
+        <Routes>
+          <Route path="/" element={<DiaryListPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<SignupPage />} />
+          <Route path="/list/:userId" element={<DiaryListPage />} />
+          <Route path="/create" element={<DiaryCreatePage />} />
+          <Route path="/edit/:diaryId" element={<DiaryEditPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
       <BootstrapToastContainer />
       <BottomNav />
     </Layout>
