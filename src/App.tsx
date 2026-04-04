@@ -1,16 +1,19 @@
-import React, { useEffect, useRef } from "react";
-import LoginPage from "./pages/user/LoginPage";
+import React, { lazy, useEffect, useRef } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import SignupPage from "./pages/user/SignupPage";
 import { useLogin } from "./context/LoginContext";
 import Layout from "./components/layouts/Layout";
 import BottomNav from "./components/layouts/BottomNav";
-import DiaryCreatePage from "./pages/diary/DiaryCreatePage";
-import DiaryEditPage from "./pages/diary/DiaryEditPage";
-import DiaryListPage from "./pages/diary/DiaryListPage";
-import MyPage from "./pages/mypage/MyPage";
-import NotFoundPage from "./pages/notfound/NotFoundPage";
 import { BootstrapToastContainer } from "./components/layouts/Toast";
+
+const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
+const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
+const SignupPage = lazy(() => import("../src/pages/user/SignupPage"));
+const DiaryCreatePage = lazy(
+  () => import("../src/pages/diary/DiaryCreatePage"),
+);
+const DiaryEditPage = lazy(() => import("../src/pages/diary/DiaryEditPage"));
+const MyPage = lazy(() => import("../src/pages/mypage/MyPage"));
+const NotFoundPage = lazy(() => import("../src/pages/notfound/NotFoundPage"));
 
 function App() {
   const location = useLocation();
