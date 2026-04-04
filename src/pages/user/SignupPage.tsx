@@ -107,7 +107,7 @@ const SignupPage = () => {
         </div>
 
         <div className="w-100">
-          <ConfirmButton title="회원 가입" onClick={OnSignupSubmit} />
+          <ConfirmButton disabled title="회원 가입" onClick={OnSignupSubmit} />
         </div>
       </div>
     </div>
