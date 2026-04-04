@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
@@ -51,45 +51,105 @@ const mainStyle: React.CSSProperties = {
 };
 
 export default function Layout({ appName = "앱", children }: Props) {
-  const navigator = useNavigate();
-  const location = useLocation();
-  const { isLogin, setIsLogin, open, setOpen } = useLogin();
-  const [searchParams] = useSearchParams();
-  const tab = searchParams.get("tab");
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const { isLogin, setIsLogin, open, setOpen } = useLogin();
   const { setMainPageScroll, setMyDiaryScroll } = useScroll();
 
+  const tab = searchParams.get("tab");
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isMainPage = location.pathname === "/";
   const isMyDiaryPage = tab === "mydiary";
 
-  useEffect(() => {
-    if (!isMainPage && !isMyDiaryPage) return;
+  const handleOpenMenu = useCallback(() => {
+    setOpen(true);
+  }, [setOpen]);
 
-    const handleWindowScroll = () => {
-      if (scrollTimer.current) {
-        clearTimeout(scrollTimer.current);
+  const handleCloseMenu = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const handleGoLogin = useCallback(() => {
+    navigate("/login");
+  }, [navigate]);
+
+  const handleGoRegister = useCallback(() => {
+    navigate("/register");
+  }, [navigate]);
+
+  const handleGoCreate = useCallback(() => {
+    navigate("/create");
+  }, [navigate]);
+
+  const handleLogout = useCallback(() => {
+    if (window.confirm("로그아웃 하시겠습니까?") === false) {
+      return;
+    }
+
+    UserLogoutApi()
+      .then(() => {})
+      .catch(() => {})
+      .finally(() => {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("nickname");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        setIsLogin(false);
+        navigate("/login");
+      });
+  }, [navigate, setIsLogin]);
+
+  const handleSkipLinkFocus = useCallback(
+    (e: React.FocusEvent<HTMLAnchorElement>) => {
+      Object.assign(e.currentTarget.style, {
+        position: "fixed",
+        left: "12px",
+        top: "12px",
+        zIndex: "60",
+        padding: "8px 12px",
+        borderRadius: "12px",
+        background: "rgba(0, 0, 0, 0.9)",
+        color: "white",
+      });
+    },
+    []
+  );
+
+  const handleSkipLinkBlur = useCallback(
+    (e: React.FocusEvent<HTMLAnchorElement>) => {
+      Object.assign(e.currentTarget.style, skipLinkStyle);
+    },
+    []
+  );
+
+  const handleWindowScroll = useCallback(() => {
+    if (scrollTimer.current) {
+      clearTimeout(scrollTimer.current);
+    }
+
+    scrollTimer.current = setTimeout(() => {
+      if (isMyDiaryPage) {
+        setMyDiaryScroll({
+          x: window.scrollX,
+          y: window.scrollY,
+        });
+        return;
       }
 
-      scrollTimer.current = setTimeout(() => {
-        if (isMyDiaryPage) {
-          setMyDiaryScroll({
-            x: window.scrollX,
-            y: window.scrollY,
-          });
-          return;
-        }
+      if (isMainPage) {
+        setMainPageScroll({
+          x: window.scrollX,
+          y: window.scrollY,
+        });
+      }
+    }, 150);
+  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
 
-        if (isMainPage) {
-          setMainPageScroll({
-            x: window.scrollX,
-            y: window.scrollY,
-          });
-        }
-      }, 150);
-    };
+  useEffect(() => {
+    if (!isMainPage && !isMyDiaryPage) return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -100,28 +160,15 @@ export default function Layout({ appName = "앱", children }: Props) {
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
+  }, [handleWindowScroll, isMainPage, isMyDiaryPage]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>
       <a
         href="#main"
         style={skipLinkStyle}
-        onFocus={(e) => {
-          Object.assign(e.currentTarget.style, {
-            position: "fixed",
-            left: "12px",
-            top: "12px",
-            zIndex: "60",
-            padding: "8px 12px",
-            borderRadius: "12px",
-            background: "rgba(0, 0, 0, 0.9)",
-            color: "white",
-          });
-        }}
-        onBlur={(e) => {
-          Object.assign(e.currentTarget.style, skipLinkStyle);
-        }}
+        onFocus={handleSkipLinkFocus}
+        onBlur={handleSkipLinkBlur}
       >
         본문으로 건너뛰기
       </a>
@@ -133,7 +180,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         aria-label="메뉴 열기"
         aria-expanded={open}
         aria-controls="side-nav"
-        onClick={() => setOpen(true)}
+        onClick={handleOpenMenu}
       >
         <Menu size={20} />
       </button>
@@ -142,7 +189,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         role="presentation"
         className="position-fixed top-0 start-0 w-100 h-100"
         style={overlayStyle(open)}
-        onClick={() => setOpen(false)}
+        onClick={handleCloseMenu}
         aria-hidden={!open}
       />
 
@@ -160,7 +207,7 @@ export default function Layout({ appName = "앱", children }: Props) {
           <button
             type="button"
             className="btn btn-link text-secondary text-decoration-none p-0 fs-3 lh-1"
-            onClick={() => setOpen(false)}
+            onClick={handleCloseMenu}
             aria-label="메뉴 닫기"
           >
             ×
@@ -190,24 +237,7 @@ export default function Layout({ appName = "앱", children }: Props) {
               <span
                 className="small text-end"
                 role="button"
-                onClick={() => {
-                  if (window.confirm("로그아웃 하시겠습니까?") === false) {
-                    return;
-                  }
-
-                  UserLogoutApi()
-                    .then(() => {})
-                    .catch(() => {})
-                    .finally(() => {
-                      localStorage.removeItem("userId");
-                      localStorage.removeItem("nickname");
-                      localStorage.removeItem("accessToken");
-                      localStorage.removeItem("refreshToken");
-
-                      setIsLogin(false);
-                      navigate("/login");
-                    });
-                }}
+                onClick={handleLogout}
               >
                 <div>{localStorage.getItem("nickname")}</div>
                 <div>로그아웃</div>
@@ -217,14 +247,14 @@ export default function Layout({ appName = "앱", children }: Props) {
                 <span
                   className="small"
                   role="button"
-                  onClick={() => navigate("/login")}
+                  onClick={handleGoLogin}
                 >
                   로그인
                 </span>
                 <span
                   className="small"
                   role="button"
-                  onClick={() => navigate("/register")}
+                  onClick={handleGoRegister}
                 >
                   회원가입
                 </span>
@@ -244,7 +274,7 @@ export default function Layout({ appName = "앱", children }: Props) {
       </main>
 
       <LockBodyScroll when={open} />
-      <AddDiaryButton title="+" onClick={() => navigator("/create")} />
+      <AddDiaryButton title="+" onClick={handleGoCreate} />
     </div>
   );
 }
