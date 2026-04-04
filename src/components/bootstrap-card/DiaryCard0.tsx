@@ -175,4 +175,4 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   );
 };
 
-export default DiaryCard0;
+export default React.memo(DiaryCard0);

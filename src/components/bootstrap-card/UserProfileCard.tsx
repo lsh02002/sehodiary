@@ -3,7 +3,7 @@ import { UserInfoResponseType } from "../../types/type";
 import { useLogin } from "../../context/LoginContext";
 import { getOtherUserInfoApi } from "../../api/sehodiary-api";
 
-export default function UserProfileCard({ userId }: { userId: number }) {
+function UserProfileCard({ userId }: { userId: number }) {
   const [user, setUser] = useState<UserInfoResponseType>();
   const { isLogin } = useLogin();
 
@@ -55,3 +55,5 @@ export default function UserProfileCard({ userId }: { userId: number }) {
     </div>
   );
 }
+
+export default React.memo(UserProfileCard);

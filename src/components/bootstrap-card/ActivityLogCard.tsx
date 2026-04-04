@@ -14,4 +14,4 @@ const ActivityLogCard = ({ log }: { log: ActivityLogResponseType }) => {
   );
 };
 
-export default ActivityLogCard;
+export default React.memo(ActivityLogCard);

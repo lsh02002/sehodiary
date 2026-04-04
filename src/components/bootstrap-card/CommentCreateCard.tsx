@@ -83,4 +83,4 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   );
 };
 
-export default CommentCreateCard;
+export default React.memo(CommentCreateCard);

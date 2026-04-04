@@ -86,4 +86,4 @@ const CommentCard0 = ({
   );
 };
 
-export default CommentCard0;
+export default React.memo(CommentCard0);

@@ -94,4 +94,4 @@ const CommentCard1 = ({
   );
 };
 
-export default CommentCard1;
+export default React.memo(CommentCard1);

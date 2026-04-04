@@ -36,4 +36,4 @@ const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
   );
 };
 
-export default DiaryCard1;
+export default React.memo(DiaryCard1);
