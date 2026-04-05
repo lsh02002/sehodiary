@@ -9,8 +9,7 @@ import { AiFillLike } from "react-icons/ai";
 import {
   deleteLikeApi,
   getLikingNicknameByDiaryApi,
-  insertLikeApi,
-  isLikedApi,
+  insertLikeApi,  
 } from "../../api/sehodiary-api";
 import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
@@ -27,14 +26,7 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
 
   useEffect(() => {
     setLikesCount(diary0?.likesCount ?? -1);
-
-    if (isLogin) {
-      isLikedApi(diary0?.id ?? -1)
-        .then((res) => {
-          setIsLiked(res.data);
-        })
-        .catch(() => {});
-    }
+    setIsLiked(diary0?.isLiked ?? false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary0?.id]);
 

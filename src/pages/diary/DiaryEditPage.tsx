@@ -7,8 +7,7 @@ import {
   editDiaryApi,
   getLikingNicknameByDiaryApi,
   getOneDiaryApi,
-  insertLikeApi,
-  isLikedApi,
+  insertLikeApi,  
   showToast,
 } from "../../api/sehodiary-api";
 import SelectInput, {
@@ -66,6 +65,7 @@ const DiaryEditPage = () => {
         setVisibility(res.data.visibility);
         setContent(res.data.content);
         setCommentsCount(res.data.commentsCount);
+        setIsLiked(res.data.isLiked);
         setLikesCount(res.data.likesCount);
         setImageResponses(res.data.imageResponses);
         setProfileImage(res.data.profileImage);
@@ -80,14 +80,6 @@ const DiaryEditPage = () => {
         setDiary(res.data);
       })
       .catch(() => {});
-
-    if (isLogin) {
-      isLikedApi(Number(diaryId) ?? -1)
-        .then((res) => {
-          setIsLiked(res.data);
-        })
-        .catch(() => {});
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaryId, isLogin]);
