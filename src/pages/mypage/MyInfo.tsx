@@ -83,7 +83,7 @@ const MyInfo = () => {
         setPreviewUrls={setImageUrls}
       />
       <div className="text-danger mt-3">
-        프로필 사진 이외는 가입할때 정해짐!!!
+        소개글과 프로필 사진 이외는 가입할때 정해짐!!!
       </div>
       <TwoDiv>
         <div style={{ width: "450px" }} />
