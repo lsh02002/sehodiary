@@ -58,15 +58,10 @@ const DiaryListPage = () => {
         })
         .catch(() => {});
     }
-
-    if(hasNewDiary) {
-      setHasNewDiary(false);
-    }
-
-  }, [hasNewDiary, isLogin, userId]);
+  }, [isLogin, userId]);
 
   useEffect(() => {
-    loadData();    
+    loadData();
   }, [loadData]);
 
   useEffect(() => {
@@ -101,7 +96,10 @@ const DiaryListPage = () => {
             marginBottom: "16px",
             cursor: "pointer",
           }}
-          onClick={loadData}
+          onClick={() => {
+            loadData();
+            setHasNewDiary(false);
+          }}
         >
           새로운 글이 올라와 있습니다. 새로고침하거나 이글을 클릭해주세요.
         </div>
