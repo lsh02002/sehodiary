@@ -1,4 +1,9 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import {
   getDiariesByPublicApi,
   getDiariesTargetFollowingUserIdByUser,
@@ -9,14 +14,37 @@ import { useLogin } from "../../context/LoginContext";
 import { useScroll } from "../../context/ScrollContext";
 import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
+import { BASE_URL } from "../../api/BASE_URL";
 
 const DiaryListPage = () => {
   const { userId } = useParams();
   const { isLogin, diary } = useLogin();
   const { mainPageScroll } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
+  const [hasNewDiary, setHasNewDiary] = useState(false);
 
   useEffect(() => {
+    const eventSource = new EventSource(`${BASE_URL}/sse/posts`);
+
+    eventSource.addEventListener("connect", (event) => {
+      console.log("SSE connected:", event.data);
+    });
+
+    eventSource.addEventListener("new-post", (event) => {
+      console.log("새 글 알림:", event.data);
+      setHasNewDiary(true);
+    });
+
+    eventSource.onerror = (error) => {
+      console.error("SSE error:", error);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  const loadData = useCallback(() => {
     if (isLogin && userId != null) {
       getDiariesTargetFollowingUserIdByUser(Number(userId) ?? -1).then(
         (res) => {
@@ -31,6 +59,10 @@ const DiaryListPage = () => {
         .catch(() => {});
     }
   }, [isLogin, userId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   useEffect(() => {
     setDiaryList((prev) => {
@@ -55,6 +87,20 @@ const DiaryListPage = () => {
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
       {userId && <UserProfileCard userId={Number(userId)} />}
+      {hasNewDiary && (
+        <div
+          style={{
+            background: "#fff3cd",
+            padding: "12px 16px",
+            border: "1px solid #ffe69c",
+            marginBottom: "16px",
+            cursor: "pointer",
+          }}
+          onClick={loadData}
+        >
+          새로운 글이 올라와 있습니다. 새로고침해주세요.
+        </div>
+      )}
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
           <DiaryCard0 key={diary?.id} diary0={diary} />
