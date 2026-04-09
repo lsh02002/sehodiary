@@ -40,9 +40,7 @@ const DiaryListPage = () => {
 
   const connect = () => {
     // EventSource는 재연결 시 Last-Event-ID 헤더를 자동으로 포함
-    eventSource = new EventSource(`${BASE_URL}/sse/posts`, {
-      withCredentials: true,
-    });
+    eventSource = new EventSource(`${BASE_URL}/sse/posts`);
 
     eventSource.addEventListener("connect", (event) => {
       console.log("SSE connected:", event.data);
