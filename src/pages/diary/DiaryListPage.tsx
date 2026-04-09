@@ -23,6 +23,16 @@ const DiaryListPage = () => {
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
 
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 60000); // 1분
+
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     const eventSource = new EventSource(`${BASE_URL}/sse/posts`);
 
@@ -112,7 +122,7 @@ const DiaryListPage = () => {
       )}
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary: DiaryResponseType) => (
-          <DiaryCard0 key={diary?.id} diary0={diary} />
+          <DiaryCard0 key={diary?.id} diary0={diary} now={now} />
         ))
       ) : (
         <div>해당 글이 없습니다!</div>

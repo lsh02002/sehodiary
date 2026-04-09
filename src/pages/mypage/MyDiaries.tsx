@@ -10,6 +10,16 @@ const MyDiaries = () => {
   const { myDiaryScroll } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 60000); // 1분
+
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     let mounted = true;
 
@@ -50,7 +60,7 @@ const MyDiaries = () => {
       <h4 style={{ marginBottom: "20px" }}>내가쓴일기({diaryList?.length})</h4>
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary0: DiaryResponseType) => (
-          <DiaryCard0 key={diary0?.id} diary0={diary0} />
+          <DiaryCard0 key={diary0?.id} diary0={diary0} now={now} />
         ))
       ) : (
         <div>해당 글이 없습니다!</div>

@@ -9,13 +9,19 @@ import { AiFillLike } from "react-icons/ai";
 import {
   deleteLikeApi,
   getLikingNicknameByDiaryApi,
-  insertLikeApi,  
+  insertLikeApi,
 } from "../../api/sehodiary-api";
 import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
 
-const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
+const DiaryCard0 = ({
+  diary0,
+  now,
+}: {
+  diary0: DiaryResponseType | undefined;
+  now: number;
+}) => {
   const navigator = useNavigate();
   const { isLogin, setOpen, setDiary } = useLogin();
   const [isLiked, setIsLiked] = useState(false);
@@ -23,6 +29,9 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState<string[]>([]);
   const date = `${new Date(diary0?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+  const isRecentlyUpdated =
+    !!diary0?.updatedAt &&
+    new Date(diary0.updatedAt).getTime() > now - 60 * 60 * 1000;
 
   useEffect(() => {
     setLikesCount(diary0?.likesCount ?? -1);
@@ -85,6 +94,9 @@ const DiaryCard0 = ({ diary0 }: { diary0: DiaryResponseType | undefined }) => {
           >
             <div className="text-primary fw-semibold flex-shrink-0">
               #{diary0?.id}
+              {isRecentlyUpdated && (
+                <span className="badge text-bg-warning ms-3">수정됨(1시간내)</span>
+              )}
             </div>
             <div className="fw-semibold text-body text-end flex-grow-1">
               {diary0?.title}
