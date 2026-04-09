@@ -38,24 +38,8 @@ const DiaryListPage = () => {
   let retryTimer: number | null = null;
   let closed = false;
 
-  // 👉 SSE 놓쳤을 때 대비
-  const fetchHasNewDiary = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/posts/has-new`, {
-        credentials: "include",
-      });
-      if (!res.ok) return;
-
-      const data = await res.json();
-      if (data?.hasNewDiary) {
-        setHasNewDiary(true);
-      }
-    } catch (e) {
-      console.error("has-new fetch error:", e);
-    }
-  };
-
   const connect = () => {
+    // EventSource는 재연결 시 Last-Event-ID 헤더를 자동으로 포함
     eventSource = new EventSource(`${BASE_URL}/sse/posts`, {
       withCredentials: true,
     });
@@ -66,11 +50,14 @@ const DiaryListPage = () => {
 
     eventSource.addEventListener("new-post", (event) => {
       try {
-        const data = JSON.parse(event.data ?? "{}");
+        // Last-Event-ID 저장 → 재연결 시 놓친 이벤트 복구에 사용됨
+        if (event.lastEventId) {
+          localStorage.setItem("sseLastEventId", event.lastEventId);
+        }
 
+        const data = JSON.parse(event.data ?? "{}");
         console.log("새 글 알림:", data);
 
-        // 👉 요청한 조건 그대로 적용
         if (isLogin && userId != null) {
           if (userId === String(data?.userId)) {
             setHasNewDiary(true);
@@ -78,15 +65,12 @@ const DiaryListPage = () => {
         } else {
           setHasNewDiary(true);
         }
-
       } catch (e) {
         console.error("parse error:", e);
       }
     });
 
-    eventSource.onerror = (error) => {
-      console.error("SSE error:", error);
-
+    eventSource.onerror = () => {
       eventSource?.close();
       eventSource = null;
 
@@ -99,15 +83,12 @@ const DiaryListPage = () => {
     };
   };
 
-  // 👉 최초 진입 시 상태 동기화
-  fetchHasNewDiary();
-
   connect();
 
-  // 👉 화면 꺼졌다 켜질 때 복구
+  // 화면 꺼졌다 켜질 때 → 재연결하면 서버가 Last-Event-ID 기준으로 놓친 이벤트 재전송
   const handleVisible = () => {
-    if (document.visibilityState === "visible") {
-      fetchHasNewDiary();
+    if (document.visibilityState === "visible" && !eventSource) {
+      connect();
     }
   };
 
