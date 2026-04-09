@@ -34,31 +34,92 @@ const DiaryListPage = () => {
   }, []);
 
   useEffect(() => {
-    const eventSource = new EventSource(`${BASE_URL}/sse/posts`);
+  let eventSource: EventSource | null = null;
+  let retryTimer: number | null = null;
+  let closed = false;
+
+  // 👉 SSE 놓쳤을 때 대비
+  const fetchHasNewDiary = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/posts/has-new`, {
+        credentials: "include",
+      });
+      if (!res.ok) return;
+
+      const data = await res.json();
+      if (data?.hasNewDiary) {
+        setHasNewDiary(true);
+      }
+    } catch (e) {
+      console.error("has-new fetch error:", e);
+    }
+  };
+
+  const connect = () => {
+    eventSource = new EventSource(`${BASE_URL}/sse/posts`, {
+      withCredentials: true,
+    });
 
     eventSource.addEventListener("connect", (event) => {
       console.log("SSE connected:", event.data);
     });
 
     eventSource.addEventListener("new-post", (event) => {
-      const data = JSON.parse(event.data ?? "");
+      try {
+        const data = JSON.parse(event.data ?? "{}");
 
-      console.log("새 글 알림:", event.data);
-      if (isLogin && userId != null) {
-        if (userId === String(data?.userId)) setHasNewDiary(true);
-      } else {
-        setHasNewDiary(true);
+        console.log("새 글 알림:", data);
+
+        // 👉 요청한 조건 그대로 적용
+        if (isLogin && userId != null) {
+          if (userId === String(data?.userId)) {
+            setHasNewDiary(true);
+          }
+        } else {
+          setHasNewDiary(true);
+        }
+
+      } catch (e) {
+        console.error("parse error:", e);
       }
     });
 
     eventSource.onerror = (error) => {
       console.error("SSE error:", error);
-    };
 
-    return () => {
-      eventSource.close();
+      eventSource?.close();
+      eventSource = null;
+
+      if (!closed) {
+        retryTimer = window.setTimeout(() => {
+          console.log("SSE reconnect...");
+          connect();
+        }, 3000);
+      }
     };
-  }, [isLogin, userId]);
+  };
+
+  // 👉 최초 진입 시 상태 동기화
+  fetchHasNewDiary();
+
+  connect();
+
+  // 👉 화면 꺼졌다 켜질 때 복구
+  const handleVisible = () => {
+    if (document.visibilityState === "visible") {
+      fetchHasNewDiary();
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisible);
+
+  return () => {
+    closed = true;
+    if (retryTimer) clearTimeout(retryTimer);
+    eventSource?.close();
+    document.removeEventListener("visibilitychange", handleVisible);
+  };
+}, [isLogin, userId]);
 
   const loadData = useCallback(() => {
     if (isLogin && userId != null) {
