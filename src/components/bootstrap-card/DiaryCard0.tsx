@@ -29,9 +29,12 @@ const DiaryCard0 = ({
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState<string[]>([]);
   const date = `${new Date(diary0?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
+
+  const updatedAt = diary0?.updatedAt;
+  const createdAt = diary0?.createdAt;
+  const updatedTime = updatedAt ? new Date(updatedAt).getTime() : 0;
   const isRecentlyUpdated =
-    !!diary0?.updatedAt &&
-    new Date(diary0.updatedAt).getTime() > now - 60 * 60 * 1000;
+    updatedTime > now - 60 * 60 * 1000 && createdAt !== updatedAt;
 
   useEffect(() => {
     setLikesCount(diary0?.likesCount ?? -1);
@@ -95,7 +98,9 @@ const DiaryCard0 = ({
             <div className="text-primary fw-semibold flex-shrink-0">
               #{diary0?.id}
               {isRecentlyUpdated && (
-                <span className="badge text-bg-warning ms-3">수정됨(1시간내)</span>
+                <span className="badge text-bg-warning ms-3">
+                  수정됨(1시간내)
+                </span>
               )}
             </div>
             <div className="fw-semibold text-body text-end flex-grow-1">

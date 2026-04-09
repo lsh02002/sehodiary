@@ -117,7 +117,7 @@ const DiaryListPage = () => {
             setHasNewDiary(false);
           }}
         >
-          새로운 글이 올라와 있습니다. 새로고침하거나 이글을 클릭해주세요.
+          새로운 글이 올라와 있습니다. 새로고침하거나 이 메세지 클릭해주세요.
         </div>
       )}
       {diaryList && diaryList?.length > 0 ? (
