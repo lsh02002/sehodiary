@@ -108,7 +108,7 @@ const DiaryListPage = () => {
         const payload = message.payload;
 
         if (isLogin && userId != null) {
-          if (userId === String(payload?.userId)) {
+          if (userId === String(payload?.userId ?? null)) {
             setHasNewDiary(true);
           }
         } else {
