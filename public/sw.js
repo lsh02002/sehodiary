@@ -8,6 +8,8 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("push", (event) => {
+  console.log("push received", event);
+
   let data = {
     title: "알림",
     body: "새 알림이 도착했습니다.",
@@ -17,19 +19,22 @@ self.addEventListener("push", (event) => {
   if (event.data) {
     try {
       data = event.data.json();
+      console.log("push json:", data);
     } catch (e) {
-      data.body = event.data.text();
+      const text = event.data.text();
+      console.log("push text:", text);
+      data.body = text;
     }
+  } else {
+    console.log("push event has no data");
   }
 
   event.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
+    self.registration.showNotification(data.title || "알림", {
+      body: data.body || "새 알림이 도착했습니다.",
       data: {
         url: data.url || "/",
       },
-      icon: "",
-      badge: "",
     }),
   );
 });
