@@ -16,7 +16,12 @@ export function urlBase64ToUint8Array(base64String: string) {
   return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
-export async function subscribePush(userId: number | null) {
+export async function subscribePush() {
+  const storedUserId = localStorage.getItem("userId");
+
+  const userId =
+    storedUserId && !isNaN(Number(storedUserId)) ? Number(storedUserId) : null;
+
   const permission = await Notification.requestPermission();
   if (permission !== "granted") {
     throw new Error("알림 권한이 허용되지 않았습니다.");
