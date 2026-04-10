@@ -4,6 +4,7 @@ import { useLogin } from "./context/LoginContext";
 import Layout from "./components/layouts/Layout";
 import BottomNav from "./components/layouts/BottomNav";
 import { BootstrapToastContainer } from "./components/layouts/Toast";
+import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -67,11 +68,71 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('SW 등록 성공'))
-        .catch(console.error);
+    async function initPush() {
+      try {
+        if (!('serviceWorker' in navigator)) {
+          console.log('serviceWorker 미지원');
+          return;
+        }
+
+        if (!('PushManager' in window)) {
+          console.log('PushManager 미지원');
+          return;
+        }
+
+        const reg = await navigator.serviceWorker.register('/sw.js');
+        console.log('SW 등록 성공', reg);
+
+        const permission = await Notification.requestPermission();
+        console.log('알림 권한:', permission);
+
+        if (permission !== 'granted') {
+          console.log('알림 권한 거부됨');
+          return;
+        }
+
+        const keyRes = await fetch('/api/push/public-key');
+        const keyData = await keyRes.json();
+        console.log('public key:', keyData);
+
+        const applicationServerKey = urlBase64ToUint8Array(keyData.publicKey);
+
+        let subscription = await reg.pushManager.getSubscription();
+
+        if (!subscription) {
+          subscription = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey,
+          });
+        }
+
+        console.log('subscription:', subscription.toJSON());
+
+        const res = await fetch('/api/push/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: 1,
+            ...subscription.toJSON(),
+          }),
+        });
+
+        console.log('subscribe API status:', res.status);
+
+        if (!res.ok) {
+          const text = await res.text();
+          console.error('구독 저장 실패:', text);
+        } else {
+          console.log('구독 저장 성공');
+        }
+      } catch (e) {
+        console.error('push init error:', e);
+      }
     }
+
+    initPush();
   }, []);
 
   return (
