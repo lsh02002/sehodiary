@@ -5,6 +5,8 @@ import Layout from "./components/layouts/Layout";
 import BottomNav from "./components/layouts/BottomNav";
 import { BootstrapToastContainer } from "./components/layouts/Toast";
 import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
+import { api } from "./api/sehodiary-api";
+import axios from "axios";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -70,30 +72,31 @@ function App() {
   useEffect(() => {
     async function initPush() {
       try {
-        if (!('serviceWorker' in navigator)) {
-          console.log('serviceWorker 미지원');
+        if (!("serviceWorker" in navigator)) {
+          console.log("serviceWorker 미지원");
           return;
         }
 
-        if (!('PushManager' in window)) {
-          console.log('PushManager 미지원');
+        if (!("PushManager" in window)) {
+          console.log("PushManager 미지원");
           return;
         }
 
-        const reg = await navigator.serviceWorker.register('/sw.js');
-        console.log('SW 등록 성공', reg);
+        const reg = await navigator.serviceWorker.register("/sw.js");
+        console.log("SW 등록 성공", reg);
 
         const permission = await Notification.requestPermission();
-        console.log('알림 권한:', permission);
+        console.log("알림 권한:", permission);
 
-        if (permission !== 'granted') {
-          console.log('알림 권한 거부됨');
+        if (permission !== "granted") {
+          console.log("알림 권한 거부됨");
           return;
         }
 
-        const keyRes = await fetch('/api/push/public-key');
-        const keyData = await keyRes.json();
-        console.log('public key:', keyData);
+        // public key 가져오기
+        const keyRes = await api.get("/api/push/public-key");
+        const keyData = keyRes.data;
+        console.log("public key:", keyData);
 
         const applicationServerKey = urlBase64ToUint8Array(keyData.publicKey);
 
@@ -106,29 +109,24 @@ function App() {
           });
         }
 
-        console.log('subscription:', subscription.toJSON());
+        console.log("subscription:", subscription.toJSON());
 
-        const res = await fetch('/api/push/subscribe', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId: 1,
-            ...subscription.toJSON(),
-          }),
+        // 구독 서버 저장
+        const res = await api.post("/api/push/subscribe", {
+          userId: 1,
+          ...subscription.toJSON(),
         });
 
-        console.log('subscribe API status:', res.status);
-
-        if (!res.ok) {
-          const text = await res.text();
-          console.error('구독 저장 실패:', text);
-        } else {
-          console.log('구독 저장 성공');
-        }
+        console.log("subscribe API status:", res.status);
+        console.log("구독 저장 성공:", res.data);
       } catch (e) {
-        console.error('push init error:', e);
+        if (axios.isAxiosError(e)) {
+          console.error("구독 저장 실패:", e.response?.data);
+        } else if (e instanceof Error) {
+          console.error("push init error:", e.message);
+        } else {
+          console.error("알 수 없는 에러:", e);
+        }
       }
     }
 
