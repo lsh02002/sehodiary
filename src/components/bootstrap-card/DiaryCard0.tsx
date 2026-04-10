@@ -28,8 +28,7 @@ const DiaryCard0 = ({
   const [likesCount, setLikesCount] = useState(-1);
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState<string[]>([]);
-  const date = `${new Date(diary0?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
-
+  
   const updatedAt = diary0?.updatedAt;
   const createdAt = diary0?.createdAt;
   const updatedTime = updatedAt ? new Date(updatedAt).getTime() : 0;
@@ -175,7 +174,7 @@ const DiaryCard0 = ({
                   </div>
                 )}
               </div>
-              <div className="fst-italic text-secondary small">{date}</div>
+              <div className="fst-italic text-secondary small">{diary0?.date}</div>
             </div>
           </div>
         </div>

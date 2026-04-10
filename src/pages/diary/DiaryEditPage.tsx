@@ -64,6 +64,7 @@ const DiaryEditPage = () => {
         setWeather(res.data.weather);
         setVisibility(res.data.visibility);
         setContent(res.data.content);
+        setDate(new Date(res.data.date));
         setCommentsCount(res.data.commentsCount);
         setIsLiked(res.data.isLiked);
         setLikesCount(res.data.likesCount);
