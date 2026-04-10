@@ -66,6 +66,14 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.ts')
+        .then(() => console.log('SW 등록 성공'))
+        .catch(console.error);
+    }
+  }, []);
+
   return (
     <Layout>
       <Suspense fallback={<div>로딩중...</div>}>
