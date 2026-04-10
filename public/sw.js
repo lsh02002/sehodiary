@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 self.addEventListener("push", (event) => {
   let data = {
     title: "알림",
@@ -26,6 +27,7 @@ self.addEventListener("push", (event) => {
 });
 
 self.addEventListener("notificationclick", (event) => {
+  console.log("notification clicked", event);
   event.notification.close();
 
   const targetUrl = event.notification.data?.url || "/";
