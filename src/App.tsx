@@ -82,8 +82,12 @@ function App() {
           return;
         }
 
-        const reg = await navigator.serviceWorker.register("/sw.js");
-        console.log("SW 등록 성공", reg);
+        await navigator.serviceWorker.register("/sw.js");
+        console.log("SW 등록 성공");
+
+        // 2. ⭐ 여기서 기다림 (핵심)
+        const reg = await navigator.serviceWorker.ready;
+        console.log("SW ready:", reg);
 
         const permission = await Notification.requestPermission();
         console.log("알림 권한:", permission);
