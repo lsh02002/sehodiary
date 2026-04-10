@@ -26,7 +26,7 @@ const MyDiaries = () => {
     getDiariesByUserApi()
       .then((res) => {
         if (!mounted) return;
-        setDiaryList(res.data);
+        setDiaryList(res.data?.content);
       })
       .catch(() => {});
 

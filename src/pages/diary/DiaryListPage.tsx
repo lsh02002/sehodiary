@@ -128,13 +128,13 @@ const DiaryListPage = () => {
     if (isLogin && userId != null) {
       getDiariesTargetFollowingUserIdByUser(Number(userId) ?? -1).then(
         (res) => {
-          setDiaryList(res.data ?? []);
+          setDiaryList(res.data?.content ?? []);
         },
       );
     } else {
       getDiariesByPublicApi()
         .then((res) => {
-          setDiaryList(res.data);
+          setDiaryList(res.data?.content);
         })
         .catch(() => {});
     }
