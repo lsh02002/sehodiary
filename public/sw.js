@@ -25,17 +25,22 @@ self.addEventListener("push", (event) => {
       console.log("push text:", text);
       data.body = text;
     }
-  } else {
-    console.log("push event has no data");
   }
 
   event.waitUntil(
-    self.registration.showNotification(data.title || "알림", {
-      body: data.body || "새 알림이 도착했습니다.",
-      data: {
-        url: data.url || "/",
-      },
-    }),
+    self.registration
+      .showNotification(data.title || "알림", {
+        body: data.body || "새 알림이 도착했습니다.",
+        data: {
+          url: data.url || "/",
+        },
+      })
+      .then(() => {
+        console.log("showNotification success");
+      })
+      .catch((err) => {
+        console.error("showNotification failed", err);
+      }),
   );
 });
 
