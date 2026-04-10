@@ -17,11 +17,6 @@ export function urlBase64ToUint8Array(base64String: string) {
 }
 
 export async function subscribePush() {
-  const storedUserId = localStorage.getItem("userId");
-
-  const userId =
-    storedUserId && !isNaN(Number(storedUserId)) ? Number(storedUserId) : null;
-
   const permission = await Notification.requestPermission();
   if (permission !== "granted") {
     throw new Error("알림 권한이 허용되지 않았습니다.");
@@ -30,7 +25,7 @@ export async function subscribePush() {
   const registration = await navigator.serviceWorker.ready;
 
   const keyResponse = await api.get("/api/push/public-key");
-  const { publicKey } = await keyResponse.data;
+  const { publicKey } = keyResponse.data;
 
   let subscription = await registration.pushManager.getSubscription();
 
@@ -41,14 +36,21 @@ export async function subscribePush() {
     });
   }
 
-  await api.post("/api/push/subscribe", {
-    body: JSON.stringify({
-      userId,
+  const subscriptionJson = subscription.toJSON();
+
+  await api.post(
+    "/api/push/subscribe",
+    {
       endpoint: subscription.endpoint,
-      keys: subscription.toJSON().keys,
-    }),
-    headers: { "Content-Type": "application/json" },
-  });
+      keys: {
+        p256dh: subscriptionJson.keys?.p256dh,
+        auth: subscriptionJson.keys?.auth,
+      },
+    },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 
   return subscription;
 }
