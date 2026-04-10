@@ -89,19 +89,19 @@ const getUserInfoApi = async () => {
 
 const getOtherUserInfoApi = async (otherId: number) => {
   return api.get(`/user/othersInfo/${otherId}`);
-}
+};
 
 const getDiariesByPublicApi = async () => {
-  return api.get(`/diary/public`);
+  return api.get(`/diary/public?page=0&size=100`);
 };
 
 const getDiariesByUserApi = async () => {
-  return api.get(`/diary/user`);
+  return api.get(`/diary/user?page=0&size=100`);
 };
 
 const getDiariesTargetFollowingUserIdByUser = async (targetUserId: number) => {
-  return api.get(`/diary/${targetUserId}/user`);
-}
+  return api.get(`/diary/${targetUserId}/user?page=0&size=100`);
+};
 
 const getOneDiaryApi = async (diaryId: number) => {
   return api.get(`/diary/one/${diaryId}`);
