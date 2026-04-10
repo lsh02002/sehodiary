@@ -1,14 +1,5 @@
-/// <reference lib="webworker" />
-export {};
-
-declare const self: ServiceWorkerGlobalScope;
-
-self.addEventListener("push", (event: PushEvent) => {
-  let data: {
-    title: string;
-    body: string;
-    url?: string;
-  } = {
+self.addEventListener("push", (event) => {
+  let data = {
     title: "알림",
     body: "새 알림이 도착했습니다.",
     url: "/",
@@ -34,10 +25,10 @@ self.addEventListener("push", (event: PushEvent) => {
   );
 });
 
-self.addEventListener("notificationclick", (event: NotificationEvent) => {
+self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
-  const targetUrl: string = event.notification.data?.url || "/";
+  const targetUrl = event.notification.data?.url || "/";
 
   event.waitUntil(
     self.clients

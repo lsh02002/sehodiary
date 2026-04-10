@@ -68,7 +68,7 @@ function App() {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.ts')
+      navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('SW 등록 성공'))
         .catch(console.error);
     }
