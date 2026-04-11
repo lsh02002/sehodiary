@@ -229,6 +229,14 @@ const DiaryListPage = () => {
       {hasNewDiary && (
         <div
           style={{
+            position: "fixed",
+            top: "110px", // 헤더/탭 아래로 조정 (필요하면 값 조절)
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%",
+            maxWidth: "640px",
+            zIndex: 50,
+
             background: "#fff3cd",
             padding: "12px 16px",
             border: "1px solid #ffe69c",
@@ -243,6 +251,7 @@ const DiaryListPage = () => {
           새로운 글이 올라와 있습니다. 새로고침하거나 이 메세지 클릭해주세요.
         </div>
       )}
+      <div style={{ height: hasNewDiary ? "120px" : 0 }} />
       <InfiniteScroll
         dataLength={diaryList.length}
         next={loadData}

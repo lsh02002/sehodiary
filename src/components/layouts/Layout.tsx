@@ -3,7 +3,6 @@ import { Menu } from "lucide-react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
-import { BackwardButton } from "../bootstrap-form/BackwardButton";
 import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
@@ -115,14 +114,14 @@ export default function Layout({ appName = "앱", children }: Props) {
         color: "white",
       });
     },
-    []
+    [],
   );
 
   const handleSkipLinkBlur = useCallback(
     (e: React.FocusEvent<HTMLAnchorElement>) => {
       Object.assign(e.currentTarget.style, skipLinkStyle);
     },
-    []
+    [],
   );
 
   const handleWindowScroll = useCallback(() => {
@@ -244,11 +243,7 @@ export default function Layout({ appName = "앱", children }: Props) {
               </span>
             ) : (
               <div className="d-flex gap-3">
-                <span
-                  className="small"
-                  role="button"
-                  onClick={handleGoLogin}
-                >
+                <span className="small" role="button" onClick={handleGoLogin}>
                   로그인
                 </span>
                 <span
@@ -269,7 +264,6 @@ export default function Layout({ appName = "앱", children }: Props) {
         className="container-fluid px-1 px-sm-4 mx-auto"
         style={mainStyle}
       >
-        <BackwardButton />
         {children}
       </main>
 
