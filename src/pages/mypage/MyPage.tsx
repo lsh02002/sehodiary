@@ -81,11 +81,14 @@ const MyPage = () => {
         <div
           role="tablist"
           aria-label="마이페이지 탭"
-          className="w-100 d-flex justify-content-between align-items-center p-3 bg-white"
+          className="w-100 d-flex justify-content-between align-items-center p-3 bg-white position-fixed"
           style={{
             top: "50px",
-            left: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
             zIndex: 10,
+            width: "100%",
+            maxWidth: 640,
           }}
         >
           {TAB_ITEMS.map((item) => {
