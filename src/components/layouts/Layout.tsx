@@ -6,6 +6,7 @@ import CommentPage from "../../pages/comment/CommentPage";
 import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
+import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
 
 interface Props {
   appName?: string;
@@ -268,6 +269,7 @@ export default function Layout({ appName = "앱", children }: Props) {
       </main>
 
       <LockBodyScroll when={open} />
+      <ScrollToTopButton />
       <AddDiaryButton title="+" onClick={handleGoCreate} />
     </div>
   );
