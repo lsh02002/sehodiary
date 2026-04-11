@@ -12,7 +12,6 @@ import { useLogin } from "../../context/LoginContext";
 import { useScroll } from "../../context/ScrollContext";
 import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
-import { BASE_URL } from "../../api/BASE_URL";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const DiaryListPage = () => {
@@ -36,74 +35,7 @@ const DiaryListPage = () => {
 
     return () => clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    let eventSource: EventSource | null = null;
-    let retryTimer: number | null = null;
-    let closed = false;
-
-    const connect = () => {
-      // EventSource는 재연결 시 Last-Event-ID 헤더를 자동으로 포함
-      eventSource = new EventSource(`${BASE_URL}/sse/posts`);
-
-      eventSource.addEventListener("connect", (event) => {
-        console.log("SSE connected:", event.data);
-      });
-
-      eventSource.addEventListener("new-post", (event) => {
-        try {
-          // Last-Event-ID 저장 → 재연결 시 놓친 이벤트 복구에 사용됨
-          if (event.lastEventId) {
-            localStorage.setItem("sseLastEventId", event.lastEventId);
-          }
-
-          const data = JSON.parse(event.data ?? "{}");
-          console.log("새 글 알림:", data);
-
-          if (isLogin && userId != null) {
-            if (userId === String(data?.userId)) {
-              setHasNewDiary(true);
-            }
-          } else {
-            setHasNewDiary(true);
-          }
-        } catch (e) {
-          console.error("parse error:", e);
-        }
-      });
-
-      eventSource.onerror = () => {
-        eventSource?.close();
-        eventSource = null;
-
-        if (!closed) {
-          retryTimer = window.setTimeout(() => {
-            console.log("SSE reconnect...");
-            connect();
-          }, 3000);
-        }
-      };
-    };
-
-    connect();
-
-    // 화면 꺼졌다 켜질 때 → 재연결하면 서버가 Last-Event-ID 기준으로 놓친 이벤트 재전송
-    const handleVisible = () => {
-      if (document.visibilityState === "visible" && !eventSource) {
-        connect();
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisible);
-
-    return () => {
-      closed = true;
-      if (retryTimer) clearTimeout(retryTimer);
-      eventSource?.close();
-      document.removeEventListener("visibilitychange", handleVisible);
-    };
-  }, [isLogin, userId]);
-
+  
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
       const message = event.data;
