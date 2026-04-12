@@ -7,6 +7,7 @@ import { BootstrapToastContainer } from "./components/layouts/Toast";
 import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
 import { api } from "./api/sehodiary-api";
 import axios from "axios";
+import { listenForegroundMessage, requestFcmToken } from "./api/fcmApi";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -135,6 +136,23 @@ function App() {
     }
 
     initPush();
+  }, []);
+
+  useEffect(() => {
+    requestFcmToken().then((token) => {
+      if (token) {
+        console.log('FCM token:', token);
+
+        // 서버에 저장
+        fetch('/api/push/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+      }
+    });
+
+    listenForegroundMessage();
   }, []);
 
   return (

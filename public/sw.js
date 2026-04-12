@@ -1,4 +1,8 @@
 /* eslint-disable no-restricted-globals */
+/* eslint-env serviceworker */
+
+import { app, firebaseConfig } from "../src/firebase/Firebase";
+
 self.addEventListener("install", () => {
   self.skipWaiting();
 });
@@ -7,52 +11,44 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("push", (event) => {
-  let data = {
-    title: "알림",
-    body: "새 알림이 도착했습니다.",
-    url: "/",
-    type: "GENERAL",
+// Firebase compat SDK 로드
+importScripts("https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js");
+
+if (!app.length) {
+  app.initializeApp(firebaseConfig);
+}
+
+const messaging = app.messaging();
+
+// 백그라운드 메시지 처리
+messaging.onBackgroundMessage((payload) => {
+  console.log("[sw] background message received:", payload);
+
+  const title = payload.notification?.title ?? "알림";
+  const body = payload.notification?.body ?? "새 알림이 도착했습니다.";
+  const data = payload.data ?? {};
+
+  const options = {
+    body,
+    icon: "/icon-192.png",
+    badge: "/badge-72.png",
+    data: {
+      url: data.url ?? "/",
+      ...data,
+    },
+    tag: data.tag ?? "default",
+    renotify: false,
   };
 
-  if (event.data) {
-    try {
-      data = event.data.json();
-    } catch (e) {
-      data.body = event.data.text();
-    }
-  }
-
-  event.waitUntil(
-    (async () => {
-      const clientList = await self.clients.matchAll({
-        type: "window",
-        includeUncontrolled: true,
-      });
-
-      for (const client of clientList) {
-        client.postMessage({
-          type: "PUSH_MESSAGE",
-          payload: data,
-        });
-      }
-
-      if (clientList.length === 0) {
-        await self.registration.showNotification(data.title || "알림", {
-          body: data.body || "새 알림이 도착했습니다.",
-          data: {
-            url: data.url || "/",
-          },
-        });
-      }
-    })(),
-  );
+  self.registration.showNotification(title, options);
 });
 
+// 클릭 처리 단일화
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
-  const targetUrl = event.notification.data?.url || "/";
+  const targetUrl = event.notification.data?.url ?? "/";
 
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
@@ -63,9 +59,7 @@ self.addEventListener("notificationclick", (event) => {
         }
       }
 
-      if (self.clients.openWindow) {
-        return self.clients.openWindow(targetUrl);
-      }
-    }),
+      return self.clients.openWindow?.(targetUrl);
+    })
   );
 });
