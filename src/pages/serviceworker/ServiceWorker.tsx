@@ -5,7 +5,9 @@ export async function registerServiceWorker() {
     throw new Error("Service Worker 미지원 브라우저");
   }
 
-  const registration = await navigator.serviceWorker.register("/sw.js");
+  const registration = await navigator.serviceWorker.register("/sw.js", {
+    scope: "/",    
+  });
   return registration;
 }
 
@@ -49,7 +51,7 @@ export async function subscribePush() {
     },
     {
       headers: { "Content-Type": "application/json" },
-    }
+    },
   );
 
   return subscription;

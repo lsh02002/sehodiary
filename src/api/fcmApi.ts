@@ -1,22 +1,24 @@
-import { getToken, onMessage } from 'firebase/messaging';
-import { getFirebaseMessaging } from '../firebase/Firebase';
+import { getToken, onMessage } from "firebase/messaging";
+import { getFirebaseMessaging } from "../firebase/Firebase";
 
-const VAPID_KEY = process.env.FIREBASE_VAPID_KEY;
+const VAPID_KEY = String(process.env.REACT_APP_FIREBASE_VAPID_KEY);
 
 export async function requestFcmToken() {
   const messaging = await getFirebaseMessaging();
   if (!messaging) {
-    console.log('This browser does not support Firebase Messaging');
+    console.log("This browser does not support Firebase Messaging");
     return null;
   }
 
   const permission = await Notification.requestPermission();
-  if (permission !== 'granted') {
-    console.log('Notification permission denied');
+  if (permission !== "granted") {
+    console.log("Notification permission denied");
     return null;
   }
 
-  const registration = await navigator.serviceWorker.register('/public/sw.js');
+  const registration = await navigator.serviceWorker.register("/sw.js", {
+    scope: "/",
+  });
 
   const token = await getToken(messaging, {
     vapidKey: VAPID_KEY,
@@ -24,7 +26,7 @@ export async function requestFcmToken() {
   });
 
   if (!token) {
-    console.log('No registration token available');
+    console.log("No registration token available");
     return null;
   }
 
@@ -36,7 +38,7 @@ export async function listenForegroundMessage() {
   if (!messaging) return;
 
   onMessage(messaging, (payload) => {
-    console.log('foreground message:', payload);
+    console.log("foreground message:", payload);
 
     // 여기서 toast 띄우거나 상태 업데이트
   });

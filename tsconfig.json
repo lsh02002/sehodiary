@@ -18,5 +18,5 @@
     "ignoreDeprecations": "6.0",
     "jsx": "react-jsx"
   },
-  "include": ["src", "public/sw.js", "public/firebase-messaging-sw.js"]
+  "include": ["src", "src/api/sw.js"]
 }

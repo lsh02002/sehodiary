@@ -83,7 +83,9 @@ function App() {
           return;
         }
 
-        await navigator.serviceWorker.register("/sw.js");
+        await navigator.serviceWorker.register("/sw.js", {
+          scope: "/",          
+        });
         console.log("SW 등록 성공");
 
         // 2. ⭐ 여기서 기다림 (핵심)
