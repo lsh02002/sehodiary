@@ -141,17 +141,12 @@ function App() {
   useEffect(() => {
     requestFcmToken().then((token) => {
       if (token) {
-        console.log('FCM token:', token);
+        console.log("FCM token:", token);
 
         // 서버에 저장
-        fetch('/api/push/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token }),
-        });
+        api.post("/api/fcm/register-token", { token });
       }
     });
-
     listenForegroundMessage();
   }, []);
 
