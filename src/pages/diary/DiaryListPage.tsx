@@ -1,8 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
-  useRef,
+  useLayoutEffect,  
   useState,
 } from "react";
 import { api } from "../../api/sehodiary-api";
@@ -24,7 +23,6 @@ const DiaryListPage = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const observerRef = useRef(null);
 
   const [now, setNow] = useState(Date.now());
 
@@ -40,7 +38,7 @@ const DiaryListPage = () => {
     function handleMessage(event: MessageEvent) {
       const message = event.data;
 
-      if (message?.type === "PUSH_MESSAGE") {
+      if (message?.type === "PUSH_DATA") {
         const payload = message.payload;
 
         if (isLogin && userId != null) {
@@ -98,43 +96,6 @@ const DiaryListPage = () => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const target = entries[0];
-        if (target.isIntersecting && !loading && hasMore) {
-          loadData();
-        }
-      },
-      {
-        threshold: 0.1,
-      },
-    );
-
-    const current = observerRef.current;
-    if (current) observer.observe(current);
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [loading, hasMore, loadData]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
-
-      if (scrollTop + windowHeight >= fullHeight - 200) {
-        loadData();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, loading, hasMore]);
 
   useEffect(() => {
     setDiaryList((prev) => {
