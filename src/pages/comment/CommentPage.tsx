@@ -52,15 +52,14 @@ const CommentPage = () => {
 
   return (
     <div className="px-2">
-      <DiaryCard1 diary={diary} />
-
       <div
         className="overflow-auto border-top"
         style={{
-          marginBottom: "100px",
-          height: "calc(100vh - 560px)",
+          paddingBottom: "130px",
+          height: "calc(100vh - 150px)",
         }}
       >
+        <DiaryCard1 diary={diary} />
         <CommentCreateCard diaryId={diary?.id ?? -1} />
 
         {commentList && commentList.length > 0 ? (
