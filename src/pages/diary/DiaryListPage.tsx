@@ -35,28 +35,40 @@ const DiaryListPage = () => {
   }, []);
 
   useEffect(() => {
-    function handleMessage(event: MessageEvent) {
-      const message = event.data;
+  function handleMessage(event: MessageEvent) {
+    const message = event.data ?? {};
+    
+    const swPayload =
+      message?.type === "PUSH_DATA" ? (message.payload ?? {}) : null;
 
-      if (message?.type === "PUSH_DATA") {
-        const payload = message.payload;
+    const rawPayload = swPayload ?? message;
+    const payload = rawPayload?.data ?? rawPayload;
 
-        if (isLogin && userId != null) {
-          if (userId === String(payload?.userId ?? null)) {
-            setHasNewDiary(true);
-          }
-        } else {
-          setHasNewDiary(true);
-        }
-      }
+    if (payload?.messageType === "push-received" || payload?.isFirebaseMessaging) {
+      setHasNewDiary(true);
+      return;
     }
 
-    navigator.serviceWorker?.addEventListener("message", handleMessage);
+    if (payload?.type === "POST_CREATED") {
+      if (
+        userId != null &&
+        payload?.userId != null &&
+        String(payload.userId) !== "null" &&
+        String(userId) !== String(payload.userId)
+      ) {
+        return;
+      }
 
-    return () => {
-      navigator.serviceWorker?.removeEventListener("message", handleMessage);
-    };
-  }, [isLogin, userId]);
+      setHasNewDiary(true);
+    }
+  }
+
+  navigator.serviceWorker?.addEventListener("message", handleMessage);
+
+  return () => {
+    navigator.serviceWorker?.removeEventListener("message", handleMessage);
+  };
+}, [userId]);
 
   const loadData = useCallback(
     (targetPage = page) => {
