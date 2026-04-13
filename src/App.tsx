@@ -7,7 +7,6 @@ import { BootstrapToastContainer } from "./components/layouts/Toast";
 import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
 import { api } from "./api/sehodiary-api";
 import axios from "axios";
-import { listenForegroundMessage, requestFcmToken } from "./api/fcmApi";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -139,19 +138,7 @@ function App() {
 
     initPush();
   }, []);
-
-  useEffect(() => {
-    requestFcmToken().then((token) => {
-      if (token) {
-        console.log("FCM token:", token);
-
-        // 서버에 저장
-        api.post("/api/fcm/register-token", { token });
-      }
-    });
-    listenForegroundMessage();
-  }, []);
-
+  
   return (
     <Layout>
       <Suspense fallback={<div>로딩중...</div>}>
