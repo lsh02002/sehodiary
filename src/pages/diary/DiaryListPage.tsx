@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,  
-  useRef,  
   useState,
 } from "react";
 import { api } from "../../api/sehodiary-api";
@@ -26,9 +25,7 @@ const DiaryListPage = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const [now, setNow] = useState(Date.now());
-
-  const restoredRef = useRef(false);
-
+ 
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(Date.now());
@@ -124,15 +121,15 @@ const DiaryListPage = () => {
   }, [diary]);
 
   useLayoutEffect(() => {
-  if (!diaryList?.length || restoredRef.current) return;
-  restoredRef.current = true;
+  if (!diaryList?.length) return;
 
   const raf = requestAnimationFrame(() => {
     window.scrollTo(0, mainPageScroll.y);
   });
 
   return () => cancelAnimationFrame(raf);
-}, [diaryList?.length, mainPageScroll.y]);
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [diaryList?.length]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
