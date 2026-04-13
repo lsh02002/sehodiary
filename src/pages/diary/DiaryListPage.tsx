@@ -131,7 +131,7 @@ const DiaryListPage = () => {
 
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryList?.length]);
+  }, []);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
