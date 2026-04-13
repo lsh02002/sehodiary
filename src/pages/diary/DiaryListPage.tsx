@@ -36,6 +36,8 @@ const DiaryListPage = () => {
 
   useEffect(() => {
   function handleMessage(event: MessageEvent) {
+    console.log("[PAGE] raw message:", event.data);
+
     const message = event.data ?? {};
     
     const swPayload =
@@ -49,6 +51,7 @@ const DiaryListPage = () => {
       return;
     }
 
+    // 네가 직접 보내는 커스텀 data payload도 같이 대응
     if (payload?.type === "POST_CREATED") {
       if (
         userId != null &&
