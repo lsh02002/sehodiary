@@ -46,6 +46,8 @@ const DiaryListPage = () => {
     const rawPayload = swPayload ?? message;
     const payload = rawPayload?.data ?? rawPayload;
 
+    console.log("[PAGE] normalized payload:", payload);
+    
     if (payload?.messageType === "push-received" || payload?.isFirebaseMessaging) {
       setHasNewDiary(true);
       return;
