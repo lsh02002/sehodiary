@@ -62,7 +62,8 @@ const DiaryListPage = () => {
 
   const loadData = useCallback(
     (targetPage = page) => {
-      if (loading || !hasMore) return;
+      if (loading) return;
+      if (targetPage !== 0 && !hasMore) return;
 
       setLoading(true);
 
@@ -74,9 +75,16 @@ const DiaryListPage = () => {
       api
         .get(url)
         .then((res) => {
-          setDiaryList((prev) => [...prev, ...(res.data?.content ?? [])]);
-          setHasMore((res.data?.content?.length ?? 0) > 0);
-          setPage((prev) => prev + 1);
+          const content = res.data?.content ?? [];
+
+          if (targetPage === 0) {
+            setDiaryList(content);
+          } else {
+            setDiaryList((prev) => [...prev, ...content]);
+          }
+
+          setHasMore(content.length > 0);
+          setPage(targetPage + 1);
         })
         .catch(() => {})
         .finally(() => {
@@ -169,8 +177,8 @@ const DiaryListPage = () => {
             cursor: "pointer",
           }}
           onClick={() => {
-            setPage(0);
             setHasNewDiary(false);
+            setHasMore(true);
             loadData(0);
           }}
         >
