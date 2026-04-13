@@ -60,43 +60,36 @@ const DiaryListPage = () => {
     };
   }, [isLogin, userId]);
 
-  const loadData = useCallback(() => {
-    if (isLogin && userId != null) {
+  const loadData = useCallback(
+    (targetPage = page) => {
       if (loading || !hasMore) return;
 
       setLoading(true);
-      api
-        .get(`/diary/${userId}/user?page=${page}&limit=10`)
-        .then((res) => {
-          setDiaryList((prev) => [...prev, ...(res.data?.content ?? [])]);
-          setHasMore(res.data?.content.length > 0);
-          setPage((prev) => prev + 1);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      if (loading || !hasMore) return;
 
-      setLoading(true);
+      const url =
+        isLogin && userId != null
+          ? `/diary/${userId}/user?page=${targetPage}&limit=10`
+          : `/diary/public?page=${targetPage}&limit=10`;
+
       api
-        .get(`/diary/public?page=${page}&limit=10`)
+        .get(url)
         .then((res) => {
           setDiaryList((prev) => [...prev, ...(res.data?.content ?? [])]);
-          setHasMore(res.data?.content.length > 0);
+          setHasMore((res.data?.content?.length ?? 0) > 0);
           setPage((prev) => prev + 1);
         })
         .catch(() => {})
         .finally(() => {
           setLoading(false);
         });
-    }
-  }, [hasMore, isLogin, loading, page, userId]);
+    },
+    [hasMore, isLogin, loading, page, userId],
+  );
 
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -178,6 +171,7 @@ const DiaryListPage = () => {
           onClick={() => {
             setPage(0);
             setHasNewDiary(false);
+            loadData(0);
           }}
         >
           새로운 글이 올라와 있습니다. 새로고침하거나 이 메세지 클릭해주세요.
