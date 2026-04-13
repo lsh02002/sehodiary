@@ -35,7 +35,7 @@ const DiaryListPage = () => {
 
     return () => clearInterval(timer);
   }, []);
-  
+
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
       const message = event.data;
@@ -96,7 +96,7 @@ const DiaryListPage = () => {
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -176,7 +176,7 @@ const DiaryListPage = () => {
             cursor: "pointer",
           }}
           onClick={() => {
-            loadData();
+            setPage(0);
             setHasNewDiary(false);
           }}
         >
