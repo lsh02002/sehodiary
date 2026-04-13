@@ -39,33 +39,32 @@ const DiaryListPage = () => {
     console.log("[PAGE] raw message:", event.data);
 
     const message = event.data ?? {};
-    
-    const swPayload =
-      message?.type === "PUSH_DATA" ? (message.payload ?? {}) : null;
 
-    const rawPayload = swPayload ?? message;
-    const payload = rawPayload?.data ?? rawPayload;
+    let payload = message;
 
-    console.log("[PAGE] normalized payload:", payload);
-    
-    if (payload?.messageType === "push-received" || payload?.isFirebaseMessaging) {
-      setHasNewDiary(true);
-      return;
+    if (message?.type === "PUSH_MESSAGE" || message?.type === "PUSH_DATA") {
+      payload = message.payload ?? {};
     }
 
-    // 네가 직접 보내는 커스텀 data payload도 같이 대응
-    if (payload?.type === "POST_CREATED") {
-      if (
-        userId != null &&
-        payload?.userId != null &&
-        String(payload.userId) !== "null" &&
-        String(userId) !== String(payload.userId)
-      ) {
+    console.log("[PAGE] normalized payload:", payload);
+
+    const pushedUserId = payload?.userId;
+    
+    if (userId != null) {
+      if (pushedUserId == null || String(pushedUserId) === "null") {
+        setHasNewDiary(true);
         return;
       }
 
-      setHasNewDiary(true);
+      if (String(userId) === String(pushedUserId)) {
+        setHasNewDiary(true);
+      }
+
+      return;
     }
+
+    // 공개 목록이면 그냥 표시
+    setHasNewDiary(true);
   }
 
   navigator.serviceWorker?.addEventListener("message", handleMessage);
