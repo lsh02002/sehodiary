@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { UserInfoResponseType } from '../../types/type';
+import React, { useEffect, useState } from "react";
+import { UserInfoResponseType } from "../../types/type";
 import {
   createFollowApi,
   getDiscoverListByUserApi,
   getFollowerListByUserApi,
   getFollowingListByUserApi,
   showToast,
-} from '../../api/sehodiary-api';
-import SelectInput from '../../components/bootstrap-form/SelectInput';
-import ConfirmButton from '../../components/bootstrap-form/ConfirmButton';
-import FollowCard from '../../components/bootstrap-card/FollowCard';
+} from "../../api/sehodiary-api";
+import SelectInput from "../../components/bootstrap-form/SelectInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
+import FollowCard from "../../components/bootstrap-card/FollowCard";
 
 const MyFollow = () => {
   const [targetUserId, setTargetUserId] = useState<number>(-1);
   const [userList, setUserList] = useState<UserInfoResponseType[]>([]);
-  const [followingList, setFollowingList] = useState<UserInfoResponseType[]>([]);
+  const [followingList, setFollowingList] = useState<UserInfoResponseType[]>(
+    [],
+  );
   const [followerList, setFollowerList] = useState<UserInfoResponseType[]>([]);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -32,6 +34,7 @@ const MyFollow = () => {
         setFollowingList(followingRes.data);
         setFollowerList(followerRes.data);
       })
+      .catch(() => {})
       .finally(() => {
         setLoading(false);
       });
@@ -40,8 +43,8 @@ const MyFollow = () => {
   const handleFollowSubmit = async () => {
     createFollowApi(targetUserId)
       .then(() => {
-        showToast('팔로우에 성공했습니다.', 'success');
-        setRefresh(prev => !prev);
+        showToast("팔로우에 성공했습니다.", "success");
+        setRefresh((prev) => !prev);
       })
       .catch(() => {});
   };
@@ -56,7 +59,6 @@ const MyFollow = () => {
 
   return (
     <div className="pb-4">
-
       {/* 유저 선택 */}
       <div className="mb-3">
         <SelectInput

@@ -94,10 +94,10 @@ function App() {
         const permission = await Notification.requestPermission();
         console.log("알림 권한:", permission);
 
-        // if (permission !== "granted") {
-        //   console.log("알림 권한 거부됨");
-        //   return;
-        // }
+        if (permission !== "granted") {
+          console.log("알림 권한 거부됨");
+          return;
+        }
 
         // public key 가져오기
         const keyRes = await api.get("/api/push/public-key");
