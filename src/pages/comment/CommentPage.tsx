@@ -56,7 +56,7 @@ const CommentPage = () => {
         className="overflow-auto"
         style={{
           paddingBottom: "100px",
-          height: "calc(100vh - 200px)",
+          height: "calc(100vh - 250px)",
         }}
       >
         <DiaryCard1 diary={diary} />
