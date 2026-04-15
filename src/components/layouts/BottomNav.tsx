@@ -42,7 +42,7 @@ const BottomNav = () => {
 
         {isLogin && (
           <NavLink
-            to="/mypage?tab=info"
+            to="/mypage?tab=follow"
             className={getNavLinkClass}
             onClick={handleNavClick}
           >
