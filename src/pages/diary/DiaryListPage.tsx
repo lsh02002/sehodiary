@@ -12,6 +12,7 @@ import { useScroll } from "../../context/ScrollContext";
 import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { DEBUG } from "../../api/DEBUG";
 
 const DiaryListPage = () => {
   const { userId } = useParams();
@@ -36,7 +37,9 @@ const DiaryListPage = () => {
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
-      console.log("[PAGE] raw message:", event.data);
+      if (DEBUG) {
+        console.log("[PAGE] raw message:", event.data);
+      }
 
       const message = event.data ?? {};
 
@@ -46,7 +49,9 @@ const DiaryListPage = () => {
         payload = message.payload ?? {};
       }
 
-      console.log("[PAGE] normalized payload:", payload);
+      if (DEBUG) {
+        console.log("[PAGE] normalized payload:", payload);
+      }
 
       const pushedUserId = payload?.userId;
 

@@ -7,6 +7,7 @@ import { BootstrapToastContainer } from "./components/layouts/Toast";
 import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
 import { api } from "./api/sehodiary-api";
 import axios from "axios";
+import { DEBUG } from "./api/DEBUG";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -73,36 +74,50 @@ function App() {
     async function initPush() {
       try {
         if (!("serviceWorker" in navigator)) {
-          console.log("serviceWorker 미지원");
+          if (DEBUG) {
+            console.log("serviceWorker 미지원");
+          }
           return;
         }
 
         if (!("PushManager" in window)) {
-          console.log("PushManager 미지원");
+          if (DEBUG) {
+            console.log("PushManager 미지원");
+          }
           return;
         }
 
         await navigator.serviceWorker.register("/sw.js", {
-          scope: "/",          
+          scope: "/",
         });
-        console.log("SW 등록 성공");
+        if (DEBUG) {
+          console.log("SW 등록 성공");
+        }
 
         // 2. ⭐ 여기서 기다림 (핵심)
         const reg = await navigator.serviceWorker.ready;
-        console.log("SW ready:", reg);
+        if (DEBUG) {
+          console.log("SW ready:", reg);
+        }
 
         const permission = await Notification.requestPermission();
-        console.log("알림 권한:", permission);
+        if (DEBUG) {
+          console.log("알림 권한:", permission);
+        }
 
         if (permission !== "granted") {
-          console.log("알림 권한 거부됨");
+          if (DEBUG) {
+            console.log("알림 권한 거부됨");
+          }
           return;
         }
 
         // public key 가져오기
         const keyRes = await api.get("/api/push/public-key");
         const keyData = keyRes.data;
-        console.log("public key:", keyData);
+        if (DEBUG) {
+          console.log("public key:", keyData);
+        }
 
         const applicationServerKey = urlBase64ToUint8Array(keyData.publicKey);
 
@@ -115,7 +130,9 @@ function App() {
           });
         }
 
-        console.log("subscription:", subscription.toJSON());
+        if (DEBUG) {
+          console.log("subscription:", subscription.toJSON());
+        }
 
         // 구독 서버 저장
         const res = await api.post("/api/push/subscribe", {
@@ -123,8 +140,10 @@ function App() {
           ...subscription.toJSON(),
         });
 
-        console.log("subscribe API status:", res.status);
-        console.log("구독 저장 성공:", res.data);
+        if (DEBUG) {
+          console.log("subscribe API status:", res.status);
+          console.log("구독 저장 성공:", res.data);
+        }
       } catch (e) {
         if (axios.isAxiosError(e)) {
           console.error("구독 저장 실패:", e.response?.data);
