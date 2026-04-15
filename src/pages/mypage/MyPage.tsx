@@ -7,7 +7,7 @@ import MyActivityLogs from "./MyActivityLogs";
 import MyInfo from "./MyInfo";
 import MyFollow from "./MyFollow";
 
-type MyPageTab = "follow" | "info" | "mydiary" | "activitylog";
+type MyPageTab = "follow" | "info" | "mydiary" | "mycomment" | "activitylog";
 
 const DEFAULT_TAB: MyPageTab = "follow";
 
@@ -15,6 +15,7 @@ const TAB_ITEMS: { key: MyPageTab; label: string }[] = [
   { key: "follow", label: "팔로우" },
   { key: "info", label: "회원 정보" },
   { key: "mydiary", label: "내가쓴일기" },
+  { key: "mycomment", label: "내가쓴댓글" },
   { key: "activitylog", label: "활동 로그 내역" },
 ];
 
@@ -53,12 +54,9 @@ const MyPage = () => {
       case "info":
         return <MyInfo />;
       case "mydiary":
-        return (
-          <>
-            <MyDiaries />
-            <MyComments />
-          </>
-        );
+        return <MyDiaries />;
+      case "mycomment":
+        return <MyComments />;
       case "activitylog":
         return <MyActivityLogs />;
       default:
@@ -79,7 +77,7 @@ const MyPage = () => {
         <div
           role="tablist"
           aria-label="마이페이지 탭"
-          className="w-100 d-flex justify-content-between align-items-center p-3 bg-white position-fixed"
+          className="w-100 d-flex justify-content-between align-items-center p-3 bg-white position-fixed flex-wrap"
           style={{
             top: "50px",
             left: "50%",
@@ -119,7 +117,7 @@ const MyPage = () => {
             );
           })}
         </div>
-
+          <div style={{height: "30px"}} />
         <div className="w-100 p-3" style={{ margin: "10px 0" }}>
           {renderTabContent()}
         </div>
