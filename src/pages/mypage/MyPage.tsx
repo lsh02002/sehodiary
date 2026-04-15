@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
-import { useScroll } from "../../context/ScrollContext";
-
 import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
 import MyActivityLogs from "./MyActivityLogs";
@@ -23,7 +21,7 @@ const TAB_ITEMS: { key: MyPageTab; label: string }[] = [
 const MyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isLogin } = useLogin();
-  const { mypageTab, setMypageTab } = useScroll();
+  const { mypageTab, setMypageTab } = useLogin();
 
   const rawTab = searchParams.get("tab");
   const validTabs = TAB_ITEMS.map((item) => item.key);

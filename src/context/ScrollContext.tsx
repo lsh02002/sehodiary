@@ -13,9 +13,7 @@ type ScrollPositionType = {
   y: number;
 };
 
-type ScrollContextValue = {
-  mypageTab: string;
-  setMypageTab: Dispatch<SetStateAction<string>>;
+type ScrollContextValue = {  
   mainPageScroll: ScrollPositionType;
   setMainPageScroll: Dispatch<SetStateAction<ScrollPositionType>>;
   myDiaryScroll: ScrollPositionType;
@@ -27,7 +25,6 @@ export const ScrollContext = createContext<ScrollContextValue | undefined>(
 );
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
-  const [mypageTab, setMypageTab] = useState("follow");
   const [mainPageScroll, setMainPageScroll] = useState<ScrollPositionType>({
     x: 0,
     y: 0,
@@ -39,14 +36,12 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo<ScrollContextValue>(
     () => ({
-      mypageTab,
-      setMypageTab,
       mainPageScroll,
       setMainPageScroll,
       myDiaryScroll,
       setMyDiaryScroll,
     }),
-    [mypageTab, mainPageScroll, myDiaryScroll],
+    [mainPageScroll, myDiaryScroll],
   );
 
   return (
