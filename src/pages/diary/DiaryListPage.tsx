@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DEBUG } from "../../api/DEBUG";
+// const DEBUG = true;
 
 const DiaryListPage = () => {
   const { userId } = useParams();
