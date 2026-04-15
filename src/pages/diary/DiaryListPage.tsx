@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,  
+  useLayoutEffect,
   useState,
 } from "react";
 import { api } from "../../api/sehodiary-api";
@@ -25,7 +25,7 @@ const DiaryListPage = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const [now, setNow] = useState(Date.now());
- 
+
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(Date.now());
@@ -35,44 +35,57 @@ const DiaryListPage = () => {
   }, []);
 
   useEffect(() => {
-  function handleMessage(event: MessageEvent) {
-    console.log("[PAGE] raw message:", event.data);
+    function handleMessage(event: MessageEvent) {
+      console.log("[PAGE] raw message:", event.data);
 
-    const message = event.data ?? {};
+      const message = event.data ?? {};
 
-    let payload = message;
+      let payload = message;
 
-    if (message?.type === "PUSH_MESSAGE" || message?.type === "PUSH_DATA") {
-      payload = message.payload ?? {};
-    }
+      if (message?.type === "PUSH_MESSAGE" || message?.type === "PUSH_DATA") {
+        payload = message.payload ?? {};
+      }
 
-    console.log("[PAGE] normalized payload:", payload);
+      console.log("[PAGE] normalized payload:", payload);
 
-    const pushedUserId = payload?.userId;
-    
-    if (userId != null) {
-      if (pushedUserId == null || String(pushedUserId) === "null") {
-        setHasNewDiary(true);
+      const pushedUserId = payload?.userId;
+
+      if (userId != null) {
+        if (pushedUserId == null || String(pushedUserId) === "null") {
+          setHasNewDiary(true);
+          return;
+        }
+
+        if (String(userId) === String(pushedUserId)) {
+          setHasNewDiary(true);
+        }
+
         return;
       }
 
-      if (String(userId) === String(pushedUserId)) {
-        setHasNewDiary(true);
-      }
-
-      return;
+      // 공개 목록이면 그냥 표시
+      setHasNewDiary(true);
     }
 
-    // 공개 목록이면 그냥 표시
-    setHasNewDiary(true);
-  }
+    navigator.serviceWorker?.addEventListener("message", handleMessage);
 
-  navigator.serviceWorker?.addEventListener("message", handleMessage);
+    return () => {
+      navigator.serviceWorker?.removeEventListener("message", handleMessage);
+    };
+  }, [userId]);
 
-  return () => {
-    navigator.serviceWorker?.removeEventListener("message", handleMessage);
+  const mergeUniqueById = (
+    prev: DiaryResponseType[],
+    next: DiaryResponseType[],
+  ) => {
+    const map = new Map<number | string, DiaryResponseType>();
+
+    [...prev, ...next].forEach((item) => {
+      map.set(item.id, item);
+    });
+
+    return Array.from(map.values());
   };
-}, [userId]);
 
   const loadData = useCallback(
     (targetPage = page) => {
@@ -94,7 +107,7 @@ const DiaryListPage = () => {
           if (targetPage === 0) {
             setDiaryList(content);
           } else {
-            setDiaryList((prev) => [...prev, ...content]);
+            setDiaryList((prev) => mergeUniqueById(prev, content));
           }
 
           setHasMore(content.length > 0);
@@ -121,15 +134,15 @@ const DiaryListPage = () => {
   }, [diary]);
 
   useLayoutEffect(() => {
-  if (!diaryList?.length) return;
+    if (!diaryList?.length) return;
 
-  const raf = requestAnimationFrame(() => {
-    window.scrollTo(0, mainPageScroll.y);
-  });
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo(0, mainPageScroll.y);
+    });
 
-  return () => cancelAnimationFrame(raf);
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [diaryList?.length]);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diaryList?.length]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
