@@ -173,16 +173,13 @@ const DiaryListPage = () => {
         dataLength={diaryList.length}
         next={loadData}
         hasMore={hasMore}
-        loader={<p>불러오는 중...</p>}
+        loader={<></>}
         endMessage={<p>마지막 데이터입니다.</p>}
       >
-        {diaryList && diaryList?.length > 0 ? (
+        {diaryList &&
           diaryList?.map((diary: DiaryResponseType) => (
             <DiaryCard0 key={diary?.id} diary0={diary} now={now} />
-          ))
-        ) : (
-          <div>해당 글이 없습니다!</div>
-        )}
+          ))}
       </InfiniteScroll>
     </div>
   );
