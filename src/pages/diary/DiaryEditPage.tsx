@@ -7,7 +7,7 @@ import {
   editDiaryApi,
   getLikingNicknameByDiaryApi,
   getOneDiaryApi,
-  insertLikeApi,  
+  insertLikeApi,
   showToast,
 } from "../../api/sehodiary-api";
 import SelectInput, {
@@ -48,6 +48,8 @@ const DiaryEditPage = () => {
   const { isLogin, diary, setDiary, setOpen } = useLogin();
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState([]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -95,7 +97,10 @@ const DiaryEditPage = () => {
     }
   }, [diaryId, isMouseOverOnce, likesCount]);
 
-  const handleEditDiary = () => {
+  const handleEditDiary = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const data: DiaryRequestType = {
       title,
       weather,
@@ -115,11 +120,14 @@ const DiaryEditPage = () => {
       formDataToSend.append("files", file);
     });
 
-    editDiaryApi(Number(diaryId), formDataToSend)
+    await editDiaryApi(Number(diaryId), formDataToSend)
       .then((res) => {
         showToast("글 수정이 되었습니다.", "success");
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   const handleLikeClick = () => {
@@ -279,7 +287,11 @@ const DiaryEditPage = () => {
           />
         </>
       )}
-      <ConfirmButton title="일기 수정" onClick={handleEditDiary} />
+      <ConfirmButton
+        title="일기 수정"
+        onClick={handleEditDiary}
+        disabled={isSubmitting}
+      />
     </div>
   );
 };
