@@ -117,7 +117,7 @@ const MyPage = () => {
             );
           })}
         </div>
-          <div style={{height: "30px"}} />
+        <div style={{ height: "30px" }} />
         <div className="w-100 p-3" style={{ margin: "10px 0" }}>
           {renderTabContent()}
         </div>
