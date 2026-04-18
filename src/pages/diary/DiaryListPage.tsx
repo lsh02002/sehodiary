@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useRef,
   useState,
 } from "react";
 import { api } from "../../api/sehodiary-api";
@@ -18,7 +17,7 @@ import { DEBUG } from "../../api/DEBUG";
 const DiaryListPage = () => {
   const { userId } = useParams();
   const { isLogin, diary } = useLogin();
-  const { mainPageScroll } = useScroll();
+  const { mainPageScroll, followPageScroll } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
 
@@ -27,9 +26,6 @@ const DiaryListPage = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const [now, setNow] = useState(Date.now());
-
-  // 추가: 최초 진입 시 1번만 스크롤 복원
-  const hasRestoredScroll = useRef(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -137,16 +133,18 @@ const DiaryListPage = () => {
 
   // 수정: 최초 데이터가 그려진 뒤에만 1번 복원
   useLayoutEffect(() => {
-    if (hasRestoredScroll.current) return;
     if (!diaryList?.length) return;
 
     const raf = requestAnimationFrame(() => {
-      window.scrollTo(0, mainPageScroll.y ?? 0);
-      hasRestoredScroll.current = true;
+      if (isLogin && userId != null) {
+        window.scrollTo(0, followPageScroll.y ?? 0);
+      } else {
+        window.scrollTo(0, mainPageScroll.y ?? 0);
+      }
     });
 
     return () => cancelAnimationFrame(raf);
-  }, [diaryList, mainPageScroll.y]);
+  }, [diaryList, followPageScroll.y, mainPageScroll.y, isLogin, userId]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
@@ -172,7 +170,6 @@ const DiaryListPage = () => {
             setHasNewDiary(false);
             setHasMore(true);
             setPage(0);
-            hasRestoredScroll.current = true; // 새글보기 때는 강제 복원 막기
             loadData(0);
           }}
         >

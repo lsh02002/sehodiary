@@ -7,6 +7,7 @@ import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
+import { matchPath } from "react-router-dom";
 
 interface Props {
   appName?: string;
@@ -56,12 +57,14 @@ export default function Layout({ appName = "앱", children }: Props) {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { isLogin, setIsLogin, open, setOpen } = useLogin();
-  const { setMainPageScroll, setMyDiaryScroll } = useScroll();
+  const { setMainPageScroll, setFollowPageScroll, setMyDiaryScroll } =
+    useScroll();
 
   const tab = searchParams.get("tab");
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isMainPage = location.pathname === "/";
+  const isFollowPage = matchPath("/:userId", location.pathname);
   const isMyDiaryPage = tab === "mydiary";
 
   const handleOpenMenu = useCallback(() => {
@@ -146,11 +149,25 @@ export default function Layout({ appName = "앱", children }: Props) {
           y: window.scrollY,
         });
       }
+
+      if (isFollowPage) {
+        setFollowPageScroll({
+          x: window.scrollX,
+          y: window.scrollY,
+        });
+      }
     }, 150);
-  }, [isMainPage, isMyDiaryPage, setMainPageScroll, setMyDiaryScroll]);
+  }, [
+    isFollowPage,
+    isMainPage,
+    isMyDiaryPage,
+    setFollowPageScroll,
+    setMainPageScroll,
+    setMyDiaryScroll,
+  ]);
 
   useEffect(() => {
-    if (!isMainPage && !isMyDiaryPage) return;
+    if (!isMainPage && !isFollowPage && !isMyDiaryPage) return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -161,7 +178,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [handleWindowScroll, isMainPage, isMyDiaryPage]);
+  }, [handleWindowScroll, isFollowPage, isMainPage, isMyDiaryPage]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>

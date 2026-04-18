@@ -13,9 +13,11 @@ type ScrollPositionType = {
   y: number;
 };
 
-type ScrollContextValue = {  
+type ScrollContextValue = {
   mainPageScroll: ScrollPositionType;
   setMainPageScroll: Dispatch<SetStateAction<ScrollPositionType>>;
+  followPageScroll: ScrollPositionType;
+  setFollowPageScroll: Dispatch<SetStateAction<ScrollPositionType>>;
   myDiaryScroll: ScrollPositionType;
   setMyDiaryScroll: Dispatch<SetStateAction<ScrollPositionType>>;
 };
@@ -29,6 +31,10 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
     x: 0,
     y: 0,
   });
+  const [followPageScroll, setFollowPageScroll] = useState<ScrollPositionType>({
+    x: 0,
+    y: 0,
+  });
   const [myDiaryScroll, setMyDiaryScroll] = useState<ScrollPositionType>({
     x: 0,
     y: 0,
@@ -38,10 +44,12 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
     () => ({
       mainPageScroll,
       setMainPageScroll,
+      followPageScroll,
+      setFollowPageScroll,
       myDiaryScroll,
       setMyDiaryScroll,
     }),
-    [mainPageScroll, myDiaryScroll],
+    [followPageScroll, mainPageScroll, myDiaryScroll],
   );
 
   return (
@@ -52,7 +60,6 @@ export const ScrollProvider = ({ children }: { children: ReactNode }) => {
 export function useScroll() {
   const ctx = useContext(ScrollContext);
 
-  if (!ctx)
-    throw new Error("useScroll must be used within <ScrollProvider>");
+  if (!ctx) throw new Error("useScroll must be used within <ScrollProvider>");
   return ctx;
 }
