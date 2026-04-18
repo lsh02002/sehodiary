@@ -19,10 +19,10 @@ export function urlBase64ToUint8Array(base64String: string) {
 }
 
 export async function subscribePush() {
-  // const permission = await Notification.requestPermission();
-  // if (permission !== "granted") {
-  //   throw new Error("알림 권한이 허용되지 않았습니다.");
-  // }
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") {
+    throw new Error("알림 권한이 허용되지 않았습니다.");
+  }
 
   const registration = await navigator.serviceWorker.ready;
 
