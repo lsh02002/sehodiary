@@ -186,7 +186,14 @@ export default function Layout({ appName = "앱", children }: Props) {
   ]);
 
   useEffect(() => {
-    if (!isMainPage && !isMainFollowPage && !isMyDiaryPage) return;
+    if (
+      !isMainPage &&
+      !isMainFollowPage &&
+      !isMyDiaryPage &&
+      !isMyCommentPage &&
+      !isMyActivityLogPage
+    )
+      return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -197,7 +204,14 @@ export default function Layout({ appName = "앱", children }: Props) {
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [handleWindowScroll, isMainFollowPage, isMainPage, isMyDiaryPage]);
+  }, [
+    handleWindowScroll,
+    isMainFollowPage,
+    isMainPage,
+    isMyActivityLogPage,
+    isMyCommentPage,
+    isMyDiaryPage,
+  ]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>
