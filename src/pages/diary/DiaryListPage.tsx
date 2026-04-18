@@ -133,8 +133,7 @@ const DiaryListPage = () => {
 
   // 수정: 최초 데이터가 그려진 뒤에만 1번 복원
   useLayoutEffect(() => {
-    if (!diaryList?.length) return;
-
+    
     const raf = requestAnimationFrame(() => {
       if (isLogin && userId != null) {
         window.scrollTo(0, scrolls.mainFollowPage.y ?? 0);
