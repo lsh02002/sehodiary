@@ -163,9 +163,9 @@ function App() {
       <Suspense fallback={<div>로딩중...</div>}>
         <Routes>
           <Route path="/" element={<DiaryListPage />} />
+          <Route path="/:userId" element={<DiaryListPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
-          <Route path="/list/:userId" element={<DiaryListPage />} />
           <Route path="/create" element={<DiaryCreatePage />} />
           <Route path="/edit/:diaryId" element={<DiaryEditPage />} />
           <Route path="/mypage" element={<MyPage />} />

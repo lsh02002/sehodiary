@@ -12,7 +12,7 @@ const FollowCard = ({ user, onPressFollow, isFollowing }: Props) => {
   const navigate = useNavigate();
 
   const handleMoveDiary = () => {
-    navigate(`/list/${user?.userId}`);
+    navigate(`/${user?.userId}`);
   };
 
   return (

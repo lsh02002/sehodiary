@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 import { api } from "../../api/sehodiary-api";
@@ -13,7 +14,6 @@ import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DEBUG } from "../../api/DEBUG";
-// const DEBUG = true;
 
 const DiaryListPage = () => {
   const { userId } = useParams();
@@ -28,10 +28,13 @@ const DiaryListPage = () => {
 
   const [now, setNow] = useState(Date.now());
 
+  // 추가: 최초 진입 시 1번만 스크롤 복원
+  const hasRestoredScroll = useRef(false);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(Date.now());
-    }, 60000); // 1분
+    }, 60000);
 
     return () => clearInterval(timer);
   }, []);
@@ -43,7 +46,6 @@ const DiaryListPage = () => {
       }
 
       const message = event.data ?? {};
-
       let payload = message;
 
       if (message?.type === "PUSH_MESSAGE" || message?.type === "PUSH_DATA") {
@@ -69,7 +71,6 @@ const DiaryListPage = () => {
         return;
       }
 
-      // 공개 목록이면 그냥 표시
       setHasNewDiary(true);
     }
 
@@ -134,31 +135,33 @@ const DiaryListPage = () => {
     });
   }, [diary]);
 
+  // 수정: 최초 데이터가 그려진 뒤에만 1번 복원
   useLayoutEffect(() => {
+    if (hasRestoredScroll.current) return;
     if (!diaryList?.length) return;
 
     const raf = requestAnimationFrame(() => {
-      window.scrollTo(0, mainPageScroll.y);
+      window.scrollTo(0, mainPageScroll.y ?? 0);
+      hasRestoredScroll.current = true;
     });
 
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryList?.length]);
+  }, [diaryList, mainPageScroll.y]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
       {userId && <UserProfileCard userId={Number(userId)} />}
+
       {hasNewDiary && (
         <div
           style={{
             position: "fixed",
-            top: "110px", // 헤더/탭 아래로 조정 (필요하면 값 조절)
+            top: "110px",
             left: "50%",
             transform: "translateX(-50%)",
             width: "100%",
             maxWidth: "640px",
             zIndex: 50,
-
             background: "#fff3cd",
             padding: "12px 16px",
             border: "1px solid #ffe69c",
@@ -168,13 +171,17 @@ const DiaryListPage = () => {
           onClick={() => {
             setHasNewDiary(false);
             setHasMore(true);
+            setPage(0);
+            hasRestoredScroll.current = true; // 새글보기 때는 강제 복원 막기
             loadData(0);
           }}
         >
           새로운 글이 올라와 있습니다. 새로고침하거나 이 메세지 클릭해주세요.
         </div>
       )}
+
       <div style={{ height: hasNewDiary ? "120px" : 0 }} />
+
       <InfiniteScroll
         dataLength={diaryList.length}
         next={loadData}
@@ -182,10 +189,9 @@ const DiaryListPage = () => {
         loader={<></>}
         endMessage={<p>마지막 데이터입니다.</p>}
       >
-        {diaryList &&
-          diaryList?.map((diary: DiaryResponseType) => (
-            <DiaryCard0 key={diary?.id} diary0={diary} now={now} />
-          ))}
+        {diaryList.map((diary: DiaryResponseType) => (
+          <DiaryCard0 key={diary.id} diary0={diary} now={now} />
+        ))}
       </InfiniteScroll>
     </div>
   );
