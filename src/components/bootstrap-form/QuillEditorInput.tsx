@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 
@@ -17,6 +17,32 @@ const QuillEditorInput = ({
   setData: (v: string) => void;
   rows?: number;
 }) => {
+  const quillRef = useRef<ReactQuill | null>(null);
+  const [isEmpty, setIsEmpty] = useState(true);
+
+  useEffect(() => {
+    const editor = quillRef.current?.getEditor();
+    const root = editor?.root;
+    if (!root) return;
+
+    const handleCompositionStart = () => {
+      setIsEmpty(false);
+    };
+
+    const handleCompositionEnd = () => {
+      const text = editor.getText().trim();
+      setIsEmpty(text.length === 0);
+    };
+
+    root.addEventListener("compositionstart", handleCompositionStart);
+    root.addEventListener("compositionend", handleCompositionEnd);
+
+    return () => {
+      root.removeEventListener("compositionstart", handleCompositionStart);
+      root.removeEventListener("compositionend", handleCompositionEnd);
+    };
+  }, []);
+
   return (
     <div className="w-100 mb-3">
       <style>{quillStyles}</style>
@@ -31,15 +57,20 @@ const QuillEditorInput = ({
           {
             ["--quill-min-height" as any]: `${Math.max(rows, 1) * 24 + 24}px`,
             ["--quill-min-height-mobile" as any]: `${Math.max(rows, 1) * 24 + 32}px`,
+            position: "relative",
           } as React.CSSProperties
         }
       >
         <ReactQuill
+          ref={quillRef}
           theme="snow"
           value={data}
-          onChange={setData}
+          onChange={(value, _delta, _source, editor) => {
+            setData(value);
+            setIsEmpty(editor.getText().trim().length === 0);
+          }}
           readOnly={disabled}
-          placeholder={`${title}을(를) 입력하세요`}
+          placeholder={isEmpty ? `${title}을(를) 입력하세요` : ""}
           modules={{
             toolbar: disabled
               ? false
