@@ -10,6 +10,7 @@ import {
 type ScrollPosition = {
   x: number;
   y: number;
+  page?: number;
 };
 
 type ScrollKey =
@@ -26,7 +27,7 @@ type ScrollContextValue = {
   setScrolls: Dispatch<SetStateAction<ScrollState>>;
 };
 
-const initialPosition: ScrollPosition = { x: 0, y: 0 };
+const initialPosition: ScrollPosition = { x: 0, y: 0, page: 0 };
 
 const initialScrolls: ScrollState = {
   mainPage: initialPosition,
@@ -37,7 +38,7 @@ const initialScrolls: ScrollState = {
 };
 
 export const ScrollContext = createContext<ScrollContextValue | undefined>(
-  undefined
+  undefined,
 );
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {

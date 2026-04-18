@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLogin } from "../../context/LoginContext";
 import CommentPage from "../../pages/comment/CommentPage";
 import { useScroll } from "../../context/ScrollContext";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
-import { matchPath } from "react-router-dom";
 
 interface Props {
   appName?: string;
@@ -54,7 +53,6 @@ const mainStyle: React.CSSProperties = {
 
 export default function Layout({ appName = "앱", children }: Props) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { isLogin, setIsLogin, open, setOpen } = useLogin();
   const { setScrolls } = useScroll();
@@ -62,8 +60,6 @@ export default function Layout({ appName = "앱", children }: Props) {
   const tab = searchParams.get("tab");
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isMainPage = location.pathname === "/";
-  const isMainFollowPage = matchPath("/:userId", location.pathname);
   const isMyDiaryPage = tab === "mydiary";
   const isMyCommentPage = tab === "mycomment";
   const isMyActivityLogPage = tab === "activitylog";
@@ -159,41 +155,11 @@ export default function Layout({ appName = "앱", children }: Props) {
         }));
         return;
       }
-
-      if (isMainPage) {
-        setScrolls((prev) => ({
-          ...prev,
-          mainPage: { x: window.scrollX, y: window.scrollY },
-        }));
-        return;
-      }
-
-      if (isMainFollowPage) {
-        setScrolls((prev) => ({
-          ...prev,
-          mainFollowPage: { x: window.scrollX, y: window.scrollY },
-        }));
-        return;
-      }
     }, 150);
-  }, [
-    isMainFollowPage,
-    isMainPage,
-    isMyActivityLogPage,
-    isMyCommentPage,
-    isMyDiaryPage,
-    setScrolls,
-  ]);
+  }, [isMyActivityLogPage, isMyCommentPage, isMyDiaryPage, setScrolls]);
 
   useEffect(() => {
-    if (
-      !isMainPage &&
-      !isMainFollowPage &&
-      !isMyDiaryPage &&
-      !isMyCommentPage &&
-      !isMyActivityLogPage
-    )
-      return;
+    if (!isMyDiaryPage && !isMyCommentPage && !isMyActivityLogPage) return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -204,14 +170,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [
-    handleWindowScroll,
-    isMainFollowPage,
-    isMainPage,
-    isMyActivityLogPage,
-    isMyCommentPage,
-    isMyDiaryPage,
-  ]);
+  }, [handleWindowScroll, isMyActivityLogPage, isMyCommentPage, isMyDiaryPage]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>
