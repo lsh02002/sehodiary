@@ -133,7 +133,8 @@ const DiaryListPage = () => {
 
   // 수정: 최초 데이터가 그려진 뒤에만 1번 복원
   useLayoutEffect(() => {
-    
+    if (!diaryList?.length) return;
+
     const raf = requestAnimationFrame(() => {
       if (isLogin && userId != null) {
         window.scrollTo(0, scrolls.mainFollowPage.y ?? 0);
@@ -144,7 +145,7 @@ const DiaryListPage = () => {
 
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogin, userId]);
+  }, [diaryList?.length, isLogin, userId]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
