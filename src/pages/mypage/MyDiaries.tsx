@@ -7,7 +7,7 @@ import { useScroll } from "../../context/ScrollContext";
 
 const MyDiaries = () => {
   const { diary } = useLogin();
-  const { myDiaryScroll } = useScroll();
+  const { scrolls } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
   const [now, setNow] = useState(Date.now());
@@ -45,8 +45,8 @@ const MyDiaries = () => {
   useLayoutEffect(() => {
     const raf = requestAnimationFrame(() => {
       window.scrollTo({
-        left: myDiaryScroll.x,
-        top: myDiaryScroll.y,
+        left: scrolls.myDiary.x,
+        top: scrolls.myDiary.y,
         behavior: "auto",
       });
     });

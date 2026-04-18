@@ -5,61 +5,53 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
-  useMemo,
 } from "react";
 
-type ScrollPositionType = {
+type ScrollPosition = {
   x: number;
   y: number;
 };
 
+type ScrollKey =
+  | "mainPage"
+  | "mainFollowPage"
+  | "myDiary"
+  | "myComment"
+  | "myActivityLog";
+
+type ScrollState = Record<ScrollKey, ScrollPosition>;
+
 type ScrollContextValue = {
-  mainPageScroll: ScrollPositionType;
-  setMainPageScroll: Dispatch<SetStateAction<ScrollPositionType>>;
-  followPageScroll: ScrollPositionType;
-  setFollowPageScroll: Dispatch<SetStateAction<ScrollPositionType>>;
-  myDiaryScroll: ScrollPositionType;
-  setMyDiaryScroll: Dispatch<SetStateAction<ScrollPositionType>>;
+  scrolls: ScrollState;
+  setScrolls: Dispatch<SetStateAction<ScrollState>>;
+};
+
+const initialPosition: ScrollPosition = { x: 0, y: 0 };
+
+const initialScrolls: ScrollState = {
+  mainPage: initialPosition,
+  mainFollowPage: initialPosition,
+  myDiary: initialPosition,
+  myComment: initialPosition,
+  myActivityLog: initialPosition,
 };
 
 export const ScrollContext = createContext<ScrollContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
-  const [mainPageScroll, setMainPageScroll] = useState<ScrollPositionType>({
-    x: 0,
-    y: 0,
-  });
-  const [followPageScroll, setFollowPageScroll] = useState<ScrollPositionType>({
-    x: 0,
-    y: 0,
-  });
-  const [myDiaryScroll, setMyDiaryScroll] = useState<ScrollPositionType>({
-    x: 0,
-    y: 0,
-  });
-
-  const value = useMemo<ScrollContextValue>(
-    () => ({
-      mainPageScroll,
-      setMainPageScroll,
-      followPageScroll,
-      setFollowPageScroll,
-      myDiaryScroll,
-      setMyDiaryScroll,
-    }),
-    [followPageScroll, mainPageScroll, myDiaryScroll],
-  );
+  const [scrolls, setScrolls] = useState<ScrollState>(initialScrolls);
 
   return (
-    <ScrollContext.Provider value={value}>{children}</ScrollContext.Provider>
+    <ScrollContext.Provider value={{ scrolls, setScrolls }}>
+      {children}
+    </ScrollContext.Provider>
   );
 };
 
 export function useScroll() {
   const ctx = useContext(ScrollContext);
-
   if (!ctx) throw new Error("useScroll must be used within <ScrollProvider>");
   return ctx;
 }

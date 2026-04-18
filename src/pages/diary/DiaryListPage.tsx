@@ -17,7 +17,7 @@ import { DEBUG } from "../../api/DEBUG";
 const DiaryListPage = () => {
   const { userId } = useParams();
   const { isLogin, diary } = useLogin();
-  const { mainPageScroll, followPageScroll } = useScroll();
+  const { scrolls } = useScroll();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
 
@@ -137,14 +137,15 @@ const DiaryListPage = () => {
 
     const raf = requestAnimationFrame(() => {
       if (isLogin && userId != null) {
-        window.scrollTo(0, followPageScroll.y ?? 0);
+        window.scrollTo(0, scrolls.mainFollowPage.y ?? 0);
       } else {
-        window.scrollTo(0, mainPageScroll.y ?? 0);
+        window.scrollTo(0, scrolls.mainPage.y ?? 0);
       }
     });
 
     return () => cancelAnimationFrame(raf);
-  }, [diaryList, followPageScroll.y, mainPageScroll.y, isLogin, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diaryList?.length, isLogin, userId]);
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>

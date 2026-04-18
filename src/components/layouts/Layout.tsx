@@ -57,15 +57,16 @@ export default function Layout({ appName = "앱", children }: Props) {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { isLogin, setIsLogin, open, setOpen } = useLogin();
-  const { setMainPageScroll, setFollowPageScroll, setMyDiaryScroll } =
-    useScroll();
+  const { setScrolls } = useScroll();
 
   const tab = searchParams.get("tab");
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isMainPage = location.pathname === "/";
-  const isFollowPage = matchPath("/:userId", location.pathname);
+  const isMainFollowPage = matchPath("/:userId", location.pathname);
   const isMyDiaryPage = tab === "mydiary";
+  const isMyCommentPage = tab === "mycomment";
+  const isMyActivityLogPage = tab === "activitylog";
 
   const handleOpenMenu = useCallback(() => {
     setOpen(true);
@@ -136,38 +137,56 @@ export default function Layout({ appName = "앱", children }: Props) {
 
     scrollTimer.current = setTimeout(() => {
       if (isMyDiaryPage) {
-        setMyDiaryScroll({
-          x: window.scrollX,
-          y: window.scrollY,
-        });
+        setScrolls((prev) => ({
+          ...prev,
+          myDiary: { x: window.scrollX, y: window.scrollY },
+        }));
+        return;
+      }
+
+      if (isMyCommentPage) {
+        setScrolls((prev) => ({
+          ...prev,
+          myComment: { x: window.scrollX, y: window.scrollY },
+        }));
+        return;
+      }
+
+      if (isMyActivityLogPage) {
+        setScrolls((prev) => ({
+          ...prev,
+          myActivityLog: { x: window.scrollX, y: window.scrollY },
+        }));
         return;
       }
 
       if (isMainPage) {
-        setMainPageScroll({
-          x: window.scrollX,
-          y: window.scrollY,
-        });
+        setScrolls((prev) => ({
+          ...prev,
+          mainPage: { x: window.scrollX, y: window.scrollY },
+        }));
+        return;
       }
 
-      if (isFollowPage) {
-        setFollowPageScroll({
-          x: window.scrollX,
-          y: window.scrollY,
-        });
+      if (isMainFollowPage) {
+        setScrolls((prev) => ({
+          ...prev,
+          mainFollowPage: { x: window.scrollX, y: window.scrollY },
+        }));
+        return;
       }
     }, 150);
   }, [
-    isFollowPage,
+    isMainFollowPage,
     isMainPage,
+    isMyActivityLogPage,
+    isMyCommentPage,
     isMyDiaryPage,
-    setFollowPageScroll,
-    setMainPageScroll,
-    setMyDiaryScroll,
+    setScrolls,
   ]);
 
   useEffect(() => {
-    if (!isMainPage && !isFollowPage && !isMyDiaryPage) return;
+    if (!isMainPage && !isMainFollowPage && !isMyDiaryPage) return;
 
     window.addEventListener("scroll", handleWindowScroll);
 
@@ -178,7 +197,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         clearTimeout(scrollTimer.current);
       }
     };
-  }, [handleWindowScroll, isFollowPage, isMainPage, isMyDiaryPage]);
+  }, [handleWindowScroll, isMainFollowPage, isMainPage, isMyDiaryPage]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>

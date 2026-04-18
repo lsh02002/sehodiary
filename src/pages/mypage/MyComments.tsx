@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
@@ -8,10 +8,12 @@ import {
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCard1 from "../../components/bootstrap-card/CommentCard1";
 import { useLogin } from "../../context/LoginContext";
+import { useScroll } from "../../context/ScrollContext";
 
 const MyComments = () => {
   const { diary, setDiary, setCommentList } = useLogin();
   const { myCommentList, setMyCommentList } = useLogin();
+  const { scrolls } = useScroll();
 
   useEffect(() => {
     getCommentsByUserApi()
@@ -19,6 +21,19 @@ const MyComments = () => {
         setMyCommentList(res.data);
       })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({
+        left: scrolls.myComment.x,
+        top: scrolls.myComment.y,
+        behavior: "auto",
+      });
+    });
+
+    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

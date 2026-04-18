@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
 import ActivityLogCard from "../../components/bootstrap-card/ActivityLogCard";
+import { useScroll } from "../../context/ScrollContext";
 
 const MyActivityLogs = () => {
   const [logMessages, setLogMessages] = useState([]);
+  const { scrolls } = useScroll();
 
   useEffect(() => {
     getLogMessagesByUserApi()
@@ -13,6 +15,21 @@ const MyActivityLogs = () => {
       })
       .catch(() => {});
   }, []);
+
+  useLayoutEffect(() => {
+    if (!logMessages || logMessages.length === 0) return;
+
+    const raf = requestAnimationFrame(() => {
+      window.scrollTo({
+        left: scrolls.myActivityLog.x,
+        top: scrolls.myActivityLog.y,
+        behavior: "auto",
+      });
+    });
+
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [logMessages]);
 
   return (
     <>
