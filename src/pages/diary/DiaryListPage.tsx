@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { api } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
@@ -21,12 +27,11 @@ const DiaryListPage = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [now, setNow] = useState(Date.now());
-  const [restoring, setRestoring] = useState(true);
-
-  const restoredRef = useRef(false);
 
   const isFollowPage = isLogin && userId != null;
   const savedScroll = isFollowPage ? scrolls.mainFollowPage : scrolls.mainPage;
+
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -104,8 +109,7 @@ const DiaryListPage = () => {
   );
 
   const loadData = useCallback(async () => {
-    if (loading || restoring) return;
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
 
     setLoading(true);
 
@@ -119,17 +123,13 @@ const DiaryListPage = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, loading, page, restoring]);
+  }, [hasMore, loading, page]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
-  useEffect(() => {
+  useLayoutEffect(() => {
     let cancelled = false;
 
     const restoreDataAndScroll = async () => {
-      if (restoredRef.current) return;
-
-      setRestoring(true);
-
       try {
         const targetPageCount = Math.max(savedScroll.page ?? 1, 1);
 
@@ -157,13 +157,10 @@ const DiaryListPage = () => {
           requestAnimationFrame(() => {
             if (cancelled) return;
             window.scrollTo(0, savedScroll.y ?? 0);
-            restoredRef.current = true;
-            setRestoring(false);
           });
         });
       } catch (e) {
         if (cancelled) return;
-        setRestoring(false);
       }
     };
 
@@ -173,14 +170,18 @@ const DiaryListPage = () => {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [savedScroll.page]);
+  }, []);
 
   // 스크롤 저장
-  useEffect(() => {
-    const handleScroll = () => {
-      const nextY = window.scrollY;
-      const nextX = window.scrollX;
+  const handleScroll = useCallback(() => {
+    const nextY = window.scrollY;
+    const nextX = window.scrollX;
 
+    if (scrollTimer.current) {
+      clearTimeout(scrollTimer.current);
+    }
+
+    scrollTimer.current = setTimeout(() => {
       setScrolls((prev) =>
         isFollowPage
           ? {
@@ -200,14 +201,17 @@ const DiaryListPage = () => {
               },
             },
       );
-    };
+    }, 150);
+  }, [isFollowPage, page, setScrolls]);
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isFollowPage, page, setScrolls]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleScroll]);
 
   useEffect(() => {
     setDiaryList((prev) => {
@@ -240,13 +244,11 @@ const DiaryListPage = () => {
             setHasNewDiary(false);
             setHasMore(true);
             setPage(0);
-            setRestoring(true);
 
             const content = await fetchPage(0);
             setDiaryList(content);
             setPage(1);
             setHasMore(content.length > 0);
-            setRestoring(false);
 
             window.scrollTo(0, 0);
           }}
@@ -260,7 +262,7 @@ const DiaryListPage = () => {
       <InfiniteScroll
         dataLength={diaryList.length}
         next={loadData}
-        hasMore={hasMore && !restoring}
+        hasMore={hasMore}
         loader={<></>}
         endMessage={<p>마지막 데이터입니다.</p>}
       >
