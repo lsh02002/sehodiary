@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
@@ -16,6 +17,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { DEBUG } from "../../api/DEBUG";
 
 const DiaryListPage = () => {
+  const queryClient = useQueryClient();
+
   const { userId } = useParams();
   const { isLogin, diary } = useLogin();
   const { scrolls, setScrolls } = useScroll();
@@ -100,12 +103,37 @@ const DiaryListPage = () => {
     [isFollowPage, userId],
   );
 
+  const diaryQueryBaseKey = useCallback(() => {
+    return ["diary-list", isFollowPage ? `follow-${userId}` : "public"];
+  }, [isFollowPage, userId]);
+
   const fetchPage = useCallback(
-    async (targetPage: number) => {
-      const res = await api.get(getUrl(targetPage));
-      return res.data?.content ?? [];
+    async (targetPage: number, force = false) => {
+      const queryKey = [...diaryQueryBaseKey(), targetPage];
+
+      const queryFn = async () => {
+        const res = await api.get(getUrl(targetPage));
+        return res.data?.content ?? [];
+      };
+
+      if (force) {
+        queryClient.removeQueries({ queryKey, exact: true });
+
+        return queryClient.fetchQuery({
+          queryKey,
+          queryFn,
+          staleTime: 1000 * 60 * 5,
+          gcTime: 1000 * 60 * 30,
+        });
+      }
+
+      return queryClient.ensureQueryData({
+        queryKey,
+        queryFn,
+        revalidateIfStale: false,
+      });
     },
-    [getUrl],
+    [diaryQueryBaseKey, getUrl, queryClient],
   );
 
   const loadData = useCallback(async () => {
@@ -123,7 +151,7 @@ const DiaryListPage = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, loading, page]);
+  }, [hasMore, loading, page, fetchPage]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
   useLayoutEffect(() => {
@@ -245,7 +273,12 @@ const DiaryListPage = () => {
             setHasMore(true);
             setPage(0);
 
-            const content = await fetchPage(0);
+            queryClient.removeQueries({
+              queryKey: diaryQueryBaseKey(),
+              exact: false,
+            });
+
+            const content = await fetchPage(0, true);
             setDiaryList(content);
             setPage(1);
             setHasMore(content.length > 0);

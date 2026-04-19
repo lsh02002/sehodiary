@@ -7,17 +7,22 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { LoginProvider } from "./context/LoginContext";
 import { ScrollProvider } from "./context/ScrollContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(
   <ScrollProvider>
-    <BrowserRouter>
-      <LoginProvider>
-        <App />
-      </LoginProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <LoginProvider>
+          <App />
+        </LoginProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
   </ScrollProvider>,
 );
 
