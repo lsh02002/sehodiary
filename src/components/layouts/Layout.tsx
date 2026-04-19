@@ -64,10 +64,6 @@ export default function Layout({ appName = "앱", children }: Props) {
   const isMyCommentPage = tab === "mycomment";
   const isMyActivityLogPage = tab === "activitylog";
 
-  const handleOpenMenu = useCallback(() => {
-    setOpen(true);
-  }, [setOpen]);
-
   const handleCloseMenu = useCallback(() => {
     setOpen(false);
   }, [setOpen]);
@@ -186,7 +182,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         aria-label="메뉴 열기"
         aria-expanded={open}
         aria-controls="side-nav"
-        onClick={handleOpenMenu}
+        onClick={() => {}}
       >
         <Menu size={20} />
       </button>
