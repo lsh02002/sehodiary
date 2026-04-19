@@ -80,10 +80,6 @@ export default function Layout({ appName = "앱", children }: Props) {
     navigate("/register");
   }, [navigate]);
 
-  const handleGoCreate = useCallback(() => {
-    navigate("/create");
-  }, [navigate]);
-
   const handleLogout = useCallback(() => {
     if (window.confirm("로그아웃 하시겠습니까?") === false) {
       return;
@@ -280,7 +276,7 @@ export default function Layout({ appName = "앱", children }: Props) {
 
       <LockBodyScroll when={open} />
       <ScrollToTopButton />
-      <AddDiaryButton title="+" onClick={handleGoCreate} />
+      <AddDiaryButton />
     </div>
   );
 }

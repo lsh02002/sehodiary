@@ -1,18 +1,27 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 const AddDiaryButton = ({
   disabled,
-  title,
-  onClick,
+  title = "+",
 }: {
   disabled?: boolean;
-  title: string;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  title?: string;
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleClick = () => {
+    if (location.pathname !== "/create") {
+      navigate("/create");
+    }
+  };
+
   return (
     <button
       type="button"
       className="btn btn-info rounded-circle position-fixed d-flex align-items-center justify-content-center p-0"
       disabled={disabled}
-      onClick={onClick}
+      onClick={handleClick}
       style={{
         width: "50px",
         height: "50px",
