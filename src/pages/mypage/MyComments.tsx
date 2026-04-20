@@ -7,8 +7,8 @@ import {
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCard1 from "../../components/bootstrap-card/CommentCard1";
-import { useLogin } from "../../context/LoginContext";
-import { useScroll } from "../../context/ScrollContext";
+import { useLogin } from "../../recoil/RecoilLogin";
+import { useScroll } from "../../recoil/RecoilScroll";
 
 const MyComments = () => {
   const { diary, setDiary, setCommentList } = useLogin();

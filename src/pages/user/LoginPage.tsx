@@ -5,7 +5,7 @@ import TextInput from "../../components/bootstrap-form/TextInput";
 import PasswordInput from "../../components/bootstrap-form/PasswordInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { SlLogin } from "react-icons/sl";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const LoginPage = () => {
         localStorage.setItem("refreshToken", res.headers.refreshtoken);
 
         setIsLogin(true);
-        showToast("로그인 했습니다.", "success")
+        showToast("로그인 했습니다.", "success");
         navigate("/");
       })
       .catch(() => {});

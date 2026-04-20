@@ -16,7 +16,7 @@ import SelectInput, {
 import { DiaryRequestType, ImageResponseType } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";

@@ -2,8 +2,8 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
-import { useLogin } from "../../context/LoginContext";
-import { useScroll } from "../../context/ScrollContext";
+import { useLogin } from "../../recoil/RecoilLogin";
+import { useScroll } from "../../recoil/RecoilScroll";
 
 const MyDiaries = () => {
   const { diary } = useLogin();

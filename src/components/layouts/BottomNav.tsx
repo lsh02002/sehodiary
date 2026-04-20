@@ -1,7 +1,7 @@
 import Home from "../../assets/home.svg";
 import MyPage from "../../assets/dashboard.svg";
 import { NavLink } from "react-router-dom";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 
 const navLinkBaseClass =
   "d-flex flex-column align-items-center justify-content-center flex-fill text-decoration-none small text-secondary";

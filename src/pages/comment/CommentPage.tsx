@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import DiaryCard1 from "../../components/bootstrap-card/DiaryCard1";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {

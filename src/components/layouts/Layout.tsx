@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import CommentPage from "../../pages/comment/CommentPage";
-import { useScroll } from "../../context/ScrollContext";
+import { useScroll } from "../../recoil/RecoilScroll";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";

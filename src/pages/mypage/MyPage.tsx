@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
 import MyActivityLogs from "./MyActivityLogs";

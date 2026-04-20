@@ -5,9 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import { LoginProvider } from "./context/LoginContext";
-import { ScrollProvider } from "./context/ScrollContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient();
 
@@ -15,15 +14,13 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
 );
 root.render(
-  <ScrollProvider>
+  <RecoilRoot>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <LoginProvider>
-          <App />
-        </LoginProvider>
+        <App />
       </BrowserRouter>
     </QueryClientProvider>
-  </ScrollProvider>,
+  </RecoilRoot>,
 );
 
 // If you want to start measuring performance in your app, pass a function

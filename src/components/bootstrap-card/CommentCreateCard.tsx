@@ -4,7 +4,7 @@ import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import ConfirmButton from "../bootstrap-form/ConfirmButton";
 import { CommentRequestType } from "../../types/type";
 import { createCommentApi } from "../../api/sehodiary-api";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {

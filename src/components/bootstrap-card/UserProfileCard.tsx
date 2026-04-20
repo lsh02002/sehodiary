@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserInfoResponseType } from "../../types/type";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import { getOtherUserInfoApi } from "../../api/sehodiary-api";
 
 function UserProfileCard({ userId }: { userId: number }) {

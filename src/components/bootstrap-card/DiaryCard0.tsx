@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DiaryResponseType } from "../../types/type";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../context/LoginContext";
+import { useLogin } from "../../recoil/RecoilLogin";
 import { FaRegCommentDots } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
@@ -28,7 +28,7 @@ const DiaryCard0 = ({
   const [likesCount, setLikesCount] = useState(-1);
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState<string[]>([]);
-  
+
   const updatedAt = diary0?.updatedAt;
   const createdAt = diary0?.createdAt;
   const updatedTime = updatedAt ? new Date(updatedAt).getTime() : 0;
@@ -174,7 +174,9 @@ const DiaryCard0 = ({
                   </div>
                 )}
               </div>
-              <div className="fst-italic text-secondary small">{diary0?.date}</div>
+              <div className="fst-italic text-secondary small">
+                {diary0?.date}
+              </div>
             </div>
           </div>
         </div>
