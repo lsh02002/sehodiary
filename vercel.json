@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/rss.xml",
+      "destination": "https://sehodiary.lsh02002.com/rss.xml"
+    }
+  ]
+}
