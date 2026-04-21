@@ -13,6 +13,7 @@ import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInp
 import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import { useNavigate } from "react-router-dom";
 import DateInput from "../../components/bootstrap-form/DateInput";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -29,13 +30,27 @@ const DiaryCreatePage = () => {
 
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
     { label: "PRIVATE", value: "PRIVATE" },
     { label: "FRIENDS", value: "FRIENDS" },
   ];
 
-  const handleCreateDiary = async () => {
+  const mutation = useMutation({
+    mutationFn: (formData: FormData) => createDiaryApi(formData),
+    onSuccess: (res) => {
+      queryClient.removeQueries({
+        queryKey: ["diary-list"],
+      });
+
+      showToast("글 생성이 되었습니다.", "success");
+      navigate(`/edit/${res.data.id}`, { replace: true });
+    },
+  });
+
+  const handleCreateDiary = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -49,6 +64,7 @@ const DiaryCreatePage = () => {
     };
 
     const formDataToSend = new FormData();
+
     formDataToSend.append(
       "request",
       new Blob([JSON.stringify(data)], { type: "application/json" }),
@@ -58,16 +74,11 @@ const DiaryCreatePage = () => {
       formDataToSend.append("files", file);
     });
 
-    await createDiaryApi(formDataToSend)
-      .then((res) => {
-        showToast("글 생성이 되었습니다.", "success");
-
-        navigate(`/edit/${res.data.id}`, { replace: true });
-      })
-      .catch(() => {})
-      .finally(() => {
+    mutation.mutate(formDataToSend, {
+      onSettled: () => {
         setIsSubmitting(false);
-      });
+      },
+    });
   };
 
   return (
