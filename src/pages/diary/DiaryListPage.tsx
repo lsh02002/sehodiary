@@ -250,7 +250,9 @@ const DiaryListPage = () => {
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
-      <div className="ms-3 p-1 bg-secondary-subtle">rss주소: https://sehodiary.vercel.app/rss.xml</div>
+      <div className="ms-3 me-3 p-1 bg-secondary-subtle">
+        rss주소: https://sehodiary.vercel.app/rss.xml
+      </div>
       {userId && <UserProfileCard userId={Number(userId)} />}
 
       {hasNewDiary && (
