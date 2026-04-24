@@ -6,7 +6,7 @@ import {
   showToast,
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
-import CommentCard1 from "../../components/bootstrap-card/CommentCard1";
+import CommentCardTwo from "../../components/bootstrap-card/CommentCardTwo";
 import { useLogin } from "../../recoil/RecoilLogin";
 import { useScroll } from "../../recoil/RecoilScroll";
 
@@ -103,7 +103,7 @@ const MyComments = () => {
       </h4>
       {myCommentList && myCommentList?.length > 0 ? (
         myCommentList?.map((comment: CommentResponseType) => (
-          <CommentCard1
+          <CommentCardTwo
             key={comment?.commentId}
             comment={comment}
             handleEditSave={handleEditSave}

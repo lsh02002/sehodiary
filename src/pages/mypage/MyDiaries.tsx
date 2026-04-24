@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
-import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
+import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
 import { useLogin } from "../../recoil/RecoilLogin";
 import { useScroll } from "../../recoil/RecoilScroll";
 
@@ -60,7 +60,7 @@ const MyDiaries = () => {
       <h4 style={{ marginBottom: "20px" }}>내가쓴일기({diaryList?.length})</h4>
       {diaryList && diaryList?.length > 0 ? (
         diaryList?.map((diary0: DiaryResponseType) => (
-          <DiaryCard0 key={diary0?.id} diary0={diary0} now={now} />
+          <DiaryCardOne key={diary0?.id} diary0={diary0} now={now} />
         ))
       ) : (
         <div>해당 글이 없습니다!</div>

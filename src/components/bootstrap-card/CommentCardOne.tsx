@@ -5,14 +5,12 @@ import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 
-const CommentCard1 = ({
+const CommentCardOne = ({
   comment,
   handleEditSave,
-  handleRemoveSave,
 }: {
   comment: CommentResponseType;
   handleEditSave: (commentId: number, content: string) => void;
-  handleRemoveSave: (c: number) => void;
 }) => {
   const isEditing = comment?.nickname === localStorage.getItem("nickname");
   const [content, setContent] = useState("");
@@ -42,6 +40,7 @@ const CommentCard1 = ({
                 style={{ marginRight: "5px", marginTop: "4px" }}
               />
             )}
+
             <div className="w-100">
               {isEditing ? (
                 <div className="w-100">
@@ -61,12 +60,6 @@ const CommentCard1 = ({
                     >
                       수정
                     </button>
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => handleRemoveSave(comment?.commentId)}
-                    >
-                      삭제
-                    </button>
                   </div>
                 </div>
               ) : (
@@ -79,7 +72,6 @@ const CommentCard1 = ({
             </div>
           </div>
 
-          <div className="text-secondary">글 아이디: {comment?.diaryId}</div>
           <TwoDiv>
             <div className="fst-italic text-secondary">
               작성자: {comment?.nickname}
@@ -94,4 +86,4 @@ const CommentCard1 = ({
   );
 };
 
-export default React.memo(CommentCard1);
+export default React.memo(CommentCardOne);

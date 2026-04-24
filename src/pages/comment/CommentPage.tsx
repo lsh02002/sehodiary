@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLogin } from "../../recoil/RecoilLogin";
-import DiaryCard1 from "../../components/bootstrap-card/DiaryCard1";
+import DiaryCard1 from "../../components/bootstrap-card/DiaryCardTwo";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {
   getCommentsByDiaryApi,
@@ -8,7 +8,7 @@ import {
   showToast,
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
-import CommentCard0 from "../../components/bootstrap-card/CommentCard0";
+import CommentCardOne from "../../components/bootstrap-card/CommentCardOne";
 
 const CommentPage = () => {
   const { diary } = useLogin();
@@ -64,7 +64,7 @@ const CommentPage = () => {
 
         {commentList && commentList.length > 0 ? (
           commentList.map((comment: CommentResponseType) => (
-            <CommentCard0
+            <CommentCardOne
               key={comment?.commentId}
               comment={comment}
               handleEditSave={handleEditSave}

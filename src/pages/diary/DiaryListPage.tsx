@@ -8,7 +8,7 @@ import React, {
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
-import DiaryCard0 from "../../components/bootstrap-card/DiaryCard0";
+import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
 import { useLogin } from "../../recoil/RecoilLogin";
 import { useScroll } from "../../recoil/RecoilScroll";
 import { useParams } from "react-router-dom";
@@ -181,7 +181,7 @@ const DiaryListPage = () => {
           }
         }
 
-        setDiaryList(() => {          
+        setDiaryList(() => {
           const nextPage = merged.length === 0 ? 0 : targetPageCount;
 
           setPage(nextPage);
@@ -312,7 +312,7 @@ const DiaryListPage = () => {
         endMessage={<p>마지막 데이터입니다.</p>}
       >
         {diaryList.map((diary: DiaryResponseType) => (
-          <DiaryCard0 key={diary.id} diary0={diary} now={now} />
+          <DiaryCardOne key={diary.id} diary0={diary} now={now} />
         ))}
       </InfiniteScroll>
     </div>

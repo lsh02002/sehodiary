@@ -3,7 +3,7 @@ import { DiaryResponseType } from "../../types/type";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import DOMPurify from "dompurify";
 
-const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
+const DiaryCardTwo = ({ diary }: { diary: DiaryResponseType | undefined }) => {
   const date = `${new Date(diary?.date ?? "").getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`;
 
   return (
@@ -36,4 +36,4 @@ const DiaryCard1 = ({ diary }: { diary: DiaryResponseType | undefined }) => {
   );
 };
 
-export default React.memo(DiaryCard1);
+export default React.memo(DiaryCardTwo);

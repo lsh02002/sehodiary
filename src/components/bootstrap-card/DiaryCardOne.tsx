@@ -15,7 +15,7 @@ import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
 
-const DiaryCard0 = ({
+const DiaryCardOne = ({
   diary0,
   now,
 }: {
@@ -185,4 +185,4 @@ const DiaryCard0 = ({
   );
 };
 
-export default React.memo(DiaryCard0);
+export default React.memo(DiaryCardOne);
