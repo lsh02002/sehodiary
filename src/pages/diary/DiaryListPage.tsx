@@ -155,7 +155,7 @@ const DiaryListPage = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, loading, fetchPage]);
+  }, [hasMore, loading]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
   useLayoutEffect(() => {
