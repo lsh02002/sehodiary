@@ -143,9 +143,13 @@ const DiaryListPage = () => {
 
     try {
       const content = await fetchPage(page);
-      setDiaryList((prev) => mergeUniqueById(prev, content));
-      setHasMore(content.length > 0);
-      setPage((prev) => prev + 1);
+
+      setDiaryList((prev) => {
+        const merged = mergeUniqueById(prev, content);
+        setHasMore(content.length > 0);
+        setPage((p) => p + 1);
+        return merged;
+      });
     } catch (e) {
     } finally {
       setLoading(false);
@@ -159,7 +163,7 @@ const DiaryListPage = () => {
 
     const restoreDataAndScroll = async () => {
       try {
-        const targetPageCount = Math.max(savedScroll.page ?? 1, 1);
+        const targetPageCount = Math.max(savedScroll.page ?? 0, 0);
 
         let merged: DiaryResponseType[] = [];
         let lastHasMore = true;
@@ -177,9 +181,14 @@ const DiaryListPage = () => {
           }
         }
 
-        setDiaryList(merged);
-        setPage(merged.length === 0 ? 0 : targetPageCount);
-        setHasMore(lastHasMore);
+        setDiaryList(() => {          
+          const nextPage = merged.length === 0 ? 0 : targetPageCount;
+
+          setPage(nextPage);
+          setHasMore(lastHasMore);
+
+          return merged;
+        });
 
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
