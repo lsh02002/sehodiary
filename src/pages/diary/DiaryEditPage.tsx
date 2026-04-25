@@ -101,6 +101,13 @@ const DiaryEditPage = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
+    const totalSize = (images ?? []).reduce((sum, file) => sum + file.size, 0);
+
+    if (totalSize > 1 * 1024 * 1024) {
+      showToast("전체 파일 크기는 1MB 이하만 가능합니다.");
+      return;
+    }
+
     const data: DiaryRequestType = {
       title,
       weather,
