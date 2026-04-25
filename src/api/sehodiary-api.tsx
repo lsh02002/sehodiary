@@ -99,7 +99,7 @@ const getDiariesByUserApi = async () => {
   return api.get(`/diary/user?page=0&size=200`);
 };
 
-const getDiariesTargetFollowingUserIdByUser = async (targetUserId: number) => {
+const getDiariesTargetFollowingUserIdByUserApi = async (targetUserId: number) => {
   return api.get(`/diary/${targetUserId}/user`);
 };
 
@@ -187,7 +187,7 @@ export {
   getOtherUserInfoApi,
   getDiariesByPublicApi,
   getDiariesByUserApi,
-  getDiariesTargetFollowingUserIdByUser,
+  getDiariesTargetFollowingUserIdByUserApi,
   getOneDiaryApi,
   createDiaryApi,
   editDiaryApi,
