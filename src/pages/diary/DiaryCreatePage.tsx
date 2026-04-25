@@ -58,6 +58,7 @@ const DiaryCreatePage = () => {
 
     if (totalSize > 1 * 1024 * 1024) {
       showToast("전체 파일 크기는 1MB 이하만 가능합니다.");
+      setIsSubmitting(false);
       return;
     }
 
