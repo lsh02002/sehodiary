@@ -13,7 +13,11 @@ import {
 import SelectInput, {
   Option,
 } from "../../components/bootstrap-form/SelectInput";
-import { DiaryRequestType, ImageResponseType } from "../../types/type";
+import {
+  DiaryRequestType,
+  DiaryResponseType,
+  ImageResponseType,
+} from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { useLogin } from "../../recoil/RecoilLogin";
@@ -24,6 +28,7 @@ import ImageInput from "../../components/bootstrap-form/ImageInput";
 import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInput";
 import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import DateInput from "../../components/bootstrap-form/DateInput";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -50,6 +55,8 @@ const DiaryEditPage = () => {
   const [nicknameList, setNicknameList] = useState([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const visibilityOptions: Option[] = [
     { label: "PUBLIC", value: "PUBLIC" },
@@ -97,8 +104,23 @@ const DiaryEditPage = () => {
     }
   }, [diaryId, isMouseOverOnce, likesCount]);
 
+  const mutation = useMutation<DiaryResponseType, Error, FormData>({
+    mutationFn: async (formData) => {
+      const res = await editDiaryApi(id, formData);
+      return res.data;
+    },
+
+    onSuccess: () => {
+      queryClient.removeQueries({
+        queryKey: ["diary-list"],
+      });
+
+      showToast("글 수정이 되었습니다.", "success");
+    },
+  });
+
   const handleEditDiary = async () => {
-    if (isSubmitting) return;
+    if (isSubmitting || mutation.isPending) return;
     setIsSubmitting(true);
 
     const totalSize = (images ?? []).reduce((sum, file) => sum + file.size, 0);
@@ -128,14 +150,11 @@ const DiaryEditPage = () => {
       formDataToSend.append("files", file);
     });
 
-    await editDiaryApi(Number(diaryId), formDataToSend)
-      .then((res) => {
-        showToast("글 수정이 되었습니다.", "success");
-      })
-      .catch(() => {})
-      .finally(() => {
+    mutation.mutate(formDataToSend, {
+      onSettled: () => {
         setIsSubmitting(false);
-      });
+      },
+    });
   };
 
   const handleLikeClick = () => {
