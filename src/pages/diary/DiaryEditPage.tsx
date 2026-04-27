@@ -208,6 +208,7 @@ const DiaryEditPage = () => {
 
   return (
     <div className="px-3 mb-5" style={{ marginBottom: "100px" }}>
+      <h3 className="mb-5">글 수정</h3>
       <TwoDiv>
         <TextInput
           disabled

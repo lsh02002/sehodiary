@@ -91,6 +91,7 @@ const DiaryCreatePage = () => {
 
   return (
     <div className="px-3 mb-5" style={{ marginBottom: "100px" }}>
+      <h3 className="mb-5">새글 작성</h3>
       <TextInput name="title" title="제목" data={title} setData={setTitle} />
       <TwoDiv>
         <TextInput
