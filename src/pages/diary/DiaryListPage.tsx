@@ -155,12 +155,10 @@ const DiaryListPage = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, loading, page]);
+  }, [hasMore, loading, page, fetchPage]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
   useLayoutEffect(() => {
-    let cancelled = false;
-
     const restoreDataAndScroll = async () => {
       try {
         const targetPageCount = Math.max(savedScroll.page ?? 0, 0);
@@ -168,10 +166,8 @@ const DiaryListPage = () => {
         let merged: DiaryResponseType[] = [];
         let lastHasMore = true;
 
-        for (let i = 0; i < targetPageCount; i += 1) {
+        for (let i = 0; i < targetPageCount; i++) {
           const content = await fetchPage(i);
-
-          if (cancelled) return;
 
           merged = i === 0 ? content : mergeUniqueById(merged, content);
 
@@ -181,39 +177,27 @@ const DiaryListPage = () => {
           }
         }
 
-        setDiaryList(() => {
-          const nextPage = merged.length === 0 ? 0 : targetPageCount;
+        const nextPage = merged.length === 0 ? 0 : targetPageCount;
 
-          setPage(nextPage);
-          setHasMore(lastHasMore);
-
-          return merged;
-        });
+        setDiaryList(merged);
+        setPage(nextPage);
+        setHasMore(lastHasMore);
 
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            if (cancelled) return;
             window.scrollTo(0, savedScroll.y ?? 0);
           });
         });
-      } catch (e) {
-        if (cancelled) return;
-      }
+      } catch (e) {}
     };
 
     restoreDataAndScroll();
 
-    return () => {
-      cancelled = true;
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 스크롤 저장
   const handleScroll = useCallback(() => {
-    const nextY = window.scrollY;
-    const nextX = window.scrollX;
-
     if (scrollTimer.current) {
       clearTimeout(scrollTimer.current);
     }
@@ -224,21 +208,21 @@ const DiaryListPage = () => {
           ? {
               ...prev,
               mainFollowPage: {
-                x: nextX,
-                y: nextY,
-                page,
+                x: window.scrollX,
+                y: window.scrollY,
+                page: page,
               },
             }
           : {
               ...prev,
               mainPage: {
-                x: nextX,
-                y: nextY,
-                page,
+                x: window.scrollX,
+                y: window.scrollY,
+                page: page,
               },
             },
       );
-    }, 150);
+    }, 300);
   }, [isFollowPage, page, setScrolls]);
 
   useEffect(() => {
@@ -247,7 +231,6 @@ const DiaryListPage = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleScroll]);
 
   useEffect(() => {
