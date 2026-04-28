@@ -160,6 +160,7 @@ export default function Layout({ appName = "앱", children }: Props) {
 
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
+        scrollTimer.current = null;
       }
     };
   }, [handleWindowScroll, isMyActivityLogPage, isMyCommentPage, isMyDiaryPage]);
