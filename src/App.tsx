@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useEffect, useRef } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { useLogin } from "./recoil/RecoilLogin";
 import Layout from "./components/layouts/Layout";
 import BottomNav from "./components/layouts/BottomNav";
 import { BootstrapToastContainer } from "./components/layouts/Toast";
@@ -8,6 +7,7 @@ import { urlBase64ToUint8Array } from "./pages/serviceworker/ServiceWorker";
 import { api } from "./api/sehodiary-api";
 import axios from "axios";
 import { DEBUG } from "./api/DEBUG";
+import { useLoginStore } from "./zustand/ZustandLogin";
 
 const DiaryListPage = lazy(() => import("../src/pages/diary/DiaryListPage"));
 const LoginPage = lazy(() => import("../src/pages/user/LoginPage"));
@@ -21,7 +21,7 @@ const NotFoundPage = lazy(() => import("../src/pages/notfound/NotFoundPage"));
 
 function App() {
   const location = useLocation();
-  const { setIsLogin, open, setOpen } = useLogin();
+  const { setIsLogin, open, setOpen } = useLoginStore();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");

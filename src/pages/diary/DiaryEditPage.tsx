@@ -20,7 +20,6 @@ import {
 } from "../../types/type";
 import { useParams } from "react-router-dom";
 import { FaRegCommentDots } from "react-icons/fa6";
-import { useLogin } from "../../recoil/RecoilLogin";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
 import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
@@ -29,6 +28,7 @@ import EmotionSelectInput from "../../components/bootstrap-form/EmotionSelectInp
 import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import DateInput from "../../components/bootstrap-form/DateInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -50,7 +50,7 @@ const DiaryEditPage = () => {
   const [emoji, setEmoji] = useState<string>();
 
   const [isImagesShown, setIsImagesShown] = useState(true);
-  const { isLogin, diary, setDiary, setOpen } = useLogin();
+  const { isLogin, diary, setDiary, setOpen } = useLoginStore();
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);
   const [nicknameList, setNicknameList] = useState([]);
 

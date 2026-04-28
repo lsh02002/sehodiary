@@ -4,11 +4,11 @@ import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import ConfirmButton from "../bootstrap-form/ConfirmButton";
 import { CommentRequestType } from "../../types/type";
 import { createCommentApi } from "../../api/sehodiary-api";
-import { useLogin } from "../../recoil/RecoilLogin";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
-  const { setDiary, setCommentList, setMyCommentList } = useLogin();
+  const { setDiary, setCommentList, setMyCommentList } = useLoginStore();
   const nickname = localStorage.getItem("nickname") ?? "";
   const [content, setContent] = useState("");
 

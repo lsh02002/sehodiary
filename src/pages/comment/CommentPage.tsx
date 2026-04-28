@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useLogin } from "../../recoil/RecoilLogin";
 import DiaryCard1 from "../../components/bootstrap-card/DiaryCardTwo";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {
@@ -9,11 +8,12 @@ import {
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardOne from "../../components/bootstrap-card/CommentCardOne";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const CommentPage = () => {
-  const { diary } = useLogin();
-  const { commentList, setCommentList } = useLogin();
-  const { setMyCommentList } = useLogin();
+  const { diary } = useLoginStore();
+  const { commentList, setCommentList } = useLoginStore();
+  const { setMyCommentList } = useLoginStore();
 
   useEffect(() => {
     if (diary?.id) {

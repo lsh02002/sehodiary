@@ -7,13 +7,13 @@ import {
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardTwo from "../../components/bootstrap-card/CommentCardTwo";
-import { useLogin } from "../../recoil/RecoilLogin";
-import { useScroll } from "../../recoil/RecoilScroll";
+import { useLoginStore } from "../../zustand/ZustandLogin";
+import { useScrollStore } from "../../zustand/ZustandScroll";
 
 const MyComments = () => {
-  const { diary, setDiary, setCommentList } = useLogin();
-  const { myCommentList, setMyCommentList } = useLogin();
-  const { scrolls } = useScroll();
+  const { diary, setDiary, setCommentList } = useLoginStore();
+  const { myCommentList, setMyCommentList } = useLoginStore();
+  const { scrolls } = useScrollStore();
 
   useEffect(() => {
     getCommentsByUserApi()

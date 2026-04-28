@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { UserInfoResponseType } from "../../types/type";
-import { useLogin } from "../../recoil/RecoilLogin";
 import { getOtherUserInfoApi } from "../../api/sehodiary-api";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 function UserProfileCard({ userId }: { userId: number }) {
   const [user, setUser] = useState<UserInfoResponseType>();
-  const { isLogin } = useLogin();
+  const { isLogin } = useLoginStore();
 
   useEffect(() => {
     if (!isLogin || !userId) return;

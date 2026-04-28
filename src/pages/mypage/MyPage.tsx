@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useLogin } from "../../recoil/RecoilLogin";
 import MyDiaries from "./MyDiaries";
 import MyComments from "./MyComments";
 import MyActivityLogs from "./MyActivityLogs";
 import MyInfo from "./MyInfo";
 import MyFollow from "./MyFollow";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 type MyPageTab = "follow" | "info" | "mydiary" | "mycomment" | "activitylog";
 
@@ -21,8 +21,8 @@ const TAB_ITEMS: { key: MyPageTab; label: string }[] = [
 
 const MyPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { isLogin } = useLogin();
-  const { mypageTab, setMypageTab } = useLogin();
+  const { isLogin } = useLoginStore();
+  const { mypageTab, setMypageTab } = useLoginStore();
 
   const rawTab = searchParams.get("tab");
   const validTabs = TAB_ITEMS.map((item) => item.key);

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { DiaryResponseType } from "../../types/type";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { useNavigate } from "react-router-dom";
-import { useLogin } from "../../recoil/RecoilLogin";
 import { FaRegCommentDots } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { AiFillLike } from "react-icons/ai";
@@ -14,6 +13,7 @@ import {
 import ImageCard from "./ImageCard";
 import { IoPersonOutline } from "react-icons/io5";
 import DOMPurify from "dompurify";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const DiaryCardOne = ({
   diary0,
@@ -23,7 +23,7 @@ const DiaryCardOne = ({
   now: number;
 }) => {
   const navigator = useNavigate();
-  const { isLogin, setOpen, setDiary } = useLogin();
+  const { isLogin, setOpen, setDiary } = useLoginStore();
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(-1);
   const [isMouseOverOnce, setIsMouseOverOnce] = useState(false);

@@ -5,11 +5,11 @@ import TextInput from "../../components/bootstrap-form/TextInput";
 import PasswordInput from "../../components/bootstrap-form/PasswordInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { SlLogin } from "react-icons/sl";
-import { useLogin } from "../../recoil/RecoilLogin";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setIsLogin } = useLogin();
+  const { setIsLogin } = useLoginStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

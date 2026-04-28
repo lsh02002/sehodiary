@@ -9,19 +9,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
-import { useLogin } from "../../recoil/RecoilLogin";
-import { useScroll } from "../../recoil/RecoilScroll";
 import { useParams } from "react-router-dom";
 import UserProfileCard from "../../components/bootstrap-card/UserProfileCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DEBUG } from "../../api/DEBUG";
+import { useLoginStore } from "../../zustand/ZustandLogin";
+import { useScrollStore } from "../../zustand/ZustandScroll";
 
 const DiaryListPage = () => {
   const queryClient = useQueryClient();
 
   const { userId } = useParams();
-  const { isLogin, diary } = useLogin();
-  const { scrolls, setScrolls } = useScroll();
+  const { isLogin, diary } = useLoginStore();
+  const { scrolls, setScrolls } = useScrollStore();
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);

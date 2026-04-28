@@ -1,7 +1,7 @@
 import Home from "../../assets/home.svg";
 import MyPage from "../../assets/dashboard.svg";
 import { NavLink } from "react-router-dom";
-import { useLogin } from "../../recoil/RecoilLogin";
+import { useLoginStore } from "../../zustand/ZustandLogin";
 
 const navLinkBaseClass =
   "d-flex flex-column align-items-center justify-content-center flex-fill text-decoration-none small text-secondary";
@@ -16,7 +16,7 @@ const iconStyle: React.CSSProperties = {
 };
 
 const BottomNav = () => {
-  const { isLogin, open, setOpen } = useLogin();
+  const { isLogin, open, setOpen } = useLoginStore();
 
   const handleNavClick = () => {
     if (open) {

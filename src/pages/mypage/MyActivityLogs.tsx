@@ -2,11 +2,11 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
 import ActivityLogCard from "../../components/bootstrap-card/ActivityLogCard";
-import { useScroll } from "../../recoil/RecoilScroll";
+import { useScrollStore } from "../../zustand/ZustandScroll";
 
 const MyActivityLogs = () => {
   const [logMessages, setLogMessages] = useState([]);
-  const { scrolls } = useScroll();
+  const { scrolls } = useScrollStore();
 
   useEffect(() => {
     getLogMessagesByUserApi()

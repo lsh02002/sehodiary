@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { Menu } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useLogin } from "../../recoil/RecoilLogin";
 import CommentPage from "../../pages/comment/CommentPage";
-import { useScroll } from "../../recoil/RecoilScroll";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
+import { useLoginStore } from "../../zustand/ZustandLogin";
+import { useScrollStore } from "../../zustand/ZustandScroll";
 
 interface Props {
   appName?: string;
@@ -54,8 +54,8 @@ const mainStyle: React.CSSProperties = {
 export default function Layout({ appName = "앱", children }: Props) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { isLogin, setIsLogin, open, setOpen } = useLogin();
-  const { setScrolls } = useScroll();
+  const { isLogin, setIsLogin, open, setOpen } = useLoginStore();
+  const { setScrolls } = useScrollStore();
 
   const tab = searchParams.get("tab");
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

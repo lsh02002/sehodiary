@@ -2,12 +2,12 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
-import { useLogin } from "../../recoil/RecoilLogin";
-import { useScroll } from "../../recoil/RecoilScroll";
+import { useLoginStore } from "../../zustand/ZustandLogin";
+import { useScrollStore } from "../../zustand/ZustandScroll";
 
 const MyDiaries = () => {
-  const { diary } = useLogin();
-  const { scrolls } = useScroll();
+  const { diary } = useLoginStore();
+  const { scrolls } = useScrollStore();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
   const [now, setNow] = useState(Date.now());
