@@ -222,7 +222,7 @@ const DiaryListPage = () => {
               },
             },
       );
-    }, 300);
+    }, 150);
   }, [isFollowPage, page, setScrolls]);
 
   useEffect(() => {
