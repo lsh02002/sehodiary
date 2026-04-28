@@ -21,7 +21,7 @@ const DiaryListPage = () => {
 
   const { userId } = useParams();
   const { isLogin, diary } = useLoginStore();
-  const { scrolls, setScrolls } = useScrollStore();
+  const { scrolls, setScroll } = useScrollStore();
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
@@ -198,38 +198,31 @@ const DiaryListPage = () => {
 
   // 스크롤 저장
   const handleScroll = useCallback(() => {
+    const scrollKey = isFollowPage ? "mainFollowPage" : "mainPage";
+
     if (scrollTimer.current) {
       clearTimeout(scrollTimer.current);
     }
 
     scrollTimer.current = setTimeout(() => {
-      setScrolls((prev) =>
-        isFollowPage
-          ? {
-              ...prev,
-              mainFollowPage: {
-                x: window.scrollX,
-                y: window.scrollY,
-                page: page,
-              },
-            }
-          : {
-              ...prev,
-              mainPage: {
-                x: window.scrollX,
-                y: window.scrollY,
-                page: page,
-              },
-            },
-      );
+      setScroll(scrollKey, {
+        x: window.scrollX,
+        y: window.scrollY,
+        page,
+      });
     }, 150);
-  }, [isFollowPage, page, setScrolls]);
+  }, [isFollowPage, page, setScroll]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);
+        scrollTimer.current = null;
+      }
     };
   }, [handleScroll]);
 

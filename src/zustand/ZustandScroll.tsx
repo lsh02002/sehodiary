@@ -16,7 +16,7 @@ type ScrollKey =
 type ScrollState = Record<ScrollKey, ScrollPosition>;
 
 const initialScrolls: ScrollState = {
-  mainPage: { x: 0, y: 0, page: 0 },
+  mainPage: { x: 0, y: 0, page: 0 },  
   mainFollowPage: { x: 0, y: 0, page: 0 },
   myDiary: { x: 0, y: 0, page: 0 },
   myComment: { x: 0, y: 0, page: 0 },
