@@ -13,7 +13,7 @@ const SelectInput = ({
   value,
   setValue,
   options,
-  placeholder,
+  placeholder = "유저 리스트가 비어있습니다",
 }: {
   disabled?: boolean;
   name: string;
@@ -36,7 +36,7 @@ const SelectInput = ({
         onChange={(e) => setValue(e.target.value)}
         className={`form-select ${value === "" ? "text-secondary" : ""}`}
       >
-        {placeholder && (
+        {options.length < 1 && placeholder && (
           <option value="" disabled>
             {placeholder}
           </option>
