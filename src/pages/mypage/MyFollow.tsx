@@ -34,7 +34,7 @@ const MyFollow = () => {
         setFollowingList(followingRes.data);
         setFollowerList(followerRes.data);
         
-        setTargetUserId(discoverRes.data[0]?.userId);
+        setTargetUserId(discoverRes?.data[0]?.userId ?? -1);
       })
       .catch(() => {})
       .finally(() => {

@@ -13,7 +13,7 @@ const SelectInput = ({
   value,
   setValue,
   options,
-  placeholder = "유저 리스트가 비어있습니다",
+  placeholder,
 }: {
   disabled?: boolean;
   name: string;
