@@ -8,7 +8,7 @@ const ScrollToTopButton = ({
   const handleClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: "auto",
+      behavior: "smooth", // 부드럽게 올라감
     });
   };
 
