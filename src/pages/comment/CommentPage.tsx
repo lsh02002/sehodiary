@@ -55,7 +55,7 @@ const CommentPage = () => {
       <div
         className="overflow-auto"
         style={{
-          paddingBottom: "150px",
+          paddingBottom: "200px",
           height: "calc(100vh - 250px)",
         }}
       >
