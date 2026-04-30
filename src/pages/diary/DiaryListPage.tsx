@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -158,7 +157,9 @@ const DiaryListPage = () => {
   }, [hasMore, loading, page, fetchPage]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
-  useLayoutEffect(() => {
+  useEffect(() => {
+    if(diaryList?.length === 0) return;
+    
     const restoreDataAndScroll = async () => {
       try {
         const targetPageCount = Math.max(savedScroll.page ?? 0, 0);
@@ -194,7 +195,7 @@ const DiaryListPage = () => {
     restoreDataAndScroll();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [diaryList?.length]);
 
   // 스크롤 저장
   const handleScroll = useCallback(() => {
