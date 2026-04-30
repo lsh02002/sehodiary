@@ -9,17 +9,13 @@ import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardTwo from "../../components/bootstrap-card/CommentCardTwo";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
-import { useSearchParams } from "react-router-dom";
 
 const MyComments = () => {
-  const [searchParams] = useSearchParams();
   const { diary, setDiary, setCommentList } = useLoginStore();
   const { myCommentList, setMyCommentList } = useLoginStore();
   const { scrolls, setScroll } = useScrollStore();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     getCommentsByUserApi()
@@ -31,7 +27,7 @@ const MyComments = () => {
   }, []);
 
   useEffect(() => {
-    if (rawTab !== "mycomment") return;
+    if (myCommentList?.length === 0) return;
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -48,7 +44,6 @@ const MyComments = () => {
 
     scrollTimer.current = setTimeout(() => {
       setScroll("myComment", { x: window.scrollX, y: window.scrollY, page: 0 });
-      console.log("posY" + window.scrollY);
     }, 150);
   }, [setScroll]);
 

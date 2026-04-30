@@ -4,10 +4,8 @@ import { DiaryResponseType } from "../../types/type";
 import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
-import { useSearchParams } from "react-router-dom";
 
 const MyDiaries = () => {
-  const [searchParams] = useSearchParams();
   const { diary } = useLoginStore();
   const { scrolls, setScroll } = useScrollStore();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
@@ -15,8 +13,6 @@ const MyDiaries = () => {
   const [now, setNow] = useState(Date.now());
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -49,8 +45,6 @@ const MyDiaries = () => {
   }, [diary]);
 
   useEffect(() => {
-    if (rawTab !== "mydiary") return;
-
     if (diaryList?.length === 0) return;
 
     requestAnimationFrame(() => {
@@ -67,16 +61,7 @@ const MyDiaries = () => {
     }
 
     scrollTimer.current = setTimeout(() => {
-      const next = {
-        x: window.scrollX,
-        y: window.scrollY,
-        page: 0,
-      };
-
-      console.log("window.scrollY:", window.scrollY);
-      console.log("next:", next);
-
-      setScroll("myDiary", next);
+      setScroll("myDiary", { x: window.scrollX, y: window.scrollY, page: 0 });
     }, 150);
   }, [setScroll]);
 

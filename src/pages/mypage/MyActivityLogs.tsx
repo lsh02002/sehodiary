@@ -1,23 +1,14 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
 import ActivityLogCard from "../../components/bootstrap-card/ActivityLogCard";
 import { useScrollStore } from "../../zustand/ZustandScroll";
-import { useSearchParams } from "react-router-dom";
 
 const MyActivityLogs = () => {
-  const [searchParams] = useSearchParams();
   const [logMessages, setLogMessages] = useState([]);
   const { scrolls, setScroll } = useScrollStore();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     getLogMessagesByUserApi()
@@ -28,7 +19,7 @@ const MyActivityLogs = () => {
   }, []);
 
   useEffect(() => {
-    if (rawTab !== "activitylog") return;
+    if (logMessages?.length === 0) return;
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -49,7 +40,6 @@ const MyActivityLogs = () => {
         y: window.scrollY,
         page: 0,
       });
-      console.log("posY" + window.scrollY);
     }, 150);
   }, [setScroll]);
 
@@ -60,7 +50,7 @@ const MyActivityLogs = () => {
       window.removeEventListener("scroll", handleWindowScroll);
 
       if (scrollTimer.current) {
-        clearTimeout(scrollTimer.current);        
+        clearTimeout(scrollTimer.current);
       }
     };
   }, [handleWindowScroll]);
