@@ -158,8 +158,6 @@ const DiaryListPage = () => {
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
   useEffect(() => {
-    if(diaryList?.length === 0) return;
-    
     const restoreDataAndScroll = async () => {
       try {
         const targetPageCount = Math.max(savedScroll.page ?? 0, 0);
