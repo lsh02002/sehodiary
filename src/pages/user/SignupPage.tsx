@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast, UserSignupApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
-import PasswordInput from "../../components/bootstrap-form/PasswordInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { FaRegistered } from "react-icons/fa6";
 import { UserSignupType } from "../../types/type";
-import CheckboxInput from "../../components/bootstrap-form/CheckboxInput";
+import PasswordVisibleInput from "../../components/bootstrap-form/PasswordVisibleInput";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -15,7 +14,6 @@ const SignupPage = () => {
   // const [profileImage, setProfileImage] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const OnSignupSubmit = () => {
     localStorage.removeItem("userId");
@@ -78,31 +76,20 @@ const SignupPage = () => {
         </div>
 
         <div className="w-100 mb-3">
-          <PasswordInput
+          <PasswordVisibleInput
             name="password"
-            title="비밀번호"
-            isPasswordVisible={isPasswordVisible}
+            title="비밀번호"            
             data={password}
             setData={setPassword}
           />
         </div>
 
         <div className="w-100 mb-3">
-          <PasswordInput
+          <PasswordVisibleInput
             name="passwordConfirm"
-            title="비밀번호 확인"
-            isPasswordVisible={isPasswordVisible}
+            title="비밀번호 확인"            
             data={passwordConfirm}
             setData={setPasswordConfirm}
-          />
-        </div>
-
-        <div className="w-100 mb-3">
-          <CheckboxInput
-            name="istext"
-            title="암호보기"
-            checked={isPasswordVisible}
-            setChecked={setIsPasswordVisible}
           />
         </div>
 

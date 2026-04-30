@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast, UserLoginApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
-import PasswordInput from "../../components/bootstrap-form/PasswordInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { SlLogin } from "react-icons/sl";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import PasswordVisibleInput from "../../components/bootstrap-form/PasswordVisibleInput";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const LoginPage = () => {
         </div>
 
         <div className="w-100 mb-3">
-          <PasswordInput
+          <PasswordVisibleInput
             name="password"
             title="비밀 번호"
             data={password}
