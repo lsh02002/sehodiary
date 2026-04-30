@@ -33,13 +33,16 @@ const PasswordVisibleInput = ({
           className="form-control"
         />
         <button
-          className="bg-white border-0 position-absolute"
+          className="border-0 position-absolute"
           style={{
             top: "50%",
             right: 10,
             transform: `translateY(-50%)`,
             backgroundColor: "transparent",
           }}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.background = "transparent")
+          }
           onClick={() => setIsPasswordVisible(!isPasswordVisible)}
         >
           {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
