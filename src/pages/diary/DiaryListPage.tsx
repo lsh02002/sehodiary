@@ -193,7 +193,7 @@ const DiaryListPage = () => {
     restoreDataAndScroll();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryList?.length]);
+  }, []);
 
   // 스크롤 저장
   const handleScroll = useCallback(() => {
