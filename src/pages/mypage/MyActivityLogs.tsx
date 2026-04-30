@@ -51,6 +51,7 @@ const MyActivityLogs = () => {
 
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
+        scrollTimer.current = null;
       }
     };
   }, [handleWindowScroll]);
