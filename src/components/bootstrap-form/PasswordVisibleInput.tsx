@@ -34,7 +34,12 @@ const PasswordVisibleInput = ({
         />
         <button
           className="bg-white border-0 position-absolute"
-          style={{ top: "50%", right: 10, transform: `translateY(-50%)` }}
+          style={{
+            top: "50%",
+            right: 10,
+            transform: `translateY(-50%)`,
+            backgroundColor: "transparent",
+          }}
           onClick={() => setIsPasswordVisible(!isPasswordVisible)}
         >
           {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
