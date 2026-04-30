@@ -3,7 +3,7 @@ import TextInput from "../bootstrap-form/TextInput";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import ConfirmButton from "../bootstrap-form/ConfirmButton";
 import { CommentRequestType } from "../../types/type";
-import { createCommentApi } from "../../api/sehodiary-api";
+import { createCommentApi, showToast } from "../../api/sehodiary-api";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 
@@ -45,6 +45,8 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
         });
 
         setContent("");
+
+        showToast("댓글 등록이 되었습니다.", "success");
       })
       .catch(() => {});
   };

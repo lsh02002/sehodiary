@@ -3,7 +3,7 @@ import { Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CommentPage from "../../pages/comment/CommentPage";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
-import { UserLogoutApi } from "../../api/sehodiary-api";
+import { showToast, UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 interface Props {
@@ -78,6 +78,8 @@ export default function Layout({ appName = "앱", children }: Props) {
         localStorage.removeItem("nickname");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+
+        showToast("로그아웃이 되었습니다.", "success")
 
         setIsLogin(false);
         navigate("/login");
