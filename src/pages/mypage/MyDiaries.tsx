@@ -1,16 +1,22 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { getDiariesByUserApi } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
 import DiaryCardOne from "../../components/bootstrap-card/DiaryCardOne";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
+import { useSearchParams } from "react-router-dom";
 
 const MyDiaries = () => {
+  const [searchParams] = useSearchParams();
   const { diary } = useLoginStore();
-  const { scrolls } = useScrollStore();
+  const { scrolls, setScroll } = useScrollStore();
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
 
   const [now, setNow] = useState(Date.now());
+
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -42,18 +48,50 @@ const MyDiaries = () => {
     });
   }, [diary]);
 
-  useLayoutEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      window.scrollTo({
-        left: scrolls.myDiary.x,
-        top: scrolls.myDiary.y,
-        behavior: "auto",
+  useEffect(() => {
+    if (rawTab !== "mydiary") return;
+
+    if (diaryList?.length === 0) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrolls.myDiary.y ?? 0);
       });
     });
-
-    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryList.length]);
+  }, [diaryList?.length]);
+
+  const handleWindowScroll = useCallback(() => {
+    if (scrollTimer.current) {
+      clearTimeout(scrollTimer.current);
+    }
+
+    scrollTimer.current = setTimeout(() => {
+      const next = {
+        x: window.scrollX,
+        y: window.scrollY,
+        page: 0,
+      };
+
+      console.log("window.scrollY:", window.scrollY);
+      console.log("next:", next);
+
+      setScroll("myDiary", next);
+    }, 150);
+  }, [setScroll]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);
+        scrollTimer.current = null;
+      }
+    };
+  }, [handleWindowScroll]);
 
   return (
     <>

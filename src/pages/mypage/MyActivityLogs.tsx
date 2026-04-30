@@ -1,12 +1,23 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { ActivityLogResponseType } from "../../types/type";
 import { getLogMessagesByUserApi } from "../../api/sehodiary-api";
 import ActivityLogCard from "../../components/bootstrap-card/ActivityLogCard";
 import { useScrollStore } from "../../zustand/ZustandScroll";
+import { useSearchParams } from "react-router-dom";
 
 const MyActivityLogs = () => {
+  const [searchParams] = useSearchParams();
   const [logMessages, setLogMessages] = useState([]);
-  const { scrolls } = useScrollStore();
+  const { scrolls, setScroll } = useScrollStore();
+
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     getLogMessagesByUserApi()
@@ -16,20 +27,43 @@ const MyActivityLogs = () => {
       .catch(() => {});
   }, []);
 
-  useLayoutEffect(() => {
-    if (!logMessages || logMessages.length === 0) return;
+  useEffect(() => {
+    if (rawTab !== "activitylog") return;
 
-    const raf = requestAnimationFrame(() => {
-      window.scrollTo({
-        left: scrolls.myActivityLog.x,
-        top: scrolls.myActivityLog.y,
-        behavior: "auto",
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrolls.myActivityLog.y ?? 0);
       });
     });
-
-    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [logMessages]);
+  }, [logMessages?.length]);
+
+  const handleWindowScroll = useCallback(() => {
+    if (scrollTimer.current) {
+      clearTimeout(scrollTimer.current);
+    }
+
+    scrollTimer.current = setTimeout(() => {
+      setScroll("myActivityLog", {
+        x: window.scrollX,
+        y: window.scrollY,
+        page: 0,
+      });
+      console.log("posY" + window.scrollY);
+    }, 150);
+  }, [setScroll]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);        
+      }
+    };
+  }, [handleWindowScroll]);
 
   return (
     <>

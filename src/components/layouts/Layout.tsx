@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback } from "react";
 import { Menu } from "lucide-react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CommentPage from "../../pages/comment/CommentPage";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
 import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
 import { useLoginStore } from "../../zustand/ZustandLogin";
-import { useScrollStore } from "../../zustand/ZustandScroll";
-
 interface Props {
   appName?: string;
   children: React.ReactNode;
@@ -53,16 +51,7 @@ const mainStyle: React.CSSProperties = {
 
 export default function Layout({ appName = "앱", children }: Props) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { isLogin, setIsLogin, open, setOpen } = useLoginStore();
-  const { setScrolls } = useScrollStore();
-
-  const tab = searchParams.get("tab");
-  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const isMyDiaryPage = tab === "mydiary";
-  const isMyCommentPage = tab === "mycomment";
-  const isMyActivityLogPage = tab === "activitylog";
 
   const handleCloseMenu = useCallback(() => {
     setOpen(false);
@@ -117,53 +106,6 @@ export default function Layout({ appName = "앱", children }: Props) {
     },
     [],
   );
-
-  const handleWindowScroll = useCallback(() => {
-    if (scrollTimer.current) {
-      clearTimeout(scrollTimer.current);
-    }
-
-    scrollTimer.current = setTimeout(() => {
-      if (isMyDiaryPage) {
-        setScrolls((prev) => ({
-          ...prev,
-          myDiary: { x: window.scrollX, y: window.scrollY },
-        }));
-        return;
-      }
-
-      if (isMyCommentPage) {
-        setScrolls((prev) => ({
-          ...prev,
-          myComment: { x: window.scrollX, y: window.scrollY },
-        }));
-        return;
-      }
-
-      if (isMyActivityLogPage) {
-        setScrolls((prev) => ({
-          ...prev,
-          myActivityLog: { x: window.scrollX, y: window.scrollY },
-        }));
-        return;
-      }
-    }, 150);
-  }, [isMyActivityLogPage, isMyCommentPage, isMyDiaryPage, setScrolls]);
-
-  useEffect(() => {
-    if (!isMyDiaryPage && !isMyCommentPage && !isMyActivityLogPage) return;
-
-    window.addEventListener("scroll", handleWindowScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleWindowScroll);
-
-      if (scrollTimer.current) {
-        clearTimeout(scrollTimer.current);
-        scrollTimer.current = null;
-      }
-    };
-  }, [handleWindowScroll, isMyActivityLogPage, isMyCommentPage, isMyDiaryPage]);
 
   return (
     <div className="bg-white text-dark min-vh-100" data-overlay-open={open}>
@@ -271,24 +213,8 @@ export default function Layout({ appName = "앱", children }: Props) {
         {children}
       </main>
 
-      <LockBodyScroll when={open} />
       <ScrollToTopButton />
       <AddDiaryButton />
     </div>
   );
-}
-
-function LockBodyScroll({ when }: { when: boolean }) {
-  React.useEffect(() => {
-    if (!when) return;
-
-    const original = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = original;
-    };
-  }, [when]);
-
-  return null;
 }

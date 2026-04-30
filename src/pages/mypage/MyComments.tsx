@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
@@ -9,11 +9,17 @@ import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardTwo from "../../components/bootstrap-card/CommentCardTwo";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
+import { useSearchParams } from "react-router-dom";
 
 const MyComments = () => {
+  const [searchParams] = useSearchParams();
   const { diary, setDiary, setCommentList } = useLoginStore();
   const { myCommentList, setMyCommentList } = useLoginStore();
-  const { scrolls } = useScrollStore();
+  const { scrolls, setScroll } = useScrollStore();
+
+  const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const rawTab = searchParams.get("tab");
 
   useEffect(() => {
     getCommentsByUserApi()
@@ -24,18 +30,40 @@ const MyComments = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useLayoutEffect(() => {
-    const raf = requestAnimationFrame(() => {
-      window.scrollTo({
-        left: scrolls.myComment.x,
-        top: scrolls.myComment.y,
-        behavior: "auto",
+  useEffect(() => {
+    if (rawTab !== "mycomment") return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrolls.myComment.y ?? 0);
       });
     });
-
-    return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [myCommentList?.length]);
+
+  const handleWindowScroll = useCallback(() => {
+    if (scrollTimer.current) {
+      clearTimeout(scrollTimer.current);
+    }
+
+    scrollTimer.current = setTimeout(() => {
+      setScroll("myComment", { x: window.scrollX, y: window.scrollY, page: 0 });
+      console.log("posY" + window.scrollY);
+    }, 150);
+  }, [setScroll]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleWindowScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+
+      if (scrollTimer.current) {
+        clearTimeout(scrollTimer.current);
+        scrollTimer.current = null;
+      }
+    };
+  }, [handleWindowScroll]);
 
   const handleEditSave = async (commentId: number, content: string) => {
     const data: CommentRequestType = {
