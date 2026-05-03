@@ -1,4 +1,5 @@
 import React from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import DiaryCard1 from "../../components/bootstrap-card/DiaryCardTwo";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {
@@ -9,13 +10,11 @@ import {
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardOne from "../../components/bootstrap-card/CommentCardOne";
 import { useLoginStore } from "../../zustand/ZustandLogin";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CommentPage = () => {
   const queryClient = useQueryClient();
 
   const { diary } = useLoginStore();
-  const { setMyCommentList } = useLoginStore();
 
   const diaryId = diary?.id ?? -1;
 
@@ -25,7 +24,7 @@ const CommentPage = () => {
       const res = await getCommentsByDiaryApi(diaryId);
       return res.data;
     },
-    enabled: !!diary?.id,
+    enabled: diaryId !== -1,
   });
 
   const editCommentMutation = useMutation({
@@ -41,35 +40,40 @@ const CommentPage = () => {
         content,
       };
 
-      return putCommentByIdApi(commentId, data);
+      await putCommentByIdApi(commentId, data);
+
+      return {
+        commentId,
+        content,
+      };
     },
 
-    onSuccess: (_, variables) => {
-      const { commentId, content } = variables;
-
+    onSuccess: ({ commentId, content }) => {
       queryClient.setQueryData<CommentResponseType[]>(
         ["comments", diaryId],
-        (prev) =>
-          prev?.map((comment) =>
+        (prev = []) =>
+          prev.map((comment) =>
             comment.commentId === commentId
               ? { ...comment, content }
               : comment,
-          ) ?? [],
+          ),
       );
 
-      setMyCommentList((prev) =>
-        prev?.map((comment: CommentResponseType) =>
-          comment.commentId === commentId
-            ? { ...comment, content }
-            : comment,
-        ),
+      queryClient.setQueryData<CommentResponseType[]>(
+        ["myComments"],
+        (prev = []) =>
+          prev.map((comment) =>
+            comment.commentId === commentId
+              ? { ...comment, content }
+              : comment,
+          ),
       );
 
       showToast("댓글 수정이 되었습니다.", "success");
     },
   });
 
-  const handleEditSave = async (commentId: number, content: string) => {
+  const handleEditSave = (commentId: number, content: string) => {
     editCommentMutation.mutate({ commentId, content });
   };
 

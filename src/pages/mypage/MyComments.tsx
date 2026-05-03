@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
@@ -11,31 +12,30 @@ import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
 
 const MyComments = () => {
-  const { diary, setDiary, setCommentList } = useLoginStore();
-  const { myCommentList, setMyCommentList } = useLoginStore();
+  const queryClient = useQueryClient();
+
+  const { diary, setDiary } = useLoginStore();
   const { scrolls, setScroll } = useScrollStore();
 
   const scrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    getCommentsByUserApi()
-      .then((res) => {
-        setMyCommentList(res.data);
-      })
-      .catch(() => {});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data: myCommentList = [] } = useQuery<CommentResponseType[]>({
+    queryKey: ["myComments"],
+    queryFn: async () => {
+      const res = await getCommentsByUserApi();
+      return res.data;
+    },
+  });
 
   useEffect(() => {
-    if (myCommentList?.length === 0) return;
+    if (myCommentList.length === 0) return;
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         window.scrollTo(0, scrolls.myComment.y ?? 0);
       });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myCommentList?.length]);
+  }, [myCommentList.length, scrolls.myComment.y]);
 
   const handleWindowScroll = useCallback(() => {
     if (scrollTimer.current) {
@@ -43,7 +43,11 @@ const MyComments = () => {
     }
 
     scrollTimer.current = setTimeout(() => {
-      setScroll("myComment", { x: window.scrollX, y: window.scrollY, page: 0 });
+      setScroll("myComment", {
+        x: window.scrollX,
+        y: window.scrollY,
+        page: 0,
+      });
     }, 150);
   }, [setScroll]);
 
@@ -60,74 +64,104 @@ const MyComments = () => {
     };
   }, [handleWindowScroll]);
 
-  const handleEditSave = async (commentId: number, content: string) => {
-    const data: CommentRequestType = {
-      diaryId: diary?.id ?? -1,
+  const editCommentMutation = useMutation({
+    mutationFn: async ({
+      commentId,
       content,
-    };
+    }: {
+      commentId: number;
+      content: string;
+    }) => {
+      const data: CommentRequestType = {
+        diaryId: diary?.id ?? -1,
+        content,
+      };
 
-    putCommentByIdApi(commentId, data)
-      .then((res) => {
-        setCommentList((prev) =>
-          prev?.map((comment: CommentResponseType) =>
-            comment.commentId === commentId ? { ...comment, content } : comment,
-          ),
+      return putCommentByIdApi(commentId, data);
+    },
+
+    onSuccess: (_, variables) => {
+      const { commentId, content } = variables;
+
+      queryClient.setQueryData<CommentResponseType[]>(
+        ["myComments"],
+        (prev) =>
+          prev?.map((comment) =>
+            comment.commentId === commentId
+              ? { ...comment, content }
+              : comment,
+          ) ?? [],
+      );
+
+      if (diary?.id) {
+        queryClient.setQueryData<CommentResponseType[]>(
+          ["comments", diary.id],
+          (prev) =>
+            prev?.map((comment) =>
+              comment.commentId === commentId
+                ? { ...comment, content }
+                : comment,
+            ) ?? [],
         );
+      }
 
-        setMyCommentList((prev) =>
-          prev?.map((comment: CommentResponseType) =>
-            comment.commentId === commentId ? { ...comment, content } : comment,
-          ),
+      showToast("댓글 수정이 되었습니다.", "success");
+    },
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (commentId: number) => {
+      await deleteCommentByIdApi(commentId);
+      return commentId;
+    },
+
+    onSuccess: (commentId) => {
+      queryClient.setQueryData<CommentResponseType[]>(
+        ["myComments"],
+        (prev) => prev?.filter((comment) => comment.commentId !== commentId) ?? [],
+      );
+
+      if (diary?.id) {
+        queryClient.setQueryData<CommentResponseType[]>(
+          ["comments", diary.id],
+          (prev) =>
+            prev?.filter((comment) => comment.commentId !== commentId) ?? [],
         );
+      }
 
-        showToast("댓글 수정이 되었습니다.", "success");
-      })
-      .catch(() => {});
+      setDiary((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          commentsCount: Math.max(0, prev.commentsCount - 1),
+        };
+      });
+
+      showToast("댓글 삭제가 되었습니다.", "success");
+    },
+  });
+
+  const handleEditSave = async (commentId: number, content: string) => {
+    editCommentMutation.mutate({ commentId, content });
   };
 
   const handleRemoveSave = async (commentId: number) => {
-    if (!window.confirm("해당 댓글을 삭제하시겠습니까?")) {
-      return;
-    }
+    if (!window.confirm("해당 댓글을 삭제하시겠습니까?")) return;
 
-    deleteCommentByIdApi(commentId)
-      .then(() => {
-        setCommentList((prev) =>
-          prev?.filter(
-            (comment: CommentResponseType) => comment?.commentId !== commentId,
-          ),
-        );
-
-        setMyCommentList((prev) => {
-          if (!prev) return;
-          return prev?.filter(
-            (comment: CommentResponseType) => comment?.commentId !== commentId,
-          );
-        });
-
-        // 댓글 개수 감소
-        setDiary((prev) => {
-          if (!prev) return prev;
-          return {
-            ...prev,
-            commentsCount: Math.max(0, prev.commentsCount - 1),
-          };
-        });
-
-        showToast("댓글 삭제가 되었습니다.", "success");
-      })
-      .catch(() => {});
+    deleteCommentMutation.mutate(commentId);
   };
 
   return (
     <>
       <h4 style={{ marginBottom: "20px" }}>
-        내가쓴댓글({myCommentList?.length})
+        내가쓴댓글({myCommentList.length})
       </h4>
-      {myCommentList && myCommentList?.length > 0 ? (
-        myCommentList?.map((comment: CommentResponseType) => (
+
+      {myCommentList.length > 0 ? (
+        myCommentList.map((comment) => (
           <CommentCardTwo
-            key={comment?.commentId}
+            key={comment.commentId}
             comment={comment}
             handleEditSave={handleEditSave}
             handleRemoveSave={handleRemoveSave}
