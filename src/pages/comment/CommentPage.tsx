@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DiaryCard1 from "../../components/bootstrap-card/DiaryCardTwo";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {
@@ -9,45 +9,68 @@ import {
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardOne from "../../components/bootstrap-card/CommentCardOne";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CommentPage = () => {
+  const queryClient = useQueryClient();
+
   const { diary } = useLoginStore();
-  const { commentList, setCommentList } = useLoginStore();
   const { setMyCommentList } = useLoginStore();
 
-  useEffect(() => {
-    if (diary?.id) {
-      getCommentsByDiaryApi(diary?.id ?? -1)
-        .then((res) => {
-          setCommentList(res.data);
-        })
-        .catch(() => {});
-    }
-  }, [diary?.id, setCommentList]);
+  const diaryId = diary?.id ?? -1;
+
+  const { data: commentList = [] } = useQuery<CommentResponseType[]>({
+    queryKey: ["comments", diaryId],
+    queryFn: async () => {
+      const res = await getCommentsByDiaryApi(diaryId);
+      return res.data;
+    },
+    enabled: !!diary?.id,
+  });
+
+  const editCommentMutation = useMutation({
+    mutationFn: async ({
+      commentId,
+      content,
+    }: {
+      commentId: number;
+      content: string;
+    }) => {
+      const data: CommentRequestType = {
+        diaryId,
+        content,
+      };
+
+      return putCommentByIdApi(commentId, data);
+    },
+
+    onSuccess: (_, variables) => {
+      const { commentId, content } = variables;
+
+      queryClient.setQueryData<CommentResponseType[]>(
+        ["comments", diaryId],
+        (prev) =>
+          prev?.map((comment) =>
+            comment.commentId === commentId
+              ? { ...comment, content }
+              : comment,
+          ) ?? [],
+      );
+
+      setMyCommentList((prev) =>
+        prev?.map((comment: CommentResponseType) =>
+          comment.commentId === commentId
+            ? { ...comment, content }
+            : comment,
+        ),
+      );
+
+      showToast("댓글 수정이 되었습니다.", "success");
+    },
+  });
 
   const handleEditSave = async (commentId: number, content: string) => {
-    const data: CommentRequestType = {
-      diaryId: diary?.id ?? -1,
-      content,
-    };
-
-    putCommentByIdApi(commentId, data)
-      .then((res) => {
-        setCommentList((prev) =>
-          prev?.map((comment: CommentResponseType) =>
-            comment.commentId === commentId ? { ...comment, content } : comment,
-          ),
-        );
-
-        setMyCommentList((prev) =>
-          prev?.map((comment: CommentResponseType) =>
-            comment.commentId === commentId ? { ...comment, content } : comment,
-          ),
-        );
-
-        showToast("댓글 수정이 되었습니다.", "success");
-      })
-      .catch(() => {});
+    editCommentMutation.mutate({ commentId, content });
   };
 
   return (
@@ -60,12 +83,12 @@ const CommentPage = () => {
         }}
       >
         <DiaryCard1 diary={diary} />
-        <CommentCreateCard diaryId={diary?.id ?? -1} />
+        <CommentCreateCard diaryId={diaryId} />
 
-        {commentList && commentList.length > 0 ? (
-          commentList.map((comment: CommentResponseType) => (
+        {commentList.length > 0 ? (
+          commentList.map((comment) => (
             <CommentCardOne
-              key={comment?.commentId}
+              key={comment.commentId}
               comment={comment}
               handleEditSave={handleEditSave}
             />
