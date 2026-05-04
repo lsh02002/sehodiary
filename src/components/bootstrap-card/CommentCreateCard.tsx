@@ -48,12 +48,6 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   });
 
   const handleCreateComment = () => {
-    const plainContent = content.replace(/<(.|\n)*?>/g, "").trim();
-
-    if (!plainContent) {
-      showToast("댓글 내용을 입력해주세요.", "warning");
-      return;
-    }
 
     createCommentMutation.mutate({
       diaryId,
