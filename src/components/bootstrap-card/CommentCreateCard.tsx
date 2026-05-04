@@ -48,7 +48,6 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   });
 
   const handleCreateComment = () => {
-
     createCommentMutation.mutate({
       diaryId,
       content,
@@ -79,12 +78,9 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
                 />
 
                 <ConfirmButton
-                  title={
-                    createCommentMutation.isPending
-                      ? "등록 중..."
-                      : "댓글 입력"
-                  }
+                  title="댓글 입력"
                   onClick={handleCreateComment}
+                  disabled={createCommentMutation.isPending}
                 />
               </div>
             </TwoDiv>
@@ -96,3 +92,4 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
 };
 
 export default React.memo(CommentCreateCard);
+
