@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  getUserInfoApi,
-  showToast,
+  getUserInfoApi,  
   UserSetProfileImagesApi,
 } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
 import ImageInput from "../../components/bootstrap-form/ImageInput";
+import { toast } from "react-toastify";
 
 const MyInfo = () => {
   const [userId, setUserId] = useState(-1);
@@ -40,7 +40,7 @@ const MyInfo = () => {
 
     UserSetProfileImagesApi(formDataToSend)
       .then(() => {
-        showToast("프로필 사진 수정이 되었습니다.", "success");
+        toast.success("프로필 사진 수정이 되었습니다.");
       })
       .catch(() => {});
   };

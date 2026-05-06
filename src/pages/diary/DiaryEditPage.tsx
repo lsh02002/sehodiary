@@ -8,7 +8,6 @@ import {
   getLikingNicknameByDiaryApi,
   getOneDiaryApi,
   insertLikeApi,
-  showToast,
 } from "../../api/sehodiary-api";
 import SelectInput, {
   Option,
@@ -29,6 +28,7 @@ import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import DateInput from "../../components/bootstrap-form/DateInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { toast } from "react-toastify";
 
 const DiaryEditPage = () => {
   const { diaryId } = useParams();
@@ -115,7 +115,7 @@ const DiaryEditPage = () => {
         queryKey: ["diary-list"],
       });
 
-      showToast("글 수정이 되었습니다.", "success");
+      toast.success("글 수정이 되었습니다.");
     },
   });
 
@@ -126,7 +126,7 @@ const DiaryEditPage = () => {
     const totalSize = (images ?? []).reduce((sum, file) => sum + file.size, 0);
 
     if (totalSize > 1 * 1024 * 1024) {
-      showToast("전체 파일 크기는 1MB 이하만 가능합니다.");
+      toast.warning("전체 파일 크기는 1MB 이하만 가능합니다.");
       setIsSubmitting(false);
       return;
     }

@@ -4,12 +4,12 @@ import {
   createFollowApi,
   getDiscoverListByUserApi,
   getFollowerListByUserApi,
-  getFollowingListByUserApi,
-  showToast,
+  getFollowingListByUserApi,  
 } from "../../api/sehodiary-api";
 import SelectInput from "../../components/bootstrap-form/SelectInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import FollowCard from "../../components/bootstrap-card/FollowCard";
+import { toast } from "react-toastify";
 
 const MyFollow = () => {
   const [targetUserId, setTargetUserId] = useState<number>(-1);
@@ -45,7 +45,7 @@ const MyFollow = () => {
   const handleFollowSubmit = async () => {
     createFollowApi(targetUserId)
       .then(() => {
-        showToast("팔로우에 성공했습니다.", "success");
+        toast.success("팔로우에 성공했습니다.");
         setRefresh((prev) => !prev);
       })
       .catch(() => {});

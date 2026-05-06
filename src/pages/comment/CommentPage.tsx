@@ -4,12 +4,12 @@ import DiaryCard1 from "../../components/bootstrap-card/DiaryCardTwo";
 import CommentCreateCard from "../../components/bootstrap-card/CommentCreateCard";
 import {
   getCommentsByDiaryApi,
-  putCommentByIdApi,
-  showToast,
+  putCommentByIdApi,  
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardOne from "../../components/bootstrap-card/CommentCardOne";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { toast } from "react-toastify";
 
 const CommentPage = () => {
   const queryClient = useQueryClient();
@@ -69,7 +69,7 @@ const CommentPage = () => {
           ),
       );
 
-      showToast("댓글 수정이 되었습니다.", "success");
+      toast.success("댓글 수정이 되었습니다.");
     },
   });
 

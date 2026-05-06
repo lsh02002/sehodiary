@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { TwoDiv } from "../../components/bootstrap-form/TwoDiv";
-import { createDiaryApi, showToast } from "../../api/sehodiary-api";
+import { createDiaryApi } from "../../api/sehodiary-api";
 import SelectInput, {
   Option,
 } from "../../components/bootstrap-form/SelectInput";
@@ -14,6 +14,7 @@ import QuillEditorInput from "../../components/bootstrap-form/QuillEditorInput";
 import { useNavigate } from "react-router-dom";
 import DateInput from "../../components/bootstrap-form/DateInput";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const DiaryCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -45,7 +46,7 @@ const DiaryCreatePage = () => {
         queryKey: ["diary-list"],
       });
 
-      showToast("글 생성이 되었습니다.", "success");
+      toast.success("글 생성이 되었습니다.");
       navigate(`/edit/${res.data.id}`, { replace: true });
     },
   });
@@ -57,7 +58,7 @@ const DiaryCreatePage = () => {
     const totalSize = (images ?? []).reduce((sum, file) => sum + file.size, 0);
 
     if (totalSize > 1 * 1024 * 1024) {
-      showToast("전체 파일 크기는 1MB 이하만 가능합니다.");
+      toast.warning("전체 파일 크기는 1MB 이하만 가능합니다.");
       setIsSubmitting(false);
       return;
     }

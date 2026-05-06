@@ -3,9 +3,10 @@ import { Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CommentPage from "../../pages/comment/CommentPage";
 import AddDiaryButton from "../bootstrap-form/AddDiaryButton";
-import { showToast, UserLogoutApi } from "../../api/sehodiary-api";
+import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { toast } from "react-toastify";
 interface Props {
   appName?: string;
   children: React.ReactNode;
@@ -79,7 +80,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
 
-        showToast("로그아웃이 되었습니다.", "success")
+        toast.success("로그아웃이 되었습니다.");
 
         setIsLogin(false);
         navigate("/login");

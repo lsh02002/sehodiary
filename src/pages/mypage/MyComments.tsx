@@ -3,13 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteCommentByIdApi,
   getCommentsByUserApi,
-  putCommentByIdApi,
-  showToast,
+  putCommentByIdApi,  
 } from "../../api/sehodiary-api";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
 import CommentCardTwo from "../../components/bootstrap-card/CommentCardTwo";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
+import { toast } from "react-toastify";
 
 const MyComments = () => {
   const queryClient = useQueryClient();
@@ -105,7 +105,7 @@ const MyComments = () => {
         );
       }
 
-      showToast("댓글 수정이 되었습니다.", "success");
+      toast.success("댓글 수정이 되었습니다.");
     },
   });
 
@@ -138,7 +138,7 @@ const MyComments = () => {
         };
       });
 
-      showToast("댓글 삭제가 되었습니다.", "success");
+      toast.success("댓글 삭제가 되었습니다.");
     },
   });
 

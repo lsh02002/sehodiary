@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { showToast, UserLoginApi } from "../../api/sehodiary-api";
+import { UserLoginApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { SlLogin } from "react-icons/sl";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import PasswordVisibleInput from "../../components/bootstrap-form/PasswordVisibleInput";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const LoginPage = () => {
         localStorage.setItem("refreshToken", res.headers.refreshtoken);
 
         setIsLogin(true);
-        showToast("로그인 했습니다.", "success");
+        toast.success("로그인 했습니다.");
         navigate("/");
       })
       .catch(() => {});

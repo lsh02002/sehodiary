@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { showToast, UserSignupApi } from "../../api/sehodiary-api";
+import { UserSignupApi } from "../../api/sehodiary-api";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 import { FaRegistered } from "react-icons/fa6";
 import { UserSignupType } from "../../types/type";
 import PasswordVisibleInput from "../../components/bootstrap-form/PasswordVisibleInput";
+import { toast } from "react-toastify";
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const SignupPage = () => {
 
     UserSignupApi(userInfo)
       .then((res) => {
-        showToast("회원가입에 성공했습니다.", "success");
+        toast.success("회원가입에 성공했습니다.");
         navigate("/login");
       })
       .catch(() => {});
@@ -78,7 +79,7 @@ const SignupPage = () => {
         <div className="w-100 mb-3">
           <PasswordVisibleInput
             name="password"
-            title="비밀번호"            
+            title="비밀번호"
             data={password}
             setData={setPassword}
           />
@@ -87,7 +88,7 @@ const SignupPage = () => {
         <div className="w-100 mb-3">
           <PasswordVisibleInput
             name="passwordConfirm"
-            title="비밀번호 확인"            
+            title="비밀번호 확인"
             data={passwordConfirm}
             setData={setPasswordConfirm}
           />

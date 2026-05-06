@@ -4,9 +4,10 @@ import TextInput from "../bootstrap-form/TextInput";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import ConfirmButton from "../bootstrap-form/ConfirmButton";
 import { CommentRequestType, CommentResponseType } from "../../types/type";
-import { createCommentApi, showToast } from "../../api/sehodiary-api";
+import { createCommentApi } from "../../api/sehodiary-api";
 import QuillEditorInput from "../bootstrap-form/QuillEditorInput";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { toast } from "react-toastify";
 
 const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
   const queryClient = useQueryClient();
@@ -43,7 +44,7 @@ const CommentCreateCard = ({ diaryId }: { diaryId: number }) => {
       });
 
       setContent("");
-      showToast("댓글 등록이 되었습니다.", "success");
+      toast.success("댓글 등록이 되었습니다.");
     },
   });
 
