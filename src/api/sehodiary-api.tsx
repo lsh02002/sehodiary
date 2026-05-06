@@ -6,11 +6,9 @@ import { DEBUG } from "./DEBUG";
 
 type ToastType = "success" | "error" | "info" | "warning";
 
-export const showToast = (message: string, type: ToastType = "error") => {
-  const id = message;
-
-  if (!toast.isActive(id)) {
-    toast[type](message, { toastId: id });
+const showToast = (message: string, type: ToastType, toastId: string) => {
+  if (!toast.isActive(toastId)) {
+    toast[type](message, { toastId });
   }
 };
 
@@ -49,11 +47,14 @@ api.interceptors.response.use(
   (error) => {
     // ✅ detailMessage가 있으면 가장 먼저 콘솔에 출력
     if (error.response?.data?.detailMessage) {
-      showToast(error.response.data.detailMessage);
-    }
-    // 그 외의 에러도 같이 로깅
-    else {
-      showToast(error.message);
+      const toastId = `api-error-${error.response?.status}`;
+      let type: ToastType = "warning";
+
+      if (error.response?.status === 500) {
+        type = "error";
+      }
+
+      showToast(error.response.data.detailMessage, type, toastId);
     }
 
     if (DEBUG) {
@@ -99,7 +100,9 @@ const getDiariesByUserApi = async () => {
   return api.get(`/diary/user?page=0&size=200`);
 };
 
-const getDiariesTargetFollowingUserIdByUserApi = async (targetUserId: number) => {
+const getDiariesTargetFollowingUserIdByUserApi = async (
+  targetUserId: number,
+) => {
   return api.get(`/diary/${targetUserId}/user`);
 };
 
