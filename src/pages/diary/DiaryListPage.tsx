@@ -100,10 +100,12 @@ const DiaryListPage = () => {
         ? `&keyword=${encodeURIComponent(keyword.trim())}`
         : "";
 
+      const sortQuery = "&sort=createdAt,desc";        
+
       if (isFollowPage) {
         return hasKeyword
-          ? `/diary/${userId}/search?page=${targetPage}&size=10${encodedKeyword}`
-          : `/diary/${userId}/user?page=${targetPage}&size=10`;
+          ? `/diary/friends/${userId}/search?page=${targetPage}&size=10${sortQuery}${encodedKeyword}`
+          : `/diary/friends/${userId}/search?page=${targetPage}&size=10${sortQuery}`;
       }
 
       return hasKeyword
@@ -250,9 +252,10 @@ const DiaryListPage = () => {
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
       <div className="ms-0 me-0 p-1 mb-4 bg-secondary-subtle">
-        rss주소: https://sehodiary.vercel.app/rss.xml<br/>
-        검색은 테스트중으로 매우 불안정할수 있음!<br/>
-        ※ 아직 특수문자가 안 통함!
+        rss주소: https://sehodiary.vercel.app/rss.xml
+        <br />
+        검색은 테스트중으로 매우 불안정할수 있음!
+        <br />※ 아직 특수문자가 안 통함!
       </div>
       {userId && <UserProfileCard userId={Number(userId)} />}
 
@@ -263,7 +266,7 @@ const DiaryListPage = () => {
           data={keyword}
           setData={setKeyword}
         />
-        <div style={{marginTop: 7, width: 100}}>
+        <div style={{ marginTop: 7, width: 100 }}>
           <ConfirmButton
             title="검색"
             onClick={async () => {
