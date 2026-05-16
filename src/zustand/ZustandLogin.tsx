@@ -5,6 +5,7 @@ type LoginState = {
   isLogin: boolean;
   open: boolean;
   mypageTab: string;
+  keyword: string;
   diary?: DiaryResponseType;
   commentList?: CommentResponseType[];
   myCommentList?: CommentResponseType[];
@@ -14,11 +15,14 @@ type LoginStore = LoginState & {
   setIsLogin: (value: boolean | ((prev: boolean) => boolean)) => void;
   setOpen: (value: boolean | ((prev: boolean) => boolean)) => void;
   setMypageTab: (value: string | ((prev: string) => string)) => void;
+  setKeyword: (value: string | ((prev: string) => string)) => void;
   setDiary: (
     value:
       | DiaryResponseType
       | undefined
-      | ((prev: DiaryResponseType | undefined) => DiaryResponseType | undefined),
+      | ((
+          prev: DiaryResponseType | undefined,
+        ) => DiaryResponseType | undefined),
   ) => void;
   setCommentList: (
     value:
@@ -42,6 +46,7 @@ export const useLoginStore = create<LoginStore>((set) => ({
   isLogin: false,
   open: false,
   mypageTab: "follow",
+  keyword: "",
   diary: undefined,
   commentList: undefined,
   myCommentList: undefined,
@@ -58,8 +63,12 @@ export const useLoginStore = create<LoginStore>((set) => ({
 
   setMypageTab: (value) =>
     set((state) => ({
-      mypageTab:
-        typeof value === "function" ? value(state.mypageTab) : value,
+      mypageTab: typeof value === "function" ? value(state.mypageTab) : value,
+    })),
+
+  setKeyword: (value) =>
+    set((state) => ({
+      keyword: typeof value === "function" ? value(state.keyword) : value,
     })),
 
   setDiary: (value) =>

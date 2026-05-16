@@ -19,7 +19,7 @@ const DiaryListPage = () => {
   const { isLogin, diary } = useLoginStore();
   const { scrolls, setScroll } = useScrollStore();
 
-  const [keyword, setKeyword] = useState("");
+  const { keyword, setKeyword } = useLoginStore();
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
@@ -100,7 +100,7 @@ const DiaryListPage = () => {
         ? `&keyword=${encodeURIComponent(keyword.trim())}`
         : "";
 
-      const sortQuery = "&sort=createdAt,desc";        
+      const sortQuery = "&sort=createdAt,desc";
 
       if (isFollowPage) {
         return hasKeyword
