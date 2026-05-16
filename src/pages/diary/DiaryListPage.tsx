@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api/sehodiary-api";
 import { DiaryResponseType } from "../../types/type";
@@ -14,6 +9,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { DEBUG } from "../../api/DEBUG";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
+import TextInput from "../../components/bootstrap-form/TextInput";
+import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
 
 const DiaryListPage = () => {
   const queryClient = useQueryClient();
@@ -21,6 +18,8 @@ const DiaryListPage = () => {
   const { userId } = useParams();
   const { isLogin, diary } = useLoginStore();
   const { scrolls, setScroll } = useScrollStore();
+
+  const [keyword, setKeyword] = useState("");
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
@@ -95,16 +94,32 @@ const DiaryListPage = () => {
 
   const getUrl = useCallback(
     (targetPage: number) => {
-      return isFollowPage
-        ? `/diary/${userId}/user?page=${targetPage}&limit=10`
-        : `/diary/public?page=${targetPage}&limit=10`;
+      const hasKeyword = keyword?.trim().length > 0;
+
+      const encodedKeyword = hasKeyword
+        ? `&keyword=${encodeURIComponent(keyword.trim())}`
+        : "";
+
+      if (isFollowPage) {
+        return hasKeyword
+          ? `/diary/${userId}/search?page=${targetPage}&size=10${encodedKeyword}`
+          : `/diary/${userId}/user?page=${targetPage}&size=10`;
+      }
+
+      return hasKeyword
+        ? `/diary/public/search?page=${targetPage}&size=10${encodedKeyword}`
+        : `/diary/public?page=${targetPage}&size=10`;
     },
-    [isFollowPage, userId],
+    [isFollowPage, keyword, userId],
   );
 
   const diaryQueryBaseKey = useCallback(() => {
-    return ["diary-list", isFollowPage ? `follow-${userId}` : "public"];
-  }, [isFollowPage, userId]);
+    return [
+      "diary-list",
+      isFollowPage ? `follow-${userId}` : "public",
+      keyword ?? "",
+    ];
+  }, [isFollowPage, keyword, userId]);
 
   const fetchPage = useCallback(
     async (targetPage: number, force = false) => {
@@ -234,10 +249,43 @@ const DiaryListPage = () => {
 
   return (
     <div className="mt-3 px-3 mb-5" style={{ marginBottom: "100px" }}>
-      <div className="ms-3 me-3 p-1 bg-secondary-subtle">
-        rss주소: https://sehodiary.vercel.app/rss.xml
+      <div className="ms-0 me-0 p-1 mb-4 bg-secondary-subtle">
+        rss주소: https://sehodiary.vercel.app/rss.xml<br/>
+        검색은 테스트중으로 매우 불안정할수 있음!<br/>
+        ※ 아직 특수문자가 안 통함!
       </div>
       {userId && <UserProfileCard userId={Number(userId)} />}
+
+      <div className="d-flex gap-4">
+        <TextInput
+          name="keyword"
+          title="검색"
+          data={keyword}
+          setData={setKeyword}
+        />
+        <div style={{marginTop: 7, width: 100}}>
+          <ConfirmButton
+            title="검색"
+            onClick={async () => {
+              setDiaryList([]);
+              setPage(0);
+              setHasMore(true);
+
+              queryClient.removeQueries({
+                queryKey: diaryQueryBaseKey(),
+                exact: false,
+              });
+
+              const content = await fetchPage(0, true);
+
+              setDiaryList(content);
+              setPage(1);
+              setHasMore(content.length > 0);
+              window.scrollTo(0, 0);
+            }}
+          />
+        </div>
+      </div>
 
       {hasNewDiary && (
         <div
