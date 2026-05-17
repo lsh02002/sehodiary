@@ -128,8 +128,12 @@ const DiaryListPage = () => {
       const queryKey = [...diaryQueryBaseKey(), targetPage];
 
       const queryFn = async () => {
-        const res = await api.get(getUrl(targetPage));
-        return res.data?.content ?? [];
+        try {
+          const res = await api.get(getUrl(targetPage));
+          return res.data?.content ?? [];
+        } catch {
+          return [];
+        }
       };
 
       if (force) {
