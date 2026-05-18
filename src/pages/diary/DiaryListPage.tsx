@@ -21,7 +21,7 @@ const DiaryListPage = () => {
   const { scrolls, setScroll } = useScrollStore();
 
   const { keyword, setKeyword } = useLoginStore();
-  const [appliedKeyword, setAppliedKeyword] = useState("");
+  const [appliedKeyword, setAppliedKeyword] = useState(keyword);
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
