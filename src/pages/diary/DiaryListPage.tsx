@@ -20,6 +20,7 @@ const DiaryListPage = () => {
   const { scrolls, setScroll } = useScrollStore();
 
   const { keyword, setKeyword } = useLoginStore();
+  const [appliedKeyword, setAppliedKeyword] = useState("");
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
@@ -289,6 +290,8 @@ const DiaryListPage = () => {
               setPage(1);
               setHasMore(content.length > 0);
               window.scrollTo(0, 0);
+
+              setAppliedKeyword(keyword);
             }}
           />
         </div>
@@ -342,7 +345,12 @@ const DiaryListPage = () => {
         endMessage={<p>마지막 데이터입니다.</p>}
       >
         {diaryList.map((diary: DiaryResponseType) => (
-          <DiaryCardOne key={diary.id} diary0={diary} now={now} />
+          <DiaryCardOne
+            key={diary.id}
+            diary0={diary}
+            now={now}
+            keyword={appliedKeyword}
+          />
         ))}
       </InfiniteScroll>
     </div>

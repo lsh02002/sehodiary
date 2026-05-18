@@ -18,9 +18,11 @@ import { useLoginStore } from "../../zustand/ZustandLogin";
 const DiaryCardOne = ({
   diary0,
   now,
+  keyword,
 }: {
   diary0: DiaryResponseType | undefined;
   now: number;
+  keyword?: string;
 }) => {
   const navigator = useNavigate();
   const { isLogin, setOpen, setDiary } = useLoginStore();
@@ -50,6 +52,19 @@ const DiaryCardOne = ({
         .catch(() => {});
     }
   }, [diary0?.id, isMouseOverOnce, likesCount]);
+
+  const highlightText = (text: string, keyword: string): string => {
+    if (!keyword.trim()) return text;
+
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const regex = new RegExp(`(${escapedKeyword})`, "gi");
+
+    return text.replace(
+      regex,
+      `<mark class="bg-yellow-200 rounded">$1</mark>`,
+    );
+  };
 
   const handleLikeClick = () => {
     if (isLogin) {
@@ -102,16 +117,23 @@ const DiaryCardOne = ({
                 </span>
               )}
             </div>
-            <div className="fw-semibold text-body text-end flex-grow-1">
-              {diary0?.title}
-            </div>
+            <div
+              className="fw-semibold text-body text-end flex-grow-1"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  highlightText(diary0?.title ?? "", keyword ?? ""),
+                ),
+              }}
+            />
           </TwoDiv>
           <div
             className="text-body"
             onClick={() => navigator(`/edit/${diary0?.id}`)}
             style={{ cursor: "pointer" }}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(diary0?.content ?? ""),
+              __html: DOMPurify.sanitize(
+                highlightText(diary0?.content ?? "", keyword ?? ""),
+              ),
             }}
           />
           <div className="d-flex flex-column gap-2">
