@@ -276,7 +276,7 @@ const DiaryListPage = () => {
           <ConfirmButton
             title="검색"
             onClick={async () => {
-              if (keyword?.trim().length < 2) {
+              if (!(keyword?.trim().length === 0 || keyword?.trim().length >= 2)) {
                 toast.warn("검색어는 2글자 이상 입력해주세요.");
                 return;
               }
