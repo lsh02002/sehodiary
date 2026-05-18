@@ -21,7 +21,7 @@ const DiaryListPage = () => {
   const { scrolls, setScroll } = useScrollStore();
 
   const { keyword, setKeyword } = useLoginStore();
-  const [appliedKeyword, setAppliedKeyword] = useState(keyword);
+  const { appliedKeyword, setAppliedKeyword } = useLoginStore();
 
   const [diaryList, setDiaryList] = useState<DiaryResponseType[]>([]);
   const [hasNewDiary, setHasNewDiary] = useState(false);
@@ -96,10 +96,10 @@ const DiaryListPage = () => {
 
   const getUrl = useCallback(
     (targetPage: number) => {
-      const hasKeyword = keyword?.trim().length > 0;
+      const hasKeyword = appliedKeyword?.trim().length > 0;
 
       const encodedKeyword = hasKeyword
-        ? `&keyword=${encodeURIComponent(keyword.trim())}`
+        ? `&keyword=${encodeURIComponent(appliedKeyword.trim())}`
         : "";
 
       const sortQuery = "&sort=createdAt,desc";
@@ -114,16 +114,16 @@ const DiaryListPage = () => {
         ? `/diary/public/search?page=${targetPage}&size=10${encodedKeyword}`
         : `/diary/public?page=${targetPage}&size=10`;
     },
-    [isFollowPage, keyword, userId],
+    [isFollowPage, appliedKeyword, userId],
   );
 
   const diaryQueryBaseKey = useCallback(() => {
     return [
       "diary-list",
       isFollowPage ? `follow-${userId}` : "public",
-      keyword ?? "",
+      appliedKeyword ?? "",
     ];
-  }, [isFollowPage, keyword, userId]);
+  }, [isFollowPage, appliedKeyword, userId]);
 
   const fetchPage = useCallback(
     async (targetPage: number, force = false) => {
@@ -276,7 +276,9 @@ const DiaryListPage = () => {
           <ConfirmButton
             title="검색"
             onClick={async () => {
-              if (!(keyword?.trim().length === 0 || keyword?.trim().length >= 2)) {
+              if (
+                !(keyword?.trim().length === 0 || keyword?.trim().length >= 2)
+              ) {
                 toast.warning("검색어는 2글자 이상 입력해주세요.");
                 return;
               }
