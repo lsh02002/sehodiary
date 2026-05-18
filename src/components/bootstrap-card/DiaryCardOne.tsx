@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DiaryResponseType } from "../../types/type";
 import { TwoDiv } from "../bootstrap-form/TwoDiv";
 import { useNavigate } from "react-router-dom";
@@ -53,17 +53,18 @@ const DiaryCardOne = ({
     }
   }, [diary0?.id, isMouseOverOnce, likesCount]);
 
-  const highlightText = (text: string, keyword: string): string => {
-    if (!keyword.trim()) return text;
+  const regex = useMemo(() => {
+    if (!keyword) return null;
 
-    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-    const regex = new RegExp(`(${escapedKeyword})`, "gi");
+    return new RegExp(`(${escaped})`, "gi");
+  }, [keyword]);
 
-    return text.replace(
-      regex,
-      `<mark class="bg-yellow-200 rounded">$1</mark>`,
-    );
+  const highlightText = (text: string) => {
+    if (!regex) return text;
+
+    return text.replace(regex, `<mark class="bg-yellow-200">$1</mark>`);
   };
 
   const handleLikeClick = () => {
@@ -120,9 +121,7 @@ const DiaryCardOne = ({
             <div
               className="fw-semibold text-body text-end flex-grow-1"
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  highlightText(diary0?.title ?? "", keyword ?? ""),
-                ),
+                __html: DOMPurify.sanitize(highlightText(diary0?.title ?? "")),
               }}
             />
           </TwoDiv>
@@ -131,9 +130,7 @@ const DiaryCardOne = ({
             onClick={() => navigator(`/edit/${diary0?.id}`)}
             style={{ cursor: "pointer" }}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                highlightText(diary0?.content ?? "", keyword ?? ""),
-              ),
+              __html: DOMPurify.sanitize(highlightText(diary0?.content ?? "")),
             }}
           />
           <div className="d-flex flex-column gap-2">
