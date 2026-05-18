@@ -11,6 +11,7 @@ import { useLoginStore } from "../../zustand/ZustandLogin";
 import { useScrollStore } from "../../zustand/ZustandScroll";
 import TextInput from "../../components/bootstrap-form/TextInput";
 import ConfirmButton from "../../components/bootstrap-form/ConfirmButton";
+import { toast } from "react-toastify";
 
 const DiaryListPage = () => {
   const queryClient = useQueryClient();
@@ -275,6 +276,10 @@ const DiaryListPage = () => {
           <ConfirmButton
             title="검색"
             onClick={async () => {
+              if (keyword?.trim().length < 2) {
+                toast.warn("검색어는 2글자 이상 입력해주세요.");
+                return;
+              }
               setDiaryList([]);
               setPage(0);
               setHasMore(true);
