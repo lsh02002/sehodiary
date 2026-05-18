@@ -95,11 +95,12 @@ const DiaryListPage = () => {
   };
 
   const getUrl = useCallback(
-    (targetPage: number) => {
-      const hasKeyword = appliedKeyword?.trim().length > 0;
+    (targetPage: number, searchKeyword = appliedKeyword) => {
+      const trimmedKeyword = searchKeyword?.trim() ?? "";
+      const hasKeyword = trimmedKeyword.length > 0;
 
       const encodedKeyword = hasKeyword
-        ? `&keyword=${encodeURIComponent(appliedKeyword.trim())}`
+        ? `&keyword=${encodeURIComponent(trimmedKeyword)}`
         : "";
 
       const sortQuery = "&sort=createdAt,desc";
@@ -126,12 +127,23 @@ const DiaryListPage = () => {
   }, [isFollowPage, appliedKeyword, userId]);
 
   const fetchPage = useCallback(
-    async (targetPage: number, force = false) => {
-      const queryKey = [...diaryQueryBaseKey(), targetPage];
+    async (
+      targetPage: number,
+      force = false,
+      searchKeyword = appliedKeyword,
+    ) => {
+      const trimmedKeyword = searchKeyword?.trim() ?? "";
+
+      const queryKey = [
+        "diary-list",
+        isFollowPage ? `follow-${userId}` : "public",
+        trimmedKeyword,
+        targetPage,
+      ];
 
       const queryFn = async () => {
         try {
-          const res = await api.get(getUrl(targetPage));
+          const res = await api.get(getUrl(targetPage, trimmedKeyword));
           return res.data?.content ?? [];
         } catch {
           return [];
@@ -155,7 +167,7 @@ const DiaryListPage = () => {
         revalidateIfStale: false,
       });
     },
-    [diaryQueryBaseKey, getUrl, queryClient],
+    [appliedKeyword, getUrl, isFollowPage, queryClient, userId],
   );
 
   const loadData = useCallback(async () => {
@@ -276,29 +288,39 @@ const DiaryListPage = () => {
           <ConfirmButton
             title="검색"
             onClick={async () => {
+              const nextAppliedKeyword = keyword.trim();
+
               if (
-                !(keyword?.trim().length === 0 || keyword?.trim().length >= 2)
+                !(
+                  nextAppliedKeyword.length === 0 ||
+                  nextAppliedKeyword.length >= 2
+                )
               ) {
                 toast.warning("검색어는 2글자 이상 입력해주세요.");
                 return;
               }
+
+              setAppliedKeyword(nextAppliedKeyword);
+
               setDiaryList([]);
               setPage(0);
               setHasMore(true);
 
               queryClient.removeQueries({
-                queryKey: diaryQueryBaseKey(),
+                queryKey: [
+                  "diary-list",
+                  isFollowPage ? `follow-${userId}` : "public",
+                  nextAppliedKeyword,
+                ],
                 exact: false,
               });
 
-              const content = await fetchPage(0, true);
+              const content = await fetchPage(0, true, nextAppliedKeyword);
 
               setDiaryList(content);
               setPage(1);
               setHasMore(content.length > 0);
               window.scrollTo(0, 0);
-
-              setAppliedKeyword(keyword);
             }}
           />
         </div>
