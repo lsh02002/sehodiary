@@ -1,6 +1,7 @@
-import React from 'react';
-import { UserInfoResponseType } from '../../types/type';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { UserInfoResponseType } from "../../types/type";
+import { useNavigate } from "react-router-dom";
+import { IoPersonOutline } from "react-icons/io5";
 
 type Props = {
   user: UserInfoResponseType;
@@ -22,27 +23,23 @@ const FollowCard = ({ user, onPressFollow, isFollowing }: Props) => {
           {user?.profileImage ? (
             <img
               src={user.profileImage}
-              alt={user?.nickname ?? 'profile'}
+              alt={user?.nickname ?? "profile"}
               className="rounded-circle object-fit-cover"
               style={{
-                width: '44px',
-                height: '44px',
-                backgroundColor: '#e5e7eb',
+                width: 44,
+                height: 44,
+                backgroundColor: "#e5e7eb",
               }}
             />
           ) : (
-            <div
-              className="rounded-circle bg-light d-flex align-items-center justify-content-center text-secondary"
-              style={{ width: '44px', height: '44px', fontSize: '20px' }}
-            >
-              👤
-            </div>
+            <IoPersonOutline
+              className="rounded-circle object-fit-cover"
+              style={{ width: 44, height: 44, marginRight: 5 }}
+            />
           )}
 
           <div className="flex-grow-1">
-            <div className="fw-semibold text-dark">
-              {user?.nickname ?? ''}
-            </div>
+            <div className="fw-semibold text-dark">{user?.nickname ?? ""}</div>
           </div>
 
           <button
@@ -57,11 +54,11 @@ const FollowCard = ({ user, onPressFollow, isFollowing }: Props) => {
             <button
               type="button"
               className={`btn btn-sm ${
-                isFollowing ? 'btn-secondary' : 'btn-primary'
+                isFollowing ? "btn-secondary" : "btn-primary"
               }`}
               onClick={onPressFollow}
             >
-              {isFollowing ? 'Following' : 'Follow'}
+              {isFollowing ? "Following" : "Follow"}
             </button>
           )}
         </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { UserInfoResponseType } from "../../types/type";
 import { getOtherUserInfoApi } from "../../api/sehodiary-api";
 import { useLoginStore } from "../../zustand/ZustandLogin";
+import { IoPersonOutline } from "react-icons/io5";
 
 function UserProfileCard({ userId }: { userId: number }) {
   const [user, setUser] = useState<UserInfoResponseType>();
@@ -20,18 +21,19 @@ function UserProfileCard({ userId }: { userId: number }) {
   return (
     <div className="card mb-4 border-0 shadow-sm rounded-4 p-3">
       <div className="d-flex align-items-center gap-3">
-        {/* 프로필 이미지 */}
-        <img
-          src={user?.profileImage || "https://via.placeholder.com/72"}
-          alt="profile"
-          className="rounded-circle"
-          style={{
-            width: 72,
-            height: 72,
-            objectFit: "cover",
-            backgroundColor: "#f3f4f6",
-          }}
-        />
+        {user?.profileImage ? (
+          <img
+            src={user?.profileImage}
+            alt="그림"
+            className="rounded-circle"
+            style={{ width: 72, height: 72, marginRight: 5 }}
+          />
+        ) : (
+          <IoPersonOutline
+            className="rounded-circle"
+            style={{ width: 72, height: 72, marginRight: 5 }}
+          />
+        )}
 
         {/* 컨텐츠 */}
         <div className="flex-grow-1">
