@@ -340,7 +340,7 @@ const DiaryListPage = () => {
           }}
           onClick={async () => {
             setHasNewDiary(false);
-            setHasMore(true);
+            setHasMore(false);
             setPage(0);
 
             queryClient.removeQueries({
