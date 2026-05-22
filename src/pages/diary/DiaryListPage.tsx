@@ -176,20 +176,16 @@ const DiaryListPage = () => {
     setLoading(true);
 
     try {
-      const content = await fetchPage(page);
+      const content = await fetchPage(page, false, appliedKeyword);
 
-      setDiaryList((prev) => {
-        const merged = mergeUniqueById(prev, content);
-        setHasMore(content.length > 0);
-        setPage((p) => p + 1);
-        return merged;
-      });
+      setDiaryList((prev) => mergeUniqueById(prev, content));
+      setHasMore(content.length > 0);
+      setPage((p) => p + 1);
     } catch (e) {
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMore, loading, page, fetchPage]);
+  }, [appliedKeyword, fetchPage, hasMore, loading, page]);
 
   // 최초 진입 시: 저장된 page까지 먼저 복구
   useEffect(() => {
@@ -304,7 +300,7 @@ const DiaryListPage = () => {
 
               setDiaryList([]);
               setPage(0);
-              setHasMore(true);
+              setHasMore(false);
 
               queryClient.removeQueries({
                 queryKey: [
