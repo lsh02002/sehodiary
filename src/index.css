@@ -1,6 +1,7 @@
 html {
   scrollbar-gutter: stable;
   scroll-behavior: auto !important;
+  overflow-y: scroll;
 }
 
 body {
