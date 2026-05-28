@@ -47,7 +47,7 @@ const sidebarStyle = (open: boolean): React.CSSProperties => ({
 
 const mainStyle: React.CSSProperties = {
   maxWidth: "640px",
-  paddingTop: "50px",
+  paddingTop: "20px",
   paddingBottom: "100px",
 };
 
