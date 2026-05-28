@@ -7,6 +7,7 @@ import { UserLogoutApi } from "../../api/sehodiary-api";
 import ScrollToTopButton from "../bootstrap-form/ScrollToTopButton";
 import { useLoginStore } from "../../zustand/ZustandLogin";
 import { toast } from "react-toastify";
+import { BackwardButton } from "../bootstrap-form/BackwardButton";
 interface Props {
   appName?: string;
   children: React.ReactNode;
@@ -213,6 +214,7 @@ export default function Layout({ appName = "앱", children }: Props) {
         className="container-fluid px-1 px-sm-4 mx-auto"
         style={mainStyle}
       >
+        <BackwardButton />
         {children}
       </main>
 
