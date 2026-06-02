@@ -16,14 +16,19 @@ export function BackwardButton() {
   };
 
   return (
-    <span
-      role="button"
-      onClick={handleClick}
-      className="d-inline-block px-3"
-      style={{ cursor: "pointer", fontSize: "32px" }}
-      aria-label="뒤로가기"
+    <div
+      className="w-100 sticky-top bg-white bg-opacity-75"
+      style={{ backdropFilter: "blur(6px)", zIndex: 200, top: 57 }}
     >
-      ←
-    </span>
+      <span
+        role="button"
+        onClick={handleClick}
+        className="d-inline-block px-3"
+        style={{ cursor: "pointer", fontSize: "32px" }}
+        aria-label="뒤로가기"
+      >
+        ←
+      </span>
+    </div>
   );
 }
